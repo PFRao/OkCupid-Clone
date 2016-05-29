@@ -1,6 +1,6 @@
 # FresherNote
 
-[Heroku link][heroku] **NB:** This should be a link to your production site
+[Heroku link][heroku] **NB:** TBD
 
 [heroku]: http://www.herokuapp.com
 
@@ -8,12 +8,14 @@
 
 FresherNote is a web application inspired by Evernote that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
-- [ ] New account creation, login, and guest/demo login
+OkPeter is a web application inspired by OkCupid that will be built using Ruby on Rails and ReactJS. BY the end of the initial development cycle, this app will have the following features, as well as (hopefully) many, many more!
+
+- [ ] New account creation, login, and guest login
+- [ ] The minimally necessary features for an OkCupid-inspired site. These features include, but are not limited to: the ability to answer questions about oneself, having those answers used to make an initial assessment of compatibility, and the ability to send messages to each other
 - [ ] Smooth, bug-free navigation
 - [ ] Adequate seed data to demonstrate the site's features
-- [ ] The minimally necessary features for an Evernote-inspired site: note creation and saving, note editing, and notes organized into notebooks
 - [ ] Hosting on Heroku
-- [ ] CSS styling that is satisfactorily visually appealing
+- [ ] CSS styling that is clear, concise, and visually appealing
 - [ ] A production README, replacing this README (**NB**: check out the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md) -- you'll write this later)
 
 ## Product Goals and Priorities
@@ -24,11 +26,11 @@ FresherNote will allow users to do the following:
 progress. Put an x between the brackets for a checkmark: [x] -->
 
 - [ ] Create an account (MVP)
-- [ ] Log in / Log out, including as a Guest/Demo User (MVP)
-- [ ] Create, read, edit, and delete notes (MVP)
-- [ ] Organize notes within Notebooks (MVP)
-- [ ] Tag notes with multiple tags (expected feature, but not MVP)
-- [ ] Apply complex styling to notes while editing (expected feature, but not MVP)
+- [ ] Log in / Log out, including as a guest (MVP)
+- [ ] Create, read, edit, and delete users (MVP)
+- [ ] Answer personality questions and have the answers influence thy matches (MVP)
+- [ ] Allow users to search for each other by preferences (smoker/drinker status, interests, etc.)
+- [ ] A Tinder-esque "Quickmatch" feature
 
 ## Design Docs
 * [View Wireframes][views]
