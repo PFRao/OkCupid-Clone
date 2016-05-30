@@ -1,22 +1,22 @@
 # View Wireframes
 
-## New User
+## New User, Fresh Approach
 ![new-user]
 
-## New Session
+## Logged In, Main Screen
 ![new-session]
 
-## NotesIndex / NoteIndexItem / NoteForm
+## Sign In (Modal)
 ![notes]
 
-## NotebooksIndex / NotebookIndexItem
+## Likes
 ![notebooks]
 
-## NotebookForm
+## Messages (Full View)
 ![notebook-form]
 
-[new-user]: ./wireframes/new_user.png
-[new-session]: ./wireframes/new_session.png
-[notes]: ./wireframes/root_notes.png
-[notebooks]: ./wireframes/root_notebooks.png
-[notebook-form]: ./wireframes/notebook_form.png
+[new-user]: ./wireframes/new_user.xml
+[new-session]: ./wireframes/new_session.xml
+[notes]: ./wireframes/root_notes.xml
+[notebooks]: ./wireframes/root_notebooks.xml
+[notebook-form]: ./wireframes/notebook_form.xml
