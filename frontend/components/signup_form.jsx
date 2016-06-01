@@ -1,8 +1,16 @@
 var React = require('react');
-var UserApiUtil = require('./../util/user_api_util');
-var LoginForm = require('./login_form');
 var hashHistory = require('react-router').hashHistory;
 var Link = require('react-router').Link;
+
+var SessionApiUtil = require('./../util/session_api_util');
+var SessionStore = require('./../stores/session_store');
+var ErrorStore = require('./../stores/error_store');
+var UserApiUtil = require('./../util/user_api_util');
+var LoginForm = require('./login_form');
+var Modal = require('react-modal');
+
+
+Modal.setAppElement("#content");
 
 var SignupForm = React.createClass({
   getInitialState: function () {
@@ -11,14 +19,33 @@ var SignupForm = React.createClass({
       password: "",
       location: "",
       birthdate: null,
-      last_online: new Date()
+      last_online: new Date(),
+      modalIsOpen: false
     };
   },
 
-  _handleSubmit: function () {
+  _openModal: function (e) {
+    e.preventDefault();
+    this.setState({ modalIsOpen: true });
+  },
+
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+
+  _closeModal: function () {
+    this.setState({ modalIsOpen: false });
+  },
+
+  _handleSubmit: function (event) {
+    event.preventDefault();
     this.setState({ last_online: new Date() });
     UserApiUtil.signup(this.state);
-    this._goToMainPage();
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
   },
 
   _changeUsername: function (event) {
@@ -53,6 +80,17 @@ var SignupForm = React.createClass({
     }
   },
 
+  fieldErrors: function (field) {
+    var errors = ErrorStore.formErrors("login");
+    if (!errors[field]) { return; }
+
+    var messages = errors[field].map(function (errorMsg, i) {
+      return <li key={ i }>{ errorMsg }</li>;
+    });
+
+    return <ul>{ messages }</ul>;
+  },
+
   _goToMainPage: function (event) {
     hashHistory.push({
       pathname: "main"
@@ -61,44 +99,54 @@ var SignupForm = React.createClass({
 
   render: function () {
     return (
-      <div>
-        <h3>Join OkPeter today! It's totally free and rather easy!</h3>
-        What's that? You're already a member? <Link to="/login">Click here</Link> to log in!
+      <div id="steven">
+        <form className="sign_up" onSubmit={this._handleSubmit}>
 
-        <br /><br />
+          <header>Join OkPeter today! It's totally free and rather easy!</header>
 
-        <form onSubmit={this._handleSubmit}>
+          { this.fieldErrors("base") }
 
-          <label >
+          <label>
             Username:
-            <input type="text" onChange={this._changeUsername} value={this.state.username} />
+            <span>*</span>
+            { this.fieldErrors("username") }
           </label>
-
-          <br /><br />
+          <input type="text" onChange={this._changeUsername} value={this.state.username} />
+          <div className="help">What's that? You're already a member? <span className="implore" onClick={this._openModal}>Click here</span> to log in!</div>
 
           <label>
             Password:
-            <input type="password" onChange={this._changePassword} value={this.state.password} />
+            <span>*</span>
+            { this.fieldErrors("password") }
           </label>
-
-          <br /><br />
+          <input type="password" onChange={this._changePassword} value={this.state.password} />
 
           <label>
             Zip Code:
-            <input type="text" onChange={this._changeZip} value={this.state.location} />
+            <span>*</span>
           </label>
-
-          <br /><br />
+          <input type="text" onChange={this._changeZip} value={this.state.location} />
 
           <label>
             Birthday:
-            <input type="date" onChange={this._changeBirthdate} />
+            <span>*</span>
           </label>
+          <input type="date" onChange={this._changeBirthdate} />
 
-          <br /><br />
-
-          <input type="submit" value="Done!" />
+          <button type="submit">Become a Peter!</button>
         </form>
+
+        <Modal
+          className="charles"
+          ref="mymodal"
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.handleOnAfterOpenModal}
+          onRequestClose={this._closeModal}>
+
+          <LoginForm steven={this._closeModal} />
+
+        </Modal>
+
       </div>
     );
   }

@@ -1,0 +1,68 @@
+.sign_up {
+  background: #C6D43C;
+  width: 100%;
+  font-family: lato;
+  position: relative;
+  color: #000;
+}
+.sign_up > header {
+  background: #F5F5DC;
+  padding: 30px 20px;
+  color: tan;
+  font-size: 1.2em;
+  font-weight: 600;
+  text-align: center;
+}
+.sign_up > label {
+  margin-left: 20px;
+  display: inline-block;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.sign_up > label span {
+  color: #FF3838;
+  font-size: 2em;
+  position: absolute;
+  left: 2.3em;
+  top: -10px;
+}
+
+.sign_up > input {
+  display: block;
+  width: 78%;
+  margin-left: 20px;
+  padding: 5px 20px;
+  font-size: 1em;
+  border-radius: 3px;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+.sign_up > button {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-family: inherit;
+  color: white;
+  background: brown;
+  outline: none;
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.3em;
+  font-weight: 400;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px rgba(51, 51, 51, 0.4);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+.sign_up > button:hover {
+  background: purple;
+}
+
+.charles {
+  background-color: transparent;
+}

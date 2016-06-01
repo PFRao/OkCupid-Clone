@@ -1,5 +1,6 @@
 var SessionActions = require('./../actions/session_actions');
 var ErrorActions = require('./../actions/error_actions');
+var UserApiUtil = require('./user_api_util');
 
 var SessionApiUtil = {
 	login: function (credentials) {
@@ -9,7 +10,7 @@ var SessionApiUtil = {
 			data: {user: credentials},
 			success: function (currentUser) {
         console.log("Login success (SessionApiUtil#login)");
-        SessionActions.receiveCurrentUser(currentUser);
+        UserApiUtil.update({ id: currentUser.id, last_online: new Date() });
       },
 			error: function (xhr) {
 			  console.log("Login error in SessionApiUtil#login");
@@ -22,7 +23,7 @@ var SessionApiUtil = {
 	logout: function () {
 		$.ajax({
 			url: '/api/session',
-			method: 'delete',
+			method: 'DELETE',
 			success: function () {
         console.log("Logout success (SessionApiUtil#logout)");
         SessionActions.removeCurrentUser();

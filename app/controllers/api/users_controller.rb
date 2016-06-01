@@ -11,10 +11,28 @@ class Api::UsersController < ApplicationController
 		end
 	end
 
+  def show
+
+  end
+
+  def update
+    @user = User.find(user_params[:id])
+
+    if @user.update(user_params)
+      render "api/users/show"
+    else
+      ender json: @user.errors, status: 422
+    end
+  end
+
+  def destroy
+
+  end
+
 	private
 
 	def user_params
-		params.require(:user).permit(:username, :password, :last_online, :birthdate)
+		params.require(:user).permit(:id, :username, :password, :location, :last_online, :birthdate)
 	end
 
 end

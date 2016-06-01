@@ -6,14 +6,26 @@ var UserApiUtil = require('./../util/user_api_util');
 
 var Main = React.createClass({
   getInitialState: function () {
-    return { user: null };
+    return { user: SessionStore.currentUser() };
   },
 
   componentDidMount: function () {
     this.listener = SessionStore.addListener(function () {
       this.setState({ user: SessionStore.currentUser() });
     }.bind(this));
-    SessionApiUtil.fetchCurrentUser();
+    this.otherListener = SessionStore.addListener(function () {
+      if (SessionStore.isUserLoggedIn()) {
+        this._backToLogin();
+      }
+    }.bind(this));
+  },
+
+  componentWillUnmount: function () {
+    this.listener.remove();
+  },
+
+  _logout: function () {
+    SessionApiUtil.logout();
   },
 
   render: function () {
@@ -21,16 +33,15 @@ var Main = React.createClass({
     var candy;
 
     if (this.state.user) {
-      candy = [<li>Your name is: {this.state.user.username}</li>, <li>You logged in at: {this.state.user.last_online}</li>];
+      candy = <p>You logged in at: {this.state.user.last_online}.</p>;
     } else {
-      candy = <li></li>;
+      candy = <p>There is nothing here, lad.</p>;
     }
 
     return (
       <div>
-        <ul>
-          {candy}
-        </ul>
+        {candy}
+        <button onClick={this._logout}>Log the fuck out</button>
       </div>
     );
   }
