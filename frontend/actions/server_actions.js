@@ -2,10 +2,10 @@ var AppDispatcher = require('../dispatcher/dispatcher');
 var BenchConstants = require('../constants/bench_constants');
 
 var ApiActions = {
-  receiveAll: function(benches){
+  receiveAllUser: function(visitors){
     AppDispatcher.dispatch({
-      actionType: BenchConstants.BENCHES_RECEIVED,
-      benches: benches
+      actionType: "NEW_VISITORS",
+      visitors: visitors
     });
   },
   receiveSingleBench: function(bench){

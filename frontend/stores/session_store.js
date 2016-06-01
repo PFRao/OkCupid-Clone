@@ -20,8 +20,6 @@ function _logout() {
 SessionStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case SessionConstants.LOGIN:
-      console.log("we have reached the store.");
-      console.log("but why have we shown up twice?");
       _login(payload.currentUser);
       SessionStore.__emitChange();
       break;
