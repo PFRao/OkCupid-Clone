@@ -82,37 +82,33 @@ var LoginForm = React.createClass({
 	render: function () {
 
 		return (
-      <div>
-        <h3>Sign in now! Millions of Peters await you!</h3>
-        What's that? You're not a member yet? <Link to="/">Click here</Link> to join us!
+      <form className="sign_in" onSubmit={this._handleSubmit}>
+        <header>Millions of Peters await...</header>
 
-        <br />
         { this.fieldErrors("base") }
-        <br />
 
-        <form onSubmit={this._handleSubmit}>
-          <label >
-            Username:
-            { this.fieldErrors("username") }
-            <input type="text" onChange={this._changeUsername} value={this.state.username} />
-          </label>
+        <label >
+          Username:
+          <span>*</span>
+        </label>
+        { this.fieldErrors("username") }
+        <input type="text" onChange={this._changeUsername} value={this.state.username} />
+        <div className="help">What's that? You're not a member yet? <span className="implore" onClick={this.props.steven}>Click here</span> to join us!</div>
 
-          <br /><br />
+        <label>
+          Password:
+          <span>*</span>
+        </label>
+        { this.fieldErrors("password") }
+        <input type="password" onChange={this._changePassword} value={this.state.password} />
+        <div className="help">Wow, that's a really stupid password!</div>
 
-          <label>
-            Password:
-            { this.fieldErrors("password") }
-            <input type="password" onChange={this._changePassword} value={this.state.password} />
-          </label>
-
-          <br /><br />
-
-          <input type="submit" value="Done!" />
-        </form>
-      </div>
+        <button type="submit">Done!</button>
+      </form>
 		);
 	}
 });
 
 module.exports = LoginForm;
 // greed is good
+// <Link className="implore" to="/">Click here</Link>

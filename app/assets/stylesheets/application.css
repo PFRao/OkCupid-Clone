@@ -12,9 +12,12 @@
  *
  *= require_tree .
  *= require_self
+ *= require reset
+ *= require header_nav
+ *= require sign_in
+ *= require sign_up
  */
 
-.clickHere {
-  color: blue
-  cursor: pointer;
+body {
+  background: green;
 }
