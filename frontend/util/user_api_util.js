@@ -27,6 +27,8 @@ var UserApiUtil = {
       dataType: 'json',
       data: {user: formData},
       success: function (currentUser) {
+        console.log("Current Session Token:" + currentUser.session_token);
+
         SessionActions.receiveCurrentUser(currentUser);
       },
       error: function (xhr) {

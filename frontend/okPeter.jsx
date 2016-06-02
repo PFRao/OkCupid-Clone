@@ -11,14 +11,20 @@ var hashHistory = ReactRouter.hashHistory;
 var LoginForm = require('./components/login_form');
 var SignupForm = require('./components/signup_form');
 var Main = require('./components/main');
+var UsersIndex = require('./components/match_stuff/users_index');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
 var hashHistory = require('react-router').hashHistory;
 var Link = require('react-router').Link;
+var SessionApiUtil = require('./util/session_api_util');
 
 var App = React.createClass({
   // mixins: [CurrentUserState],
+
+  componentDidMount: function () {
+    SessionApiUtil.fetchCurrentUser();
+  },
 
   render: function(){
 
@@ -64,6 +70,7 @@ routes = (
       <IndexRoute component={SignupForm} />
       <Route path="login" component={LoginForm} />
       <Route path="main" component={Main} />
+      <Route path="matches" component={UsersIndex} />
     </Route>
   </Router>
 );

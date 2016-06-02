@@ -2,7 +2,7 @@
 
 [Heroku link][heroku] **NB:** TBD
 
-[heroku]: http://www.herokuapp.com
+[heroku]: http://okpeter.herokuapp.com
 
 ## Minimum Viable Product
 
