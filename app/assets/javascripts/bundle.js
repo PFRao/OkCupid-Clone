@@ -84,7 +84,7 @@
 	        { key: "visitors" },
 	        React.createElement(
 	          'a',
-	          { href: '#' },
+	          { href: '#/main' },
 	          'Visitors'
 	        )
 	      ), React.createElement(
@@ -92,7 +92,7 @@
 	        { key: "likes" },
 	        React.createElement(
 	          'a',
-	          { href: '#' },
+	          { href: '#/main' },
 	          'Likes'
 	        )
 	      ), React.createElement(
@@ -100,7 +100,7 @@
 	        { key: "messages" },
 	        React.createElement(
 	          'a',
-	          { href: '#' },
+	          { href: '#/main' },
 	          'Messages'
 	        )
 	      ), React.createElement(
@@ -108,7 +108,7 @@
 	        { key: "person" },
 	        React.createElement(
 	          'a',
-	          { href: '#' },
+	          { href: '#/main' },
 	          SessionStore.currentUser().username
 	        )
 	      )];
@@ -134,7 +134,7 @@
 	            { className: 'header-logo' },
 	            React.createElement(
 	              'a',
-	              { href: '#' },
+	              { href: '#/main' },
 	              'Ok, Peter!'
 	            )
 	          ),
@@ -35674,7 +35674,7 @@
 	};
 	
 	MatchesStore.beSelective = function (pickle, gregory) {
-	  var martin = pickle.sort(compare);
+	  var martin = pickle.sort(_compare);
 	  console.log("pickle:", pickle);
 	  console.log("martin:", martin);
 	  martine = martin.map(function (herman, index) {
@@ -35695,33 +35695,15 @@
 	  }
 	};
 	
-	var compare = function (a, b) {
+	var _remove = function (theList, theUser) {};
+	
+	var _compare = function (a, b) {
 	  if (a[1] > b[1]) {
 	    return -1;
 	  } else {
 	    return 1;
 	  }
 	};
-	
-	// Array.prototype.quickSort = function () {
-	//
-	//   if (this.length <= 1) { return this; }
-	//
-	//   var pivot = (this[0])[1];
-	//   var lowerArray = [];
-	//   var upperArray = [];
-	//
-	//
-	//   for (var i = 1; i < this.length; i++) {
-	//     if ((this[i])[1] <= pivot) {
-	//       lowerArray.push(this[i]);
-	//     } else {
-	//       upperArray.push(this[i]);
-	//     }
-	//   }
-	//
-	//   return lowerArray.quickSort().concat(this[0]).concat(upperArray.quickSort());
-	// };
 	
 	module.exports = MatchesStore;
 
@@ -35848,9 +35830,13 @@
 	    }
 	
 	    return React.createElement(
-	      'ul',
-	      null,
-	      wesley
+	      'div',
+	      { className: 'list_o_matches' },
+	      React.createElement(
+	        'ul',
+	        { className: 'list_o_matches' },
+	        wesley
+	      )
 	    );
 	  }
 	});
@@ -35866,14 +35852,34 @@
 	var UserIndexItem = React.createClass({
 	  displayName: 'UserIndexItem',
 	
+	
 	  render: function () {
+	    // debugger
+	    var oldness = new Date() - new Date(this.props.person.birthdate);
 	    return React.createElement(
 	      'li',
 	      null,
-	      this.props.person.username,
-	      this.props.rating
+	      React.createElement('img', { src: window.peterImage }),
+	      React.createElement(
+	        'h3',
+	        null,
+	        this.props.person.username
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Age ',
+	        oldness
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        this.props.rating,
+	        ' % Match'
+	      )
 	    );
 	  }
+	
 	});
 	
 	module.exports = UserIndexItem;

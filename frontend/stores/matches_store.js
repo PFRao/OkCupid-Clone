@@ -34,7 +34,7 @@ MatchesStore.beJudgemental = function (stinker, otherStinker) {
 };
 
 MatchesStore.beSelective = function (pickle, gregory) {
-  var martin = pickle.sort(compare);
+  var martin = pickle.sort(_compare);
   console.log("pickle:", pickle);
   console.log("martin:", martin);
   martine = martin.map(function (herman, index) {
@@ -53,32 +53,16 @@ MatchesStore.__onDispatch = function (payload) {
   }
 };
 
-var compare = function (a, b) {
+var _remove = function (theList, theUser) {
+
+};
+
+var _compare = function (a, b) {
   if (a[1] > b[1]) {
     return -1;
   } else {
     return 1;
   }
 };
-
-// Array.prototype.quickSort = function () {
-//
-//   if (this.length <= 1) { return this; }
-//
-//   var pivot = (this[0])[1];
-//   var lowerArray = [];
-//   var upperArray = [];
-//
-//
-//   for (var i = 1; i < this.length; i++) {
-//     if ((this[i])[1] <= pivot) {
-//       lowerArray.push(this[i]);
-//     } else {
-//       upperArray.push(this[i]);
-//     }
-//   }
-//
-//   return lowerArray.quickSort().concat(this[0]).concat(upperArray.quickSort());
-// };
 
 module.exports = MatchesStore;

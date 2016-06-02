@@ -34,9 +34,11 @@ var UsersIndex = React.createClass({
     }
 
     return (
-      <ul>
-        {wesley}
-      </ul>
+      <div className="list_o_matches">
+        <ul className="list_o_matches">
+          {wesley}
+        </ul>
+      </div>
     );
   }
 });
