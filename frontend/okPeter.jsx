@@ -32,10 +32,10 @@ var App = React.createClass({
 
     if (SessionStore.isUserLoggedIn()) {
       candyCorn = [
-        <li key={"visitors"}><a href="#">Visitors</a></li>,
-        <li key={"likes"}><a href="#">Likes</a></li>,
-        <li key={"messages"}><a href="#">Messages</a></li>,
-        <li key={"person"}><a href="#">{SessionStore.currentUser().username}</a></li>
+        <li key={"visitors"}><a href="#/main">Visitors</a></li>,
+        <li key={"likes"}><a href="#/main">Likes</a></li>,
+        <li key={"messages"}><a href="#/main">Messages</a></li>,
+        <li key={"person"}><a href="#/main">{SessionStore.currentUser().username}</a></li>
       ];
     } else {
       <li>Please log in or sign up!</li>;
@@ -47,7 +47,7 @@ var App = React.createClass({
           <nav className="header-nav group">
 
             <h1 className="header-logo">
-              <a href="#">Ok, Peter!</a>
+              <a href="#/main">Ok, Peter!</a>
             </h1>
 
             <ul className="header-list group">

@@ -17,8 +17,9 @@
  *= require sign_in
  *= require sign_up
  *= require main
+ *= require matches
  */
 
 body {
-  background: green;
+  background: #104da1;
 }
