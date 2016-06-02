@@ -17,7 +17,10 @@ class Api::UsersController < ApplicationController
 
   def update
     @user = User.find(user_params[:id])
-
+    puts "RIGHT NOW, THE USER'S SESSION TOKEN IS:"
+    puts "                                      :"
+    puts "                                      :"
+    puts @user.session_token
     if @user.update(user_params)
       render "api/users/show"
     else
@@ -32,7 +35,7 @@ class Api::UsersController < ApplicationController
 	private
 
 	def user_params
-		params.require(:user).permit(:id, :username, :password, :location, :last_online, :birthdate)
+		params.require(:user).permit(:id, :username, :password, :birthdate, :password_digest, :preferences, :personality, :location, :last_online, :looking_for)
 	end
 
 end

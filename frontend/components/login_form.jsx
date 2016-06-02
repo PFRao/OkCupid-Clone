@@ -54,12 +54,6 @@ var LoginForm = React.createClass({
 		};
 
     SessionApiUtil.login(formData);
-
-    // if (this.props.location.pathname === "/login") {
-    //   SessionApiUtil.login(formData);
-    // } else {
-    //   UserApiUtil.signup(formData);
-    // }
 	},
 
   fieldErrors: function (field) {

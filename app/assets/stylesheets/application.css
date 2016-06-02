@@ -16,6 +16,7 @@
  *= require header_nav
  *= require sign_in
  *= require sign_up
+ *= require main
  */
 
 body {

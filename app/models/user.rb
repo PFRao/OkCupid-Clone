@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 	validates :password, length: {minimum: 6}, allow_nil: :true
 
 	after_initialize :ensure_session_token
-	before_validation :ensure_session_token_uniqueness
+	# before_validation :ensure_session_token_uniqueness
 
 	def password= password
 		self.password_digest = BCrypt::Password.create(password)
@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 
 	def reset_session_token!
 		self.session_token = new_session_token
-		ensure_session_token_uniqueness
+		# ensure_session_token_uniqueness
 		self.save
 		self.session_token
 	end
@@ -41,10 +41,10 @@ class User < ActiveRecord::Base
 		SecureRandom.base64
 	end
 
-	def ensure_session_token_uniqueness
-		while User.find_by(session_token: self.session_token)
-			self.session_token = new_session_token
-		end
-	end
+	# def ensure_session_token_uniqueness
+	# 	while User.find_by(session_token: self.session_token)
+	# 		self.session_token = new_session_token
+	# 	end
+	# end
 
 end

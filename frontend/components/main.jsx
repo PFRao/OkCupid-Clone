@@ -1,6 +1,9 @@
 var React = require('react');
 var Link = require('react-router').Link;
+
 var SessionStore = require('../stores/session_store');
+var MatchesStore = require('../stores/matches_store');
+
 var SessionApiUtil = require('./../util/session_api_util');
 var UserApiUtil = require('./../util/user_api_util');
 
@@ -9,23 +12,38 @@ var Main = React.createClass({
     return { user: SessionStore.currentUser() };
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   componentDidMount: function () {
     this.listener = SessionStore.addListener(function () {
       this.setState({ user: SessionStore.currentUser() });
     }.bind(this));
     this.otherListener = SessionStore.addListener(function () {
-      if (SessionStore.isUserLoggedIn()) {
-        this._backToLogin();
+      if (!SessionStore.isUserLoggedIn()) {
+        this.redirectIfLoggedOut();
       }
     }.bind(this));
   },
 
   componentWillUnmount: function () {
     this.listener.remove();
+    this.otherListener.remove();
   },
 
   _logout: function () {
     SessionApiUtil.logout();
+  },
+
+  _browse: function () {
+    this.context.router.push("matches");
+  },
+
+  redirectIfLoggedOut: function () {
+    if (!SessionStore.isUserLoggedIn()) {
+      this.context.router.push("/");
+    }
   },
 
   render: function () {
@@ -41,9 +59,11 @@ var Main = React.createClass({
     return (
       <div>
         {candy}
-        <button onClick={this._logout}>Log the fuck out</button>
+        <button className="go_home" onClick={this._logout}>Stop being a Peter... for now!</button>
+        <button className="browse_matches" onClick={this._browse}>Take a look at some of the other Peters</button>
       </div>
     );
+
   }
 });
 
