@@ -20,7 +20,7 @@ MatchesStore.beChoosy = function (susan) {
   var kyle;
 
   _stinker = SessionStore.currentUser();
-  // ApiUtil.fetchPeeps();
+  _stinkers = _remove(_stinkers, _stinker);
 
   kyle = _stinkers.map(function (person, index) {
     return [person, MatchesStore.beJudgemental(_stinker, person), index];
@@ -54,7 +54,13 @@ MatchesStore.__onDispatch = function (payload) {
 };
 
 var _remove = function (theList, theUser) {
+  // var theIndex = theList.indexOf(theUser);
+  // if (theIndex !== -1) { theList.splice(theIndex, 1); }
+  for (var i = 0; i < theList.length; i++) {
+    if (theList[i].id === theUser.id) { theList.splice(i, 1); }
+  }
 
+  return theList;
 };
 
 var _compare = function (a, b) {
