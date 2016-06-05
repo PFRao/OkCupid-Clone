@@ -1,17 +1,20 @@
 var React = require('react');
 var ApiUtil = require('../../util/api_util');
+var UserApiUtil = require('../../util/user_api_util');
 
 var QuestionStore = require('../../stores/question_store');
 var SessionStore = require('../../stores/session_store');
+
+var _values = {};
 
 var Questions = React.createClass({
 
   getInitialState: function () {
     return {
       question: QuestionStore.newQuestion(),
-      theChoice: null,
+      theChoice: "nothing yet",
       thePreferences: [],
-      theWeight: 1
+      theWeight: 0
     };
   },
 
@@ -32,10 +35,41 @@ var Questions = React.createClass({
 
   _handleAnswer: function (event) {
     event.preventDefault();
+    var formAnswer = {};
+    var formData = {};
+    var demPrefsTho;
+
     if (this.state.theChoice || this.state.thePreferences) {
 
+      this._getRelevantValues();
+      demPrefsTho = this.state.thePreferences.map(function (thingy) {
+        return _values[thingy];
+      });
+      formAnswer.answer_choice_id = this.state.theChoice;
+      formAnswer.acceptable_choices = JSON.stringify(this.state.thePreferences);
+      formAnswer.weight = this.state.theWeight;
+      formAnswer.user_id = SessionStore.currentUser().id;
+      formData.category = this.state.question.answer_choices[0].category;
+      formData.theChoice = _values[this.state.theChoice] * this.state.theWeight;
+      formData.thePref = _average(demPrefsTho) * this.state.theWeight;
+
     }
+
+    // console.log("submitted:", formAnswer);
+    this._resetForm();
+
+    this._answerTheQuestion(formAnswer);
+    this._updateTheUser(formData);
     ApiUtil.fetchAnotherQuestion();
+  },
+
+  _resetForm: function () {
+    this.setState({
+      theChoice: null,
+      thePreferences: [],
+      theWeight: 0
+    });
+    _values = {};
   },
 
   _selectQuestion: function () {
@@ -65,8 +99,31 @@ var Questions = React.createClass({
 
   },
 
+  _changeWeight: function (event) {
+    this.setState({ theWeight: parseInt(event.target.value) });
+  },
+
   _skip: function () {
     ApiUtil.fetchAnotherQuestion();
+  },
+
+  _getRelevantValues: function () {
+    for (var i = 0; i < this.state.question.answer_choices.length; i++) {
+      _values[this.state.question.answer_choices[i].id] = this.state.question.answer_choices[i].value;
+    }
+  },
+
+  _answerTheQuestion: function (formAnswer) {
+    ApiUtil.answerQuestion(formAnswer);
+  },
+
+  _updateTheUser: function (formData) {
+    var theSendUp = SessionStore.currentUserPersonality();
+
+    theSendUp.you[formData.category] += formData.theChoice;
+    theSendUp.them[formData.category] += formData.thePref;
+
+    UserApiUtil.update({ id: SessionStore.currentUser().id, personality: JSON.stringify(theSendUp) });
   },
 
   render: function() {
@@ -86,7 +143,7 @@ var Questions = React.createClass({
             {
               this.state.question.answer_choices.map(function (thing, index) {
                 return (<label key={index}>
-                  <input type="radio" value={thing.id} checked={this.state.theChoice === thing.id} onChange={this._changePreferences} />
+                  <input type="radio" value={thing.id} checked={this.state.theChoice === thing.id} onChange={this._changeChoice} />
                   {thing.body}
                   <br />
                   </label>
@@ -109,9 +166,40 @@ var Questions = React.createClass({
             }
 
             <br />
-            <button className="go_home">Yes, that is my final answer</button>
           </form>
-          <button onClick={this._skip} className="go_home">Skip this question</button>
+
+          <form>
+            <h4>How important is this question to you?</h4>
+
+            <label>
+              <input type="radio" value={0} checked={this.state.theWeight === 0} onChange={this._changeWeight} />
+              I honestly don't give a shit
+              <br />
+            </label>
+
+            <label>
+              <input type="radio" value={1} checked={this.state.theWeight === 1} onChange={this._changeWeight} />
+              I care a little bit, bit it's really no big deal, you know?
+              <br />
+            </label>
+
+            <label>
+              <input type="radio" value={2} checked={this.state.theWeight === 2} onChange={this._changeWeight} />
+              This is something that I would definitely consider when selecting a mate
+              <br />
+            </label>
+
+            <label>
+              <input type="radio" value={10} checked={this.state.theWeight === 10} onChange={this._changeWeight} />
+              This is basically a dealbreaker
+              <br />
+            </label>
+          </form>
+
+          <br />
+
+          <button onClick={this._handleAnswer} className="go_home">Yes, that is my final answer</button>
+          <button onClick={this._skip} className="go_home">Skip this question for now</button>
         </div>
       );
     } else {
@@ -138,6 +226,17 @@ var _remove = function (theList, theThing) {
   }
 
   return theList;
+};
+
+var _average = function (theArray) {
+  if (theArray.length === 0) { return 0; }
+
+  var sum = 0;
+  for( var i = 0; i < theArray.length; i++ ){
+    sum += theArray[i];
+  }
+
+  return sum/theArray.length;
 };
 
 module.exports = Questions;

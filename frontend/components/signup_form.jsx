@@ -19,6 +19,7 @@ var SignupForm = React.createClass({
       password: "",
       location: "",
       birthdate: null,
+      gender: "man",
       last_online: new Date(),
       modalIsOpen: false
     };
@@ -62,6 +63,11 @@ var SignupForm = React.createClass({
 
   _changeBirthdate: function (event) {
     this.setState({ birthdate: event.target.value });
+  },
+
+  _changeGender: function (event) {
+    console.log(event.target.value);
+    this.setState({ gender: event.target.value });
   },
 
   componentDidMount: function () {
@@ -132,6 +138,20 @@ var SignupForm = React.createClass({
             <span>*</span>
           </label>
           <input type="date" onChange={this._changeBirthdate} />
+
+          Are you a man or a woman?
+
+          <label>
+            <input type="checkbox" value="man" checked={this.state.gender === "man"} onChange={this._changeGender} />
+            Man
+            <br />
+          </label>
+
+          <label>
+            <input type="checkbox" value="woman" checked={this.state.gender === "woman"} onChange={this._changeGender} />
+            Woman
+            <br />
+          </label>
 
           <button type="submit">Become a Peter!</button>
         </form>
