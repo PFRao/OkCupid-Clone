@@ -14,8 +14,12 @@ var UsersIndex = React.createClass({
   },
 
   componentDidMount: function () {
-    MatchesStore.addListener(this._vincent);
+    this.listener = MatchesStore.addListener(this._vincent);
     ApiUtil.fetchPeeps(this.state.filters);
+  },
+
+  componentWillUnmount: function () {
+    this.listener.remove();
   },
 
   _vincent: function () {
@@ -28,7 +32,6 @@ var UsersIndex = React.createClass({
 
     if (this.state.users) {
       wesley = this.state.users.map(function (user, index) {
-        console.log(user);
         return <UserIndexItem key={user[0].id} person={user[0]} rating={user[1]} />;
       });
     }

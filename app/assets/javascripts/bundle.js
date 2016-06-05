@@ -58,6 +58,7 @@
 	var SignupForm = __webpack_require__(263);
 	var Main = __webpack_require__(284);
 	var UsersIndex = __webpack_require__(290);
+	var Questions = __webpack_require__(293);
 	//Stores
 	var SessionStore = __webpack_require__(237);
 	//Other Stuff
@@ -105,11 +106,11 @@
 	        )
 	      ), React.createElement(
 	        'li',
-	        { key: "person" },
+	        { className: 'yer_face', key: "person" },
 	        React.createElement(
 	          'a',
 	          { href: '#/main' },
-	          SessionStore.currentUser().username
+	          React.createElement('img', { src: window.peterImage })
 	        )
 	      )];
 	    } else {
@@ -135,7 +136,7 @@
 	            React.createElement(
 	              'a',
 	              { href: '#/main' },
-	              'Ok, Peter!'
+	              'STFU, Peter!'
 	            )
 	          ),
 	          React.createElement(
@@ -151,18 +152,82 @@
 	
 	});
 	
+	// <Route path="login" component={LoginForm} />
 	routes = React.createElement(
 	  Router,
 	  { history: hashHistory },
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: SignupForm }),
-	    React.createElement(Route, { path: 'login', component: LoginForm }),
-	    React.createElement(Route, { path: 'main', component: Main }),
-	    React.createElement(Route, { path: 'matches', component: UsersIndex })
+	    React.createElement(IndexRoute, { component: SignupForm, onEnter: _ensureLoggedOut }),
+	    React.createElement(Route, { path: 'main', component: Main, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'matches', component: UsersIndex, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'questions', component: Questions, onEnter: _ensureLoggedIn })
 	  )
 	);
+	
+	function _ensureLoggedIn(nextState, replace, asyncDoneCallback) {
+	  // Router is in the process of entering a route.
+	  // Will wait for us to call the `asyncDoneCallback`
+	  // before it actually enters the route (and renders onto the page)
+	  //
+	  // Let's check if user is signed in, if they are, we can just call
+	  // the asyncDoneCallback and the Router will enter the Route normally,
+	  // else, if user is NOT signed in, let's call the `replace` argument
+	  // to instead redirect the user to the login route/component.
+	  if (SessionStore.currentUserHasBeenFetched()) {
+	    redirectIfNotLoggedIn();
+	  } else {
+	    SessionApiUtil.fetchCurrentUser(redirectIfNotLoggedIn);
+	    // redirectIfNotLoggedIn();
+	  }
+	
+	  function redirectIfNotLoggedIn() {
+	    if (!SessionStore.isUserLoggedIn()) {
+	      // `replace` is like a redirect. It replaces the current entry
+	      // into the history (and the hashFragment), so the Router is forced
+	      // to re-route.
+	      replace('/');
+	    }
+	
+	    // The `asyncDoneCallback` is the React Router's way of telling us
+	    // "let me know when you're done doing any async stuff, and I'll see
+	    // if I render the original Route or navigate to another one. In the
+	    // meantime, I'll just wait and not do anything".
+	    asyncDoneCallback();
+	  }
+	}
+	
+	function _ensureLoggedOut(nextState, replace, asyncDoneCallback) {
+	  // Router is in the process of entering a route.
+	  // Will wait for us to call the `asyncDoneCallback`
+	  // before it actually enters the route (and renders onto the page)
+	  //
+	  // Let's check if user is signed in, if they are, we can just call
+	  // the asyncDoneCallback and the Router will enter the Route normally,
+	  // else, if user is NOT signed in, let's call the `replace` argument
+	  // to instead redirect the user to the login route/component.
+	  if (SessionStore.currentUserHasBeenFetched()) {
+	    redirectIfNotLoggedOut();
+	  } else {
+	    SessionApiUtil.fetchCurrentUser(redirectIfNotLoggedOut);
+	  }
+	
+	  function redirectIfNotLoggedOut() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      // `replace` is like a redirect. It replaces the current entry
+	      // into the history (and the hashFragment), so the Router is forced
+	      // to re-route.
+	      replace('/main');
+	    }
+	
+	    // The `asyncDoneCallback` is the React Router's way of telling us
+	    // "let me know when you're done doing any async stuff, and I'll see
+	    // if I render the original Route or navigate to another one. In the
+	    // meantime, I'll just wait and not do anything".
+	    asyncDoneCallback();
+	  }
+	}
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  ReactDOM.render(routes, document.getElementById("allStuffGoesHere"));
@@ -33302,7 +33367,35 @@
 	      dataType: 'json',
 	      data: { user: formData },
 	      success: function (currentUser) {
-	        SessionActions.receiveCurrentUser(currentUser);
+	        // SessionActions.receiveCurrentUser(currentUser);
+	        UserApiUtil.update({
+	          id: currentUser.id,
+	          personality: JSON.stringify({ you: {
+	              active: 0,
+	              outdoorsy: 0,
+	              outgoing: 0,
+	              sports: 0,
+	              pop_culture: 0,
+	              conservative: 0,
+	              rebellious: 0,
+	              optimistic: 0,
+	              traditional: 0,
+	              organized: 0,
+	              religious: 0
+	            }, them: {
+	              active: 0,
+	              outdoorsy: 0,
+	              outgoing: 0,
+	              sports: 0,
+	              pop_culture: 0,
+	              conservative: 0,
+	              rebellious: 0,
+	              optimistic: 0,
+	              traditional: 0,
+	              organized: 0,
+	              religious: 0
+	            } })
+	        });
 	      },
 	      error: function (xhr) {
 	        console.log('UserApiUtil#createAccount error');
@@ -35586,6 +35679,10 @@
 	    this.context.router.push("matches");
 	  },
 	
+	  _interrogate: function () {
+	    this.context.router.push("questions");
+	  },
+	
 	  redirectIfLoggedOut: function () {
 	    if (!SessionStore.isUserLoggedIn()) {
 	      this.context.router.push("/");
@@ -35619,13 +35716,21 @@
 	      React.createElement(
 	        'button',
 	        { className: 'go_home', onClick: this._logout },
-	        'Stop being a Peter... for now!'
+	        'Log thee out'
 	      ),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'browse_matches', onClick: this._browse },
-	        'Take a look at some of the other Peters'
-	      )
+	        { className: 'go_home', onClick: this._browse },
+	        'Browse thy matches'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
+	        { className: 'go_home', onClick: this._interrogate },
+	        'Find thyself'
+	      ),
+	      React.createElement('br', null)
 	    );
 	  }
 	});
@@ -35642,17 +35747,19 @@
 	var ApiUtil = __webpack_require__(286);
 	
 	var SessionStore = __webpack_require__(237);
+	var QuestionStore = __webpack_require__(292);
 	
 	var _matches;
 	var _stinkers;
 	var _stinker;
 	
+	var _ATTRIBUTES = ["active", "outdoorsy", "outgoing", "sports", "pop_culture", "conservative", "rebellious", "optimistic", "traditional", "organized", "religious"];
+	
 	var MatchesStore = new Store(AppDispatcher);
 	
 	MatchesStore.all = function (randall) {
-	  if (!_matches) {
-	    MatchesStore.beChoosy(randall);
-	  }
+	  // if (!_matches) { MatchesStore.beChoosy(randall); }
+	  MatchesStore.beChoosy(randall);
 	  return _matches;
 	};
 	
@@ -35670,13 +35777,29 @@
 	};
 	
 	MatchesStore.beJudgemental = function (stinker, otherStinker) {
-	  return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+	  // return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+	
+	  var theCount = _getQuestionCounts(stinker);
+	  var theOtherCount = _getQuestionCounts(otherStinker);
+	
+	  var thePersonality = JSON.parse(stinker.personality);
+	  var theOtherPersonality = JSON.parse(otherStinker.personality);
+	
+	  var theScore = 0;
+	
+	  _ATTRIBUTES.forEach(function (attr) {
+	    theScore += Math.abs(thePersonality.you[attr] / theCount[attr] - theOtherPersonality.them[attr] / theOtherCount[attr]);
+	  }.bind(this));
+	
+	  _ATTRIBUTES.forEach(function (attr) {
+	    theScore += Math.abs(thePersonality.them[attr] / theCount[attr] - theOtherPersonality.you[attr] / theOtherCount[attr]);
+	  }.bind(this));
+	
+	  return theScore;
 	};
 	
 	MatchesStore.beSelective = function (pickle, gregory) {
 	  var martin = pickle.sort(_compare);
-	  console.log("pickle:", pickle);
-	  console.log("martin:", martin);
 	  martine = martin.map(function (herman, index) {
 	    return [herman[0], herman[1]];
 	  });
@@ -35696,8 +35819,6 @@
 	};
 	
 	var _remove = function (theList, theUser) {
-	  // var theIndex = theList.indexOf(theUser);
-	  // if (theIndex !== -1) { theList.splice(theIndex, 1); }
 	  for (var i = 0; i < theList.length; i++) {
 	    if (theList[i].id === theUser.id) {
 	      theList.splice(i, 1);
@@ -35715,6 +35836,16 @@
 	  }
 	};
 	
+	var _getQuestionCounts = function (theUser) {
+	  theCount = {};
+	
+	  _ATTRIBUTES.forEach(function (theAttribute) {
+	    theCount[theAttribute] = 1;
+	  });
+	
+	  return theCount;
+	};
+	
 	module.exports = MatchesStore;
 
 /***/ },
@@ -35728,6 +35859,29 @@
 	  fetchPeeps: function (filters) {
 	    $.get('api/peeps', filters, function (peeps) {
 	      ServerActions.receiveAllUsers(peeps);
+	    });
+	  },
+	
+	  fetchAllUserQuestions: function (thePerson) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/questions',
+	      dataType: 'json',
+	      data: { user: thePerson },
+	      success: function (questions) {
+	        ServerActions.receiveAnsweredQuestions(questions);
+	      }
+	    });
+	  },
+	
+	  fetchAnotherQuestion: function () {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/questions/new',
+	      dataType: 'json',
+	      success: function (question) {
+	        ServerActions.receiveNewQuestion(question);
+	      }
 	    });
 	  }
 	};
@@ -35745,6 +35899,20 @@
 	    AppDispatcher.dispatch({
 	      actionType: "NEW_VISITORS",
 	      visitors: visitors
+	    });
+	  },
+	
+	  receiveAnsweredQuestions: function (questions) {
+	    AppDispatcher.dispatch({
+	      actionType: "ANSWERED_QUESTIONS",
+	      questions: questions
+	    });
+	  },
+	
+	  receiveNewQuestion: function (question) {
+	    AppDispatcher.dispatch({
+	      actionType: "NEW_QUESTION",
+	      question: question
 	    });
 	  }
 	};
@@ -35820,8 +35988,12 @@
 	  },
 	
 	  componentDidMount: function () {
-	    MatchesStore.addListener(this._vincent);
+	    this.listener = MatchesStore.addListener(this._vincent);
 	    ApiUtil.fetchPeeps(this.state.filters);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
 	  },
 	
 	  _vincent: function () {
@@ -35834,7 +36006,6 @@
 	
 	    if (this.state.users) {
 	      wesley = this.state.users.map(function (user, index) {
-	        console.log(user);
 	        return React.createElement(UserIndexItem, { key: user[0].id, person: user[0], rating: user[1] });
 	      });
 	    }
@@ -35894,6 +36065,220 @@
 	});
 	
 	module.exports = UserIndexItem;
+
+/***/ },
+/* 292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(238);
+	var Store = __webpack_require__(242).Store;
+	
+	var ApiUtil = __webpack_require__(286);
+	
+	var _answered = [];
+	var _next;
+	
+	var QuestionStore = new Store(AppDispatcher);
+	
+	QuestionStore.answeredQuestions = function () {
+	  return _answered;
+	};
+	
+	QuestionStore.newQuestion = function () {
+	  return _next;
+	};
+	
+	QuestionStore.noNoNoNoNo = function (aQuestion) {
+	  for (var i = 0; i < _answered.length; i++) {
+	    if (_answered[i].id === aQuestion.id) {
+	      return true;
+	    }
+	  }
+	  return false;
+	};
+	
+	QuestionStore.activeAnswers = function () {
+	  return ":)";
+	}, QuestionStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "ANSWERED_QUESTIONS":
+	      _answered = payload.questions;
+	      QuestionStore.__emitChange();
+	      break;
+	    case "NEW_QUESTION":
+	      _next = payload.question;
+	      QuestionStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = QuestionStore;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(286);
+	
+	var QuestionStore = __webpack_require__(292);
+	var SessionStore = __webpack_require__(237);
+	
+	var Questions = React.createClass({
+	  displayName: 'Questions',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      question: QuestionStore.newQuestion(),
+	      theChoice: null,
+	      thePreferences: [],
+	      theWeight: 1
+	    };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = QuestionStore.addListener(this._selectQuestion);
+	
+	    ApiUtil.fetchAllUserQuestions(SessionStore.currentUser());
+	    ApiUtil.fetchAnotherQuestion();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _handleAnswer: function (event) {
+	    event.preventDefault();
+	    if (this.state.theChoice || this.state.thePreferences) {}
+	    ApiUtil.fetchAnotherQuestion();
+	  },
+	
+	  _selectQuestion: function () {
+	    this.setState({ question: QuestionStore.newQuestion() });
+	  },
+	
+	  _backItUp: function () {
+	    this.context.router.push("main");
+	  },
+	
+	  _changeChoice: function (event) {
+	    this.setState({ theChoice: parseInt(event.target.value) });
+	  },
+	
+	  _changePreferences: function (event) {
+	    var temp;
+	
+	    if (this.state.thePreferences.includes(parseInt(event.target.value))) {
+	      temp = _remove(this.state.thePreferences, parseInt(event.target.value));
+	
+	      this.setState({ thePreferences: _remove(this.state.thePreferences, parseInt(event.target.value)) });
+	    } else {
+	      temp = this.state.thePreferences.concat([parseInt(event.target.value)]);
+	
+	      this.setState({ thePreferences: temp });
+	    }
+	  },
+	
+	  _skip: function () {
+	    ApiUtil.fetchAnotherQuestion();
+	  },
+	
+	  render: function () {
+	
+	    var stuffToRender;
+	
+	    if (this.state.question) {
+	      // console.log("current question:", this.state.question.description);
+	      // console.log("current answer:", this.state.theChoice);
+	      // console.log(this.state.thePreferences);
+	
+	      stuffToRender = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'form',
+	          { onSubmit: this._handleAnswer },
+	          React.createElement(
+	            'h4',
+	            null,
+	            this.state.question.description
+	          ),
+	          this.state.question.answer_choices.map(function (thing, index) {
+	            return React.createElement(
+	              'label',
+	              { key: index },
+	              React.createElement('input', { type: 'radio', value: thing.id, checked: this.state.theChoice === thing.id, onChange: this._changePreferences }),
+	              thing.body,
+	              React.createElement('br', null)
+	            );
+	          }.bind(this)),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'h4',
+	            null,
+	            'Which answers would you want to see from your matches?'
+	          ),
+	          this.state.question.answer_choices.map(function (thing, index) {
+	            return React.createElement(
+	              'label',
+	              { key: index },
+	              React.createElement('input', { type: 'checkbox', value: thing.id, checked: this.state.thePreferences.includes(thing.id), onChange: this._changePreferences }),
+	              thing.body,
+	              React.createElement('br', null)
+	            );
+	          }.bind(this)),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'button',
+	            { className: 'go_home' },
+	            'Yes, that is my final answer'
+	          )
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: this._skip, className: 'go_home' },
+	          'Skip this question'
+	        )
+	      );
+	    } else {
+	      stuffToRender = React.createElement(
+	        'div',
+	        { className: 'no_more_questions' },
+	        'You\'ve answered every question we\'ve got, you crazy sonuvagun.',
+	        React.createElement('br', null)
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      stuffToRender,
+	      React.createElement(
+	        'button',
+	        { className: 'go_home', onClick: this._backItUp },
+	        'Ok, I\'m done'
+	      )
+	    );
+	  }
+	
+	});
+	
+	var _remove = function (theList, theThing) {
+	  for (var i = 0; i < theList.length; i++) {
+	    if (theList[i] === theThing) {
+	      theList.splice(i, 1);
+	    }
+	  }
+	
+	  return theList;
+	};
+	
+	module.exports = Questions;
 
 /***/ }
 /******/ ]);

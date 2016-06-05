@@ -38,3 +38,9 @@
 .header-list > li:hover {
   background: blue;
 }
+
+.yer_face {
+  height: 30px;
+  width: 30px;
+  border-radius: 50px;
+}
