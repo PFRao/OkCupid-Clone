@@ -40,6 +40,10 @@ var Main = React.createClass({
     this.context.router.push("matches");
   },
 
+  _interrogate: function () {
+    this.context.router.push("questions");
+  },
+
   redirectIfLoggedOut: function () {
     if (!SessionStore.isUserLoggedIn()) {
       this.context.router.push("/");
@@ -59,8 +63,9 @@ var Main = React.createClass({
     return (
       <div>
         {candy}
-        <button className="go_home" onClick={this._logout}>Stop being a Peter... for now!</button>
-        <button className="browse_matches" onClick={this._browse}>Take a look at some of the other Peters</button>
+        <button className="go_home" onClick={this._logout}>Log thee out</button><br />
+        <button className="go_home" onClick={this._browse}>Browse thy matches</button><br />
+        <button className="go_home" onClick={this._interrogate}>Find thyself</button><br />
       </div>
     );
 

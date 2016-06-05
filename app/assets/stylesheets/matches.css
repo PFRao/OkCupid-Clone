@@ -2,13 +2,16 @@
 
 div.list_o_matches {
   margin: auto;
-  width: 60%;
+  width: 33%;
   padding: 10px;
+  background: #ccc;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 ul {
   list-style-type: none;
-  width: 500px;
+  width: 333px;
 }
 
 h3 {

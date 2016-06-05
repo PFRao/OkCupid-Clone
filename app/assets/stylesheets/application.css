@@ -23,3 +23,26 @@
 body {
   background: #104da1;
 }
+
+button.go_home {
+  background-color: white;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px solid purple;
+}
+
+button.go_home:hover {
+  background-color: purple;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px solid purple;
+  color: purple;
+}
+
+button.go_home:active {
+  background-color: #29d58f;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px solid #29d58f;
+  color: brown;
+}

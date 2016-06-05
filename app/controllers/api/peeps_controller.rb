@@ -17,7 +17,7 @@ class Api::PeepsController < ApplicationController
 	private
 
 	def user_params
-		params.require(:user).permit(:id, :username, :birthdate, :password_digest, :preferences, :personality, :location, :last_online, :looking_for)
+		params.require(:user).permit(:id, :username, :birthdate, :password_digest, :personality, :location, :last_online)
 	end
 
 end

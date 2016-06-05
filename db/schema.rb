@@ -11,18 +11,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531185642) do
+ActiveRecord::Schema.define(version: 20160604020955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "answer_choices", force: :cascade do |t|
+    t.integer  "question_id", null: false
+    t.string   "body",        null: false
+    t.string   "category",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "value"
+  end
+
+  add_index "answer_choices", ["question_id"], name: "index_answer_choices_on_question_id", using: :btree
+
+  create_table "answers", force: :cascade do |t|
+    t.integer  "user_id",                           null: false
+    t.integer  "weight",                            null: false
+    t.boolean  "public",             default: true, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "acceptable_choices"
+    t.integer  "answer_choice_id"
+  end
+
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "description",                 null: false
+    t.boolean  "multiple",    default: false, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "username",        null: false
     t.string   "password_digest", null: false
-    t.string   "preferences"
     t.string   "personality"
     t.string   "location",        null: false
-    t.string   "looking_for"
     t.datetime "last_online",     null: false
     t.string   "session_token",   null: false
     t.datetime "created_at",      null: false

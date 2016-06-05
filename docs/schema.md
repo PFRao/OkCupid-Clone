@@ -24,6 +24,8 @@ column name | data type | details
 id          | integer   | not null, primary key
 description | string    | not null
 answers     | string    | not null
+categories  | array     | not null
+weight      | array     | not null
 multiple    | boolean   | not null, default: false
 
 ## answers
@@ -32,7 +34,9 @@ column name | data type | details
 id          | integer   | not null, primary key
 user_id     | integer   | not null, foreign key (references users), indexed
 question_id | integer   | not null, foreign key (references questions), indexed
-answer      | string    | not null
+answer      | integer   | not null
+preferred   | integer   | not null
+weight      | integer   | not null
 public      | boolean   | not null, default: true
 
 ## likes

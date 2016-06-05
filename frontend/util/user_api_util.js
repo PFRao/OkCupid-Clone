@@ -10,7 +10,35 @@ var UserApiUtil = {
       dataType: 'json',
       data: {user: formData},
       success: function (currentUser) {
-        SessionActions.receiveCurrentUser(currentUser);
+        // SessionActions.receiveCurrentUser(currentUser);
+        UserApiUtil.update({
+          id: currentUser.id,
+          personality: JSON.stringify({you: {
+            active: 0,
+            outdoorsy: 0,
+            outgoing: 0,
+            sports: 0,
+            pop_culture: 0,
+            conservative: 0,
+            rebellious: 0,
+            optimistic: 0,
+            traditional: 0,
+            organized: 0,
+            religious: 0
+          }, them: {
+            active: 0,
+            outdoorsy: 0,
+            outgoing: 0,
+            sports: 0,
+            pop_culture: 0,
+            conservative: 0,
+            rebellious: 0,
+            optimistic: 0,
+            traditional: 0,
+            organized: 0,
+            religious: 0
+          }})
+        });
       },
       error: function (xhr) {
         console.log('UserApiUtil#createAccount error');
