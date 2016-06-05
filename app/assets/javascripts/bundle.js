@@ -26546,6 +26546,10 @@
 	  return $.extend({}, _currentUser);
 	};
 	
+	SessionStore.currentUserPersonality = function () {
+	  return JSON.parse(_currentUser.personality);
+	};
+	
 	SessionStore.currentUserHasBeenFetched = function () {
 	  return _currentUserHasBeenFetched;
 	};
@@ -33412,8 +33416,6 @@
 	      dataType: 'json',
 	      data: { user: formData },
 	      success: function (currentUser) {
-	        console.log("Current Session Token:" + currentUser.session_token);
-	
 	        SessionActions.receiveCurrentUser(currentUser);
 	      },
 	      error: function (xhr) {
@@ -33503,6 +33505,7 @@
 	      password: "",
 	      location: "",
 	      birthdate: null,
+	      gender: "man",
 	      last_online: new Date(),
 	      modalIsOpen: false
 	    };
@@ -33546,6 +33549,11 @@
 	
 	  _changeBirthdate: function (event) {
 	    this.setState({ birthdate: event.target.value });
+	  },
+	
+	  _changeGender: function (event) {
+	    console.log(event.target.value);
+	    this.setState({ gender: event.target.value });
 	  },
 	
 	  componentDidMount: function () {
@@ -33661,6 +33669,21 @@
 	          )
 	        ),
 	        React.createElement('input', { type: 'date', onChange: this._changeBirthdate }),
+	        'Are you a man or a woman?',
+	        React.createElement(
+	          'label',
+	          null,
+	          React.createElement('input', { type: 'checkbox', value: 'man', checked: this.state.gender === "man", onChange: this._changeGender }),
+	          'Man',
+	          React.createElement('br', null)
+	        ),
+	        React.createElement(
+	          'label',
+	          null,
+	          React.createElement('input', { type: 'checkbox', value: 'woman', checked: this.state.gender === "woman", onChange: this._changeGender }),
+	          'Woman',
+	          React.createElement('br', null)
+	        ),
 	        React.createElement(
 	          'button',
 	          { type: 'submit' },
@@ -35692,6 +35715,15 @@
 	  render: function () {
 	
 	    var candy;
+	    var bar;
+	
+	    if (this.state.user.gender === "man") {
+	      bar = "man";
+	    } else if (this.state.user.gender === "woman") {
+	      bar = "woman";
+	    } else {
+	      bar = "???";
+	    }
 	
 	    if (this.state.user) {
 	      candy = React.createElement(
@@ -35699,7 +35731,10 @@
 	        null,
 	        'You logged in at: ',
 	        this.state.user.last_online,
-	        '.'
+	        ' ',
+	        React.createElement('br', null),
+	        'You are a ',
+	        bar
 	      );
 	    } else {
 	      candy = React.createElement(
@@ -35716,7 +35751,7 @@
 	      React.createElement(
 	        'button',
 	        { className: 'go_home', onClick: this._logout },
-	        'Log thee out'
+	        'Log out'
 	      ),
 	      React.createElement('br', null),
 	      React.createElement(
@@ -35795,7 +35830,7 @@
 	    theScore += Math.abs(thePersonality.them[attr] / theCount[attr] - theOtherPersonality.you[attr] / theOtherCount[attr]);
 	  }.bind(this));
 	
-	  return theScore;
+	  return 100 - theScore / 5;
 	};
 	
 	MatchesStore.beSelective = function (pickle, gregory) {
@@ -35881,6 +35916,24 @@
 	      dataType: 'json',
 	      success: function (question) {
 	        ServerActions.receiveNewQuestion(question);
+	      }
+	    });
+	  },
+	
+	  answerQuestion: function (answerInfo) {
+	    // debugger
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/answers',
+	      dataType: 'json',
+	      data: { answer: answerInfo },
+	      success: function (answer) {
+	        console.log("This was a triumph!");
+	        console.log("I'm making a note here: HUGE success!");
+	        console.log(answer);
+	      },
+	      error: function (answer) {
+	        console.log("Fission mailed");
 	      }
 	    });
 	  }
@@ -36120,9 +36173,12 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(286);
+	var UserApiUtil = __webpack_require__(261);
 	
 	var QuestionStore = __webpack_require__(292);
 	var SessionStore = __webpack_require__(237);
+	
+	var _values = {};
 	
 	var Questions = React.createClass({
 	  displayName: 'Questions',
@@ -36131,9 +36187,9 @@
 	  getInitialState: function () {
 	    return {
 	      question: QuestionStore.newQuestion(),
-	      theChoice: null,
+	      theChoice: "nothing yet",
 	      thePreferences: [],
-	      theWeight: 1
+	      theWeight: 0
 	    };
 	  },
 	
@@ -36154,8 +36210,40 @@
 	
 	  _handleAnswer: function (event) {
 	    event.preventDefault();
-	    if (this.state.theChoice || this.state.thePreferences) {}
+	    var formAnswer = {};
+	    var formData = {};
+	    var demPrefsTho;
+	
+	    if (this.state.theChoice || this.state.thePreferences) {
+	
+	      this._getRelevantValues();
+	      demPrefsTho = this.state.thePreferences.map(function (thingy) {
+	        return _values[thingy];
+	      });
+	      formAnswer.answer_choice_id = this.state.theChoice;
+	      formAnswer.acceptable_choices = JSON.stringify(this.state.thePreferences);
+	      formAnswer.weight = this.state.theWeight;
+	      formAnswer.user_id = SessionStore.currentUser().id;
+	      formData.category = this.state.question.answer_choices[0].category;
+	      formData.theChoice = _values[this.state.theChoice] * this.state.theWeight;
+	      formData.thePref = _average(demPrefsTho) * this.state.theWeight;
+	    }
+	
+	    // console.log("submitted:", formAnswer);
+	    this._resetForm();
+	
+	    this._answerTheQuestion(formAnswer);
+	    this._updateTheUser(formData);
 	    ApiUtil.fetchAnotherQuestion();
+	  },
+	
+	  _resetForm: function () {
+	    this.setState({
+	      theChoice: null,
+	      thePreferences: [],
+	      theWeight: 0
+	    });
+	    _values = {};
 	  },
 	
 	  _selectQuestion: function () {
@@ -36184,8 +36272,31 @@
 	    }
 	  },
 	
+	  _changeWeight: function (event) {
+	    this.setState({ theWeight: parseInt(event.target.value) });
+	  },
+	
 	  _skip: function () {
 	    ApiUtil.fetchAnotherQuestion();
+	  },
+	
+	  _getRelevantValues: function () {
+	    for (var i = 0; i < this.state.question.answer_choices.length; i++) {
+	      _values[this.state.question.answer_choices[i].id] = this.state.question.answer_choices[i].value;
+	    }
+	  },
+	
+	  _answerTheQuestion: function (formAnswer) {
+	    ApiUtil.answerQuestion(formAnswer);
+	  },
+	
+	  _updateTheUser: function (formData) {
+	    var theSendUp = SessionStore.currentUserPersonality();
+	
+	    theSendUp.you[formData.category] += formData.theChoice;
+	    theSendUp.them[formData.category] += formData.thePref;
+	
+	    UserApiUtil.update({ id: SessionStore.currentUser().id, personality: JSON.stringify(theSendUp) });
 	  },
 	
 	  render: function () {
@@ -36212,7 +36323,7 @@
 	            return React.createElement(
 	              'label',
 	              { key: index },
-	              React.createElement('input', { type: 'radio', value: thing.id, checked: this.state.theChoice === thing.id, onChange: this._changePreferences }),
+	              React.createElement('input', { type: 'radio', value: thing.id, checked: this.state.theChoice === thing.id, onChange: this._changeChoice }),
 	              thing.body,
 	              React.createElement('br', null)
 	            );
@@ -36232,17 +36343,55 @@
 	              React.createElement('br', null)
 	            );
 	          }.bind(this)),
-	          React.createElement('br', null),
+	          React.createElement('br', null)
+	        ),
+	        React.createElement(
+	          'form',
+	          null,
 	          React.createElement(
-	            'button',
-	            { className: 'go_home' },
-	            'Yes, that is my final answer'
+	            'h4',
+	            null,
+	            'How important is this question to you?'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'radio', value: 0, checked: this.state.theWeight === 0, onChange: this._changeWeight }),
+	            'I honestly don\'t give a shit',
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'radio', value: 1, checked: this.state.theWeight === 1, onChange: this._changeWeight }),
+	            'I care a little bit, bit it\'s really no big deal, you know?',
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'radio', value: 2, checked: this.state.theWeight === 2, onChange: this._changeWeight }),
+	            'This is something that I would definitely consider when selecting a mate',
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'radio', value: 10, checked: this.state.theWeight === 10, onChange: this._changeWeight }),
+	            'This is basically a dealbreaker',
+	            React.createElement('br', null)
 	          )
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'button',
+	          { onClick: this._handleAnswer, className: 'go_home' },
+	          'Yes, that is my final answer'
 	        ),
 	        React.createElement(
 	          'button',
 	          { onClick: this._skip, className: 'go_home' },
-	          'Skip this question'
+	          'Skip this question for now'
 	        )
 	      );
 	    } else {
@@ -36276,6 +36425,19 @@
 	  }
 	
 	  return theList;
+	};
+	
+	var _average = function (theArray) {
+	  if (theArray.length === 0) {
+	    return 0;
+	  }
+	
+	  var sum = 0;
+	  for (var i = 0; i < theArray.length; i++) {
+	    sum += theArray[i];
+	  }
+	
+	  return sum / theArray.length;
 	};
 	
 	module.exports = Questions;

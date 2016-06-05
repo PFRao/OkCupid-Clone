@@ -29,6 +29,24 @@ var ApiUtil = {
         ServerActions.receiveNewQuestion(question);
       }
     });
+  },
+
+  answerQuestion: function (answerInfo) {
+    // debugger
+    $.ajax({
+      method: 'POST',
+      url: 'api/answers',
+      dataType: 'json',
+      data: { answer: answerInfo },
+      success: function (answer) {
+        console.log("This was a triumph!");
+        console.log("I'm making a note here: HUGE success!");
+        console.log(answer);
+      },
+      error: function (answer) {
+        console.log("Fission mailed");
+      }
+    });
   }
 };
 

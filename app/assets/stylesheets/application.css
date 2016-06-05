@@ -22,6 +22,7 @@
 
 body {
   background: #104da1;
+  font-family: monospace;
 }
 
 button.go_home {
@@ -29,20 +30,22 @@ button.go_home {
   border-radius: 20px;
   padding: 5px;
   border: 10px solid purple;
+  font-family: cursive;
+  font-weight: 1000;
 }
 
 button.go_home:hover {
   background-color: purple;
   border-radius: 20px;
   padding: 5px;
-  border: 10px solid purple;
+  border: 10px outset #29d58f;
   color: purple;
 }
 
 button.go_home:active {
-  background-color: #29d58f;
+  background-color: purple;
   border-radius: 20px;
   padding: 5px;
-  border: 10px solid #29d58f;
-  color: brown;
+  border: 10px inset #29d58f;
+  color: #29d58f;
 }

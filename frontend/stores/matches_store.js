@@ -64,7 +64,7 @@ MatchesStore.beJudgemental = function (stinker, otherStinker) {
     theScore += Math.abs((thePersonality.them[attr] / theCount[attr]) - (theOtherPersonality.you[attr] / theOtherCount[attr]));
   }.bind(this));
 
-  return theScore;
+  return (100 - (theScore/5));
 };
 
 MatchesStore.beSelective = function (pickle, gregory) {

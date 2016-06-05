@@ -42,6 +42,10 @@ SessionStore.currentUser = function () {
 	return $.extend({}, _currentUser);
 };
 
+SessionStore.currentUserPersonality = function () {
+  return JSON.parse(_currentUser.personality);
+};
+
 SessionStore.currentUserHasBeenFetched = function () {
   return _currentUserHasBeenFetched;
 };
