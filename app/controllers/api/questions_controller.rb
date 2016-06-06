@@ -1,5 +1,3 @@
-require 'byebug'
-
 class Api::QuestionsController < ApplicationController
 
   def index
