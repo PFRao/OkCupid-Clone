@@ -1,5 +1,3 @@
-require 'byebug'
-
 class Api::LikesController < ApplicationController
 
   def create
