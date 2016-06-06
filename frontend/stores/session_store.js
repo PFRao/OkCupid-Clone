@@ -1,4 +1,4 @@
-var AppDispatcher = require('../dispatcher/dispatcher.js');
+var AppDispatcher = require('../dispatcher/dispatcher');
 var Store = require('flux/utils').Store;
 var SessionConstants = require('../constants/session_constants');
 
@@ -27,14 +27,9 @@ SessionStore.__onDispatch = function (payload) {
     	_logout();
       SessionStore.__emitChange();
       break;
-    // case FavoriteConstants.FAVORITE_RECEIVED:
-    //   _addFavorite(payload.favorite.benchId);
-    //   SessionStore.__emitChange();
-    //   break;
-    // case FavoriteConstants.FAVORITE_REMOVED:
-    //   _removeFavorite(payload.favorite.benchId);
-    //   SessionStore.__emitChange();
-    //   break;
+    case "LIKES_TOGGLED":
+      SessionStore.__emitChange();
+      break;
   }
 };
 
@@ -42,8 +37,31 @@ SessionStore.currentUser = function () {
 	return $.extend({}, _currentUser);
 };
 
+SessionStore.update = function () {
+  console.log("Hi i'm hubert");
+  SessionApiUtil.hubert();
+};
+
 SessionStore.currentUserPersonality = function () {
   return JSON.parse(_currentUser.personality);
+};
+
+SessionStore.doesCurrentUserLike = function (somePerson) {
+  for (var i = 0; i < _currentUser.likees.length; i++) {
+    if (_currentUser.likees[i].id === somePerson.id) {
+      return true;
+    }
+  }
+  return false;
+};
+
+SessionStore.isCurrentUserLikedBy = function (somePerson) {
+  for (var i = 0; i < _currentUser.likers.length; i++) {
+    if (_currentUser.likers[i].id === somePerson.id) {
+      return true;
+    }
+  }
+  return false;
 };
 
 SessionStore.currentUserHasBeenFetched = function () {

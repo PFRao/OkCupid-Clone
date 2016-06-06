@@ -9,8 +9,12 @@ class Api::QuestionsController < ApplicationController
 
   def new
     @questions = (Question.all - current_user.questions).shuffle()
-    @question = @questions[0]
-    render "api/questions/show"
+    if @questions.length > 0
+      @question = @questions[0]
+      render "api/questions/show"
+    else
+      render json: nil
+    end
   end
 
 end

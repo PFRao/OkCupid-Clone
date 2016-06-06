@@ -57,7 +57,7 @@
 	var LoginForm = __webpack_require__(229);
 	var SignupForm = __webpack_require__(263);
 	var Main = __webpack_require__(284);
-	var UsersIndex = __webpack_require__(290);
+	var UsersIndex = __webpack_require__(291);
 	var Questions = __webpack_require__(293);
 	//Stores
 	var SessionStore = __webpack_require__(237);
@@ -26415,7 +26415,6 @@
 				data: { user: credentials },
 				success: function (currentUser) {
 					console.log("Login success (SessionApiUtil#login)");
-					console.log("Current Session Token:" + currentUser.session_token);
 	
 					UserApiUtil.update({ id: currentUser.id, last_online: new Date() });
 				},
@@ -26453,6 +26452,10 @@
 				},
 				complete: complete
 			});
+		},
+	
+		hubert: function () {
+			console.log("hubert is very awesome!");
 		}
 	};
 	
@@ -26531,14 +26534,9 @@
 	      _logout();
 	      SessionStore.__emitChange();
 	      break;
-	    // case FavoriteConstants.FAVORITE_RECEIVED:
-	    //   _addFavorite(payload.favorite.benchId);
-	    //   SessionStore.__emitChange();
-	    //   break;
-	    // case FavoriteConstants.FAVORITE_REMOVED:
-	    //   _removeFavorite(payload.favorite.benchId);
-	    //   SessionStore.__emitChange();
-	    //   break;
+	    case "LIKES_TOGGLED":
+	      SessionStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -26546,8 +26544,31 @@
 	  return $.extend({}, _currentUser);
 	};
 	
+	SessionStore.update = function () {
+	  console.log("Hi i'm hubert");
+	  SessionApiUtil.hubert();
+	};
+	
 	SessionStore.currentUserPersonality = function () {
 	  return JSON.parse(_currentUser.personality);
+	};
+	
+	SessionStore.doesCurrentUserLike = function (somePerson) {
+	  for (var i = 0; i < _currentUser.likees.length; i++) {
+	    if (_currentUser.likees[i].id === somePerson.id) {
+	      return true;
+	    }
+	  }
+	  return false;
+	};
+	
+	SessionStore.isCurrentUserLikedBy = function (somePerson) {
+	  for (var i = 0; i < _currentUser.likers.length; i++) {
+	    if (_currentUser.likers[i].id === somePerson.id) {
+	      return true;
+	    }
+	  }
+	  return false;
 	};
 	
 	SessionStore.currentUserHasBeenFetched = function () {
@@ -35782,7 +35803,7 @@
 	var ApiUtil = __webpack_require__(286);
 	
 	var SessionStore = __webpack_require__(237);
-	var QuestionStore = __webpack_require__(292);
+	var QuestionStore = __webpack_require__(290);
 	
 	var _matches;
 	var _stinkers;
@@ -35915,6 +35936,7 @@
 	      url: 'api/questions/new',
 	      dataType: 'json',
 	      success: function (question) {
+	        console.log("next question:", question);
 	        ServerActions.receiveNewQuestion(question);
 	      }
 	    });
@@ -35930,7 +35952,6 @@
 	      success: function (answer) {
 	        console.log("This was a triumph!");
 	        console.log("I'm making a note here: HUGE success!");
-	        console.log(answer);
 	      },
 	      error: function (answer) {
 	        console.log("Fission mailed");
@@ -35966,6 +35987,18 @@
 	    AppDispatcher.dispatch({
 	      actionType: "NEW_QUESTION",
 	      question: question
+	    });
+	  },
+	
+	  likeAPerson: function (theInfo) {
+	    AppDispatcher.dispatch({
+	      actionType: "LIKES_TOGGLED"
+	    });
+	  },
+	
+	  unlikeAPerson: function (theInfo) {
+	    AppDispatcher.dispatch({
+	      actionType: "LIKES_TOGGLED"
 	    });
 	  }
 	};
@@ -36023,17 +36056,68 @@
 /* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var AppDispatcher = __webpack_require__(238);
+	var Store = __webpack_require__(242).Store;
+	
+	var ApiUtil = __webpack_require__(286);
+	
+	var _answered = [];
+	var _next;
+	
+	var QuestionStore = new Store(AppDispatcher);
+	
+	QuestionStore.answeredQuestions = function () {
+	  return _answered;
+	};
+	
+	QuestionStore.newQuestion = function () {
+	  return _next;
+	};
+	
+	QuestionStore.noNoNoNoNo = function (aQuestion) {
+	  for (var i = 0; i < _answered.length; i++) {
+	    if (_answered[i].id === aQuestion.id) {
+	      return true;
+	    }
+	  }
+	  return false;
+	};
+	
+	QuestionStore.activeAnswers = function () {
+	  return ":)";
+	}, QuestionStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "ANSWERED_QUESTIONS":
+	      _answered = payload.questions;
+	      QuestionStore.__emitChange();
+	      break;
+	    case "NEW_QUESTION":
+	      debugger;
+	      _next = payload.question;
+	      QuestionStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = QuestionStore;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	
 	var MatchesStore = __webpack_require__(285),
 	    ApiUtil = __webpack_require__(286);
 	
-	var UserIndexItem = __webpack_require__(291);
+	var UserIndexItem = __webpack_require__(292);
+	var SessionApiUtil = __webpack_require__(234);
 	
 	var UsersIndex = React.createClass({
 	  displayName: 'UsersIndex',
 	
 	  getInitialState: function () {
+	    SessionApiUtil.fetchCurrentUser();
 	    return {
 	      users: null,
 	      filters: {}
@@ -36078,10 +36162,13 @@
 	module.exports = UsersIndex;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var LikeButton = __webpack_require__(294);
+	
+	var SessionStore = __webpack_require__(237);
 	
 	var UserIndexItem = React.createClass({
 	  displayName: 'UserIndexItem',
@@ -36091,6 +36178,17 @@
 	    // debugger
 	    var oldness = new Date() - new Date(this.props.person.birthdate);
 	    var oldness2 = Math.floor(oldness / 31536000000);
+	
+	    if (SessionStore.isCurrentUserLikedBy(this.props.person)) {
+	      oldness = React.createElement(
+	        'p',
+	        null,
+	        'This person likes you!'
+	      );
+	    } else {
+	      oldness = React.createElement('p', null);
+	    }
+	
 	    return React.createElement(
 	      'li',
 	      null,
@@ -36111,61 +36209,15 @@
 	        null,
 	        this.props.rating,
 	        ' % Match'
-	      )
+	      ),
+	      oldness,
+	      React.createElement(LikeButton, { person: this.props.person })
 	    );
 	  }
 	
 	});
 	
 	module.exports = UserIndexItem;
-
-/***/ },
-/* 292 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(238);
-	var Store = __webpack_require__(242).Store;
-	
-	var ApiUtil = __webpack_require__(286);
-	
-	var _answered = [];
-	var _next;
-	
-	var QuestionStore = new Store(AppDispatcher);
-	
-	QuestionStore.answeredQuestions = function () {
-	  return _answered;
-	};
-	
-	QuestionStore.newQuestion = function () {
-	  return _next;
-	};
-	
-	QuestionStore.noNoNoNoNo = function (aQuestion) {
-	  for (var i = 0; i < _answered.length; i++) {
-	    if (_answered[i].id === aQuestion.id) {
-	      return true;
-	    }
-	  }
-	  return false;
-	};
-	
-	QuestionStore.activeAnswers = function () {
-	  return ":)";
-	}, QuestionStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "ANSWERED_QUESTIONS":
-	      _answered = payload.questions;
-	      QuestionStore.__emitChange();
-	      break;
-	    case "NEW_QUESTION":
-	      _next = payload.question;
-	      QuestionStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = QuestionStore;
 
 /***/ },
 /* 293 */
@@ -36175,7 +36227,7 @@
 	var ApiUtil = __webpack_require__(286);
 	var UserApiUtil = __webpack_require__(261);
 	
-	var QuestionStore = __webpack_require__(292);
+	var QuestionStore = __webpack_require__(290);
 	var SessionStore = __webpack_require__(237);
 	
 	var _values = {};
@@ -36441,6 +36493,98 @@
 	};
 	
 	module.exports = Questions;
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var LikeApiUtil = __webpack_require__(295);
+	
+	var SessionStore = __webpack_require__(237);
+	
+	var LikeButton = React.createClass({
+	  displayName: 'LikeButton',
+	
+	  getInitialState: function () {
+	    return { status: SessionStore.doesCurrentUserLike(this.props.person) };
+	  },
+	
+	  _getClickedLike: function (event) {
+	    var louis = { liker_id: SessionStore.currentUser().id, likee_id: this.props.person.id };
+	    LikeApiUtil.likeSomeone(louis);
+	  },
+	
+	  _getClickedUnlike: function (event) {
+	    var louis = { liker_id: SessionStore.currentUser().id, likee_id: this.props.person.id };
+	    LikeApiUtil.unlikeSomeone(louis);
+	  },
+	
+	  _toggleThis: function () {
+	    if (this.state.status) {
+	      this._getClickedUnlike();
+	      this.setState({ status: false });
+	    } else {
+	      this._getClickedLike();
+	      this.setState({ status: true });
+	    }
+	  },
+	
+	  render: function () {
+	
+	    var humphrey;
+	
+	    if (this.state.status) {
+	      humphrey = "Unlike";
+	    } else {
+	      humphrey = "Like";
+	    }
+	
+	    return React.createElement(
+	      'button',
+	      { className: 'like_button', onClick: this._toggleThis },
+	      humphrey
+	    );
+	  }
+	
+	});
+	
+	module.exports = LikeButton;
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerActions = __webpack_require__(287);
+	// var FilterParamsStore = require('../stores/filter_params');
+	
+	var LikeApiUtil = {
+	  likeSomeone: function (theInfo) {
+	    $.ajax({
+	      method: "POST",
+	      url: "api/likes",
+	      dataType: "json",
+	      data: { like: theInfo },
+	      success: function (like) {
+	        ServerActions.likeAPerson(like);
+	      }
+	    });
+	  },
+	
+	  unlikeSomeone: function (theInfo) {
+	    $.ajax({
+	      method: "DELETE",
+	      url: "api/likes/1",
+	      dataType: "json",
+	      data: { like: theInfo },
+	      success: function (like) {
+	        ServerActions.unlikeAPerson(like);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = LikeApiUtil;
 
 /***/ }
 /******/ ]);

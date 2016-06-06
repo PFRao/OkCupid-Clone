@@ -4,9 +4,11 @@ var MatchesStore = require('../../stores/matches_store'),
     ApiUtil = require('../../util/api_util');
 
 var UserIndexItem = require('./user_index_item');
+var SessionApiUtil = require('../../util/session_api_util');
 
 var UsersIndex = React.createClass({
   getInitialState: function () {
+    SessionApiUtil.fetchCurrentUser();
     return {
       users: null,
       filters: {}

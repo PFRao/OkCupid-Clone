@@ -20,6 +20,18 @@ var ApiActions = {
       actionType: "NEW_QUESTION",
       question: question
     });
+  },
+
+  likeAPerson: function (theInfo) {
+    AppDispatcher.dispatch({
+      actionType: "LIKES_TOGGLED"
+    });
+  },
+
+  unlikeAPerson: function (theInfo) {
+    AppDispatcher.dispatch({
+      actionType: "LIKES_TOGGLED"
+    });
   }
 };
 
