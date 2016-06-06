@@ -34,6 +34,7 @@ QuestionStore.__onDispatch = function (payload) {
       QuestionStore.__emitChange();
       break;
     case "NEW_QUESTION":
+      debugger
       _next = payload.question;
       QuestionStore.__emitChange();
       break;

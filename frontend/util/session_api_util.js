@@ -10,7 +10,6 @@ var SessionApiUtil = {
 			data: {user: credentials},
 			success: function (currentUser) {
         console.log("Login success (SessionApiUtil#login)");
-        console.log("Current Session Token:" + currentUser.session_token);
 
         UserApiUtil.update({ id: currentUser.id, last_online: new Date() });
       },
@@ -48,7 +47,11 @@ var SessionApiUtil = {
 			},
       complete: complete
 		});
-	}
+	},
+
+  hubert: function () {
+    console.log("hubert is very awesome!");
+  }
 };
 
 module.exports = SessionApiUtil;

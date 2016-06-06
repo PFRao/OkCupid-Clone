@@ -1,0 +1,24 @@
+button.like_button {
+  background-color: yellow;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px solid #FF8300;
+  font-family: cursive;
+  font-weight: 1000;
+}
+
+button.like_button:hover {
+  background-color: tan;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px outset #654321;
+  color: purple;
+}
+
+button.like_button:active {
+  background-color: red;
+  border-radius: 20px;
+  padding: 5px;
+  border: 10px inset #654321;
+  color: #29d58f;
+}

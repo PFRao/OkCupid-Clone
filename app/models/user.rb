@@ -12,6 +12,12 @@ class User < ActiveRecord::Base
   has_many :answers
   has_many :questions, through: :answers, source: :question
 
+  has_many :incoming_likes, class_name: "Like", foreign_key: :likee_id, primary_key: :id
+  has_many :outgoing_likes, class_name: "Like", foreign_key: :liker_id, primary_key: :id
+
+  has_many :likers, through: :incoming_likes, source: :liker
+  has_many :likees, through: :outgoing_likes, source: :likee
+
 	def password= password
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password

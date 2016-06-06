@@ -26,6 +26,7 @@ var ApiUtil = {
       url: 'api/questions/new',
       dataType: 'json',
       success: function (question) {
+        console.log("next question:", question);
         ServerActions.receiveNewQuestion(question);
       }
     });
@@ -41,7 +42,6 @@ var ApiUtil = {
       success: function (answer) {
         console.log("This was a triumph!");
         console.log("I'm making a note here: HUGE success!");
-        console.log(answer);
       },
       error: function (answer) {
         console.log("Fission mailed");
