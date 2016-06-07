@@ -1,4 +1,4 @@
-class Api::ProfilesController < ApplicationController
+       class Api::ProfilesController < ApplicationController
 
   def show
     @profile = Profile.find_by(user_id: params[:id])

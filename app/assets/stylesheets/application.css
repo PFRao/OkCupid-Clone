@@ -21,7 +21,8 @@
  *= require like_button
  *= require questions
  *= require profile
- *= likes
+ *= require likes
+ *= require visits
  */
 
 body {

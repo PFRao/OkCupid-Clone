@@ -32,6 +32,15 @@ var ApiActions = {
     AppDispatcher.dispatch({
       actionType: "LIKES_TOGGLED"
     });
+  },
+
+  receiveAllVisits: function (theVisits, type) {
+    debugger
+    AppDispatcher.dispatch({
+      actionType: "VISITS_RECEIVED",
+      visits: theVisits,
+      type: type
+    });
   }
 };
 

@@ -37,6 +37,16 @@ var UserProfile = React.createClass({
     this.setState({ theState: ProfileStore.userIs() });
   },
 
+  // _registerVisit: function () {
+  //   var you = SessionStore.currentUser();
+  //   var them = this.state.theState.user;
+  //
+  // },
+  //
+  // _visitSeekAndDestroy: function () {
+  //
+  // },
+
   render: function() {
 
     var warning;

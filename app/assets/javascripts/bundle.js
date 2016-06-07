@@ -60,6 +60,7 @@
 	var UsersIndex = __webpack_require__(293);
 	var Questions = __webpack_require__(297);
 	var LikesIndex = __webpack_require__(298);
+	var VisitsIndex = __webpack_require__(307);
 	var UserProfile = __webpack_require__(304);
 	//Stores
 	var SessionStore = __webpack_require__(237);
@@ -95,7 +96,7 @@
 	        { key: "visitors" },
 	        React.createElement(
 	          'a',
-	          { href: '#/main' },
+	          { href: '#/visits' },
 	          'Visitors'
 	        )
 	      ), React.createElement(
@@ -170,6 +171,7 @@
 	    React.createElement(Route, { path: 'matches', component: UsersIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'questions', component: Questions, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'likes', component: LikesIndex, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'visits', component: VisitsIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/:user_id', component: UserProfile, onEnter: _ensureLoggedIn })
 	  )
 	);
@@ -36099,6 +36101,15 @@
 	    AppDispatcher.dispatch({
 	      actionType: "LIKES_TOGGLED"
 	    });
+	  },
+	
+	  receiveAllVisits: function (theVisits, type) {
+	    debugger;
+	    AppDispatcher.dispatch({
+	      actionType: "VISITS_RECEIVED",
+	      visits: theVisits,
+	      type: type
+	    });
 	  }
 	};
 	
@@ -36271,6 +36282,8 @@
 	
 	var SessionStore = __webpack_require__(237);
 	
+	var VisitApiUtil = __webpack_require__(311);
+	
 	var UserIndexItem = React.createClass({
 	  displayName: 'UserIndexItem',
 	
@@ -36280,6 +36293,7 @@
 	  },
 	
 	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
 	    this.context.router.push("profile/" + this.props.person.id);
 	  },
 	
@@ -36325,6 +36339,20 @@
 	  }
 	
 	});
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
 	
 	module.exports = UserIndexItem;
 
@@ -37033,6 +37061,16 @@
 	    this.setState({ theState: ProfileStore.userIs() });
 	  },
 	
+	  // _registerVisit: function () {
+	  //   var you = SessionStore.currentUser();
+	  //   var them = this.state.theState.user;
+	  //
+	  // },
+	  //
+	  // _visitSeekAndDestroy: function () {
+	  //
+	  // },
+	
 	  render: function () {
 	
 	    var warning;
@@ -37273,6 +37311,362 @@
 	});
 	
 	module.exports = ProfileField;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SessionStore = __webpack_require__(237);
+	var VisitsStore = __webpack_require__(312);
+	
+	var VisitApiUtil = __webpack_require__(311);
+	
+	var IncomingVisits = __webpack_require__(308),
+	    OutgoingVisits = __webpack_require__(309);
+	
+	var VisitsIndex = React.createClass({
+	  displayName: 'VisitsIndex',
+	
+	
+	  getInitialState: function () {
+	    return { whichTab: "incoming" };
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  _changeTab: function (event) {
+	    this.setState({ whichTab: event.target.value });
+	  },
+	
+	  render: function () {
+	
+	    var theTab;
+	
+	    if (this.state.whichTab === "incoming") {
+	      theTab = React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors });
+	    } else {
+	      theTab = React.createElement(OutgoingVisits, { theList: SessionStore.currentUser().visitees });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'visits_main' },
+	      React.createElement(
+	        'p',
+	        { className: 'visits_poem' },
+	        'Remember what we used to do, ',
+	        React.createElement('br', null),
+	        'And how it used to be? ',
+	        React.createElement('br', null),
+	        'I always knew to count on you, ',
+	        React.createElement('br', null),
+	        'And you, depend on me. ',
+	        React.createElement('br', null),
+	        'I guess we drifted out of touch - ',
+	        React.createElement('br', null),
+	        'But that\'s the thing, they say ',
+	        React.createElement('br', null),
+	        'It\'s not that the spark can ',
+	        React.createElement(
+	          'span',
+	          { className: 'poem_italics' },
+	          'end'
+	        ),
+	        ', as such. ',
+	        React.createElement('br', null),
+	        'It simply... slips away... ',
+	        React.createElement('br', null),
+	        React.createElement('br', null),
+	        'DON\'T LET THAT HAPPEN TO YOU, ',
+	        SessionStore.currentUser().username,
+	        '!'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
+	        { className: 'go_home', onClick: this._changeTab, value: 'incoming' },
+	        'Recently Visited You'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'go_home', onClick: this._changeTab, value: 'outgoing' },
+	        'You Recently Visited'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement('br', null),
+	      theTab
+	    );
+	  }
+	
+	});
+	
+	module.exports = VisitsIndex;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var SessionStore = __webpack_require__(237);
+	var VisitsStore = __webpack_require__(312);
+	
+	var VisitIndexItem = __webpack_require__(310);
+	
+	var VisitApiUtil = __webpack_require__(311);
+	
+	var IncomingVisits = React.createClass({
+	  displayName: 'IncomingVisits',
+	
+	
+	  render: function () {
+	
+	    VisitApiUtil.getAllVisits(SessionStore.currentUser().id, "incoming");
+	
+	    var theVisit;
+	
+	    var kiwi = this.props.theList.map(function (element, index) {
+	      theVisit = _find_visit1(element.id);
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element, time: theVisit.updated_at });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'visit_title' },
+	        'People who recently visited you:'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        kiwi
+	      )
+	    );
+	  }
+	
+	});
+	
+	_find_visit1 = function (visitorId) {
+	  debugger;
+	  var incomingVisits = VisitsStore.incoming();
+	  for (var i = 0; i < incomingVisits.length; i++) {
+	    console.log(incomingVisits[i].visitor_id, visitorId);
+	    if (incomingVisits[i].visitor_id == visitorId) {
+	      return incomingVisits[i];
+	    }
+	  }
+	};
+	
+	module.exports = IncomingVisits;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var VisitsStore = __webpack_require__(312);
+	
+	var VisitIndexItem = __webpack_require__(310);
+	
+	var VisitApiUtil = __webpack_require__(311);
+	
+	var OutgoingVisits = React.createClass({
+	  displayName: 'OutgoingVisits',
+	
+	
+	  render: function () {
+	
+	    VisitApiUtil.getAllVisits(SessionStore.currentUser().id, "outgoing");
+	
+	    var theVisit;
+	
+	    var rhea = this.props.theList.map(function (element, index) {
+	      theVisit = _find_visit(element.id);
+	
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element, time: theVisit.updated_at });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'visit_title' },
+	        'People whom you have recently visited:'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        rhea
+	      )
+	    );
+	  }
+	
+	});
+	
+	_find_visit = function (visiteeId) {
+	  var outgoingVisits = VisitsStore.outgoing();
+	  for (var i = 0; i < outgoingVisits.length; i++) {
+	    console.log(outgoingVisits[i].visitee_id, visiteeId);
+	    if (outgoingVisits[i].visitee_id == visiteeId) {
+	      return outgoingVisits[i];
+	    }
+	  }
+	};
+	
+	module.exports = OutgoingVisits;
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var LikeButton = __webpack_require__(295);
+	
+	var SessionStore = __webpack_require__(237);
+	var MatchesStore = __webpack_require__(287);
+	var VisitsStore = __webpack_require__(312);
+	
+	var VisitIndexItem = React.createClass({
+	  displayName: 'VisitIndexItem',
+	
+	
+	  render: function () {
+	    // debugger
+	    var oldness = new Date() - new Date(this.props.person.birthdate);
+	    var oldness2 = Math.floor(oldness / 31536000000);
+	
+	    oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
+	
+	    return React.createElement(
+	      'li',
+	      null,
+	      React.createElement('img', { src: window.peterImage }),
+	      React.createElement(
+	        'h3',
+	        null,
+	        this.props.person.username
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Age ',
+	        oldness2
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        oldness,
+	        ' % Match'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Last visit was: ',
+	        this.props.time
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = VisitIndexItem;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerActions = __webpack_require__(289);
+	
+	var VisitApiUtil = {
+	  createVisit: function (theIds) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: theIds },
+	      success: function () {
+	        console.log("Visit created!");
+	      },
+	      faliure: function (xhr) {
+	        console.log("Somebody set us up the bomb!");
+	      }
+	    });
+	  },
+	
+	  deleteVisit: function (theIds) {
+	    $.ajax({
+	      method: 'DELETE',
+	      url: 'api/visits/1',
+	      dataType: 'json',
+	      data: { visit: theIds },
+	      success: function () {
+	        console.log("Visit destroyed!");
+	      },
+	      faliure: function (xhr) {
+	        console.log("Somebody set us up the bomb!");
+	      }
+	    });
+	  },
+	
+	  getAllVisits: function (theCurrentUserId, theType) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: { visitor_id: theCurrentUserId, type: theType } },
+	      success: function (theVisits) {
+	        ServerActions.receiveAllVisits(theVisits, theType);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = VisitApiUtil;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(238);
+	var Store = __webpack_require__(242).Store;
+	
+	var _incoming = [];
+	var _outoging = [];
+	
+	var VisitsStore = new Store(AppDispatcher);
+	
+	VisitsStore.incoming = function () {
+	  return _incoming;
+	};
+	
+	VisitsStore.outgoing = function () {
+	  return _outoging;
+	};
+	
+	VisitsStore.__onDispatch = function (payload) {
+	  debugger;
+	  switch (payload.actionType) {
+	    case "VISITS_RECEIVED":
+	      if (payload.type === "incoming") {
+	        _incoming = payload.visits;
+	      } else {
+	        _outgoing = payload.visits;
+	      }
+	      VisitsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = VisitsStore;
 
 /***/ }
 /******/ ]);

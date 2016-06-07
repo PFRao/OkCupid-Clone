@@ -5,7 +5,8 @@ Rails.application.routes.draw do
     resources :peeps
     resources :questions
     resources :answers
-    resources :likes, only: [:create, :destroy]
+    resources :likes, only: [:create, :destroy, :index]
+    resources :visits, only: [:create, :destroy, :index]
     resources :profiles
   end
 

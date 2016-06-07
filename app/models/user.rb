@@ -18,6 +18,12 @@ class User < ActiveRecord::Base
   has_many :likers, through: :incoming_likes, source: :liker
   has_many :likees, through: :outgoing_likes, source: :likee
 
+  has_many :incoming_visits, class_name: "Visit", foreign_key: :visitee_id, primary_key: :id
+  has_many :outgoing_visits, class_name: "Visit", foreign_key: :visitor_id, primary_key: :id
+
+  has_many :visitors, through: :incoming_visits, source: :visitor
+  has_many :visitees, through: :outgoing_visits, source: :visitee
+
   has_one :profile
 
 	def password= password
