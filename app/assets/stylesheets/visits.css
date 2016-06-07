@@ -3,7 +3,8 @@
 }
 
 .visits_poem {
-  color: #0F0;
+  color: orange;
+  font-family: sans-serif;
 }
 
 .poem_italics {
@@ -11,10 +12,11 @@
 }
 
 .visit_title {
-  font-family:sans-serif;
+  font-family:fantasy;
   color: pink;
 }
 
 .datDateDoe {
   color: yellow;
+  font-family: monospace;
 }

@@ -62,7 +62,7 @@ var VisitIndexItem = React.createClass({
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>
         <p>{oldness} % Match</p>
-        <p>Last visit was: <span className="datDateDoe"> {timeStamp} </span></p>
+        <p>Last visit: <span className="datDateDoe"> {timeStamp} </span></p>
       </li>
     );
 
