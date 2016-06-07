@@ -24,6 +24,15 @@ var theMonths = {
 
 var VisitIndexItem = React.createClass({
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
+  _goToProfile: function (event) {
+    _registerVisit(SessionStore.currentUser(), this.props.person);
+    this.context.router.push("profile/" + this.props.person.id);
+  },
+
   render: function () {
 
     var oldness = (new Date()) - (new Date(this.props.person.birthdate));
@@ -32,14 +41,14 @@ var VisitIndexItem = React.createClass({
     var date;
     date = new Date(this.props.person.last_visit);
 
-    var hours = (date.getHours() % 12);
     var theM = "am";
-
     if (date.getHours() >= 12) { theM = "pm"; }
+
+    var hours = (date.getHours() % 12);
     if (hours === 0) { hours = 12; }
 
     var theColon = ":";
-    if (date.getMinutes() <= 10) { theColon = ":0"; }
+    if (date.getMinutes() < 10) { theColon = ":0"; }
 
     var time = hours + theColon + date.getMinutes() + theM;
 
@@ -48,7 +57,7 @@ var VisitIndexItem = React.createClass({
     oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
 
     return (
-      <li>
+      <li onClick={this._goToProfile}>
         <img src={window.peterImage} />
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>
@@ -60,5 +69,19 @@ var VisitIndexItem = React.createClass({
   }
 
 });
+
+_registerVisit = function (visitor, visitee) {
+  _visitSeekAndDestroy(visitor, visitee);
+  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+};
+
+_visitSeekAndDestroy = function (visitor, visitee) {
+  for (var i = 0; i < visitor.visitees.length; i++) {
+    if (visitor.visitees[i].id === visitee.id) {
+      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+      return;
+    }
+  }
+};
 
 module.exports = VisitIndexItem;

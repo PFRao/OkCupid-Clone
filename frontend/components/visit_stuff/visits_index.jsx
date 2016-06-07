@@ -4,6 +4,7 @@ var SessionStore = require('../../stores/session_store');
 // var VisitsStore = require('../../stores/visits_store');
 
 var VisitApiUtil = require('../../util/visit_api_util');
+var SessionApiUtil = require('../../util/session_api_util');
 
 var IncomingVisits = require('./incoming_visits'),
     OutgoingVisits = require('./outgoing_visits');
@@ -11,6 +12,7 @@ var IncomingVisits = require('./incoming_visits'),
 var VisitsIndex = React.createClass({
 
   getInitialState: function () {
+    SessionApiUtil.fetchCurrentUser();
     return { whichTab: "incoming" };
   },
 
