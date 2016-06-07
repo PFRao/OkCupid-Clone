@@ -36319,28 +36319,32 @@
 	    }
 	
 	    return React.createElement(
-	      'li',
-	      { onClick: this._goToProfile },
-	      React.createElement('img', { src: window.peterImage }),
+	      'div',
+	      null,
 	      React.createElement(
-	        'h3',
-	        null,
-	        this.props.person.username
+	        'li',
+	        { onClick: this._goToProfile },
+	        React.createElement('img', { src: window.peterImage }),
+	        React.createElement(
+	          'h3',
+	          null,
+	          this.props.person.username
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Age ',
+	          oldness2
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          this.props.rating,
+	          ' % Match'
+	        ),
+	        oldness
 	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Age ',
-	        oldness2
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        this.props.rating,
-	        ' % Match'
-	      ),
-	      oldness,
-	      React.createElement(LikeButton, { person: this.props.person })
+	      React.createElement(LikeButton, { className: 'build_a_bridge', person: this.props.person })
 	    );
 	  }
 	
@@ -37614,7 +37618,7 @@
 	      React.createElement(
 	        'p',
 	        null,
-	        'Last visit was: ',
+	        'Last visit: ',
 	        React.createElement(
 	          'span',
 	          { className: 'datDateDoe' },
