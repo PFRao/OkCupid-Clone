@@ -6,6 +6,15 @@ var MatchesStore = require('../../stores/matches_store');
 
 var UserIndexItem = React.createClass({
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
+  _goToProfile: function (event) {
+    _registerVisit(SessionStore.currentUser(), this.props.person);
+    this.context.router.push("profile/" + this.props.person.id);
+  },
+
   render: function () {
     // debugger
     var oldness = (new Date()) - (new Date(this.props.person.birthdate));
@@ -14,7 +23,7 @@ var UserIndexItem = React.createClass({
     oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
 
     return (
-      <li>
+      <li onClick={this._goToProfile}>
         <img src={window.peterImage} />
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>
@@ -24,5 +33,19 @@ var UserIndexItem = React.createClass({
   }
 
 });
+
+_registerVisit = function (visitor, visitee) {
+  _visitSeekAndDestroy(visitor, visitee);
+  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+};
+
+_visitSeekAndDestroy = function (visitor, visitee) {
+  for (var i = 0; i < visitor.visitees.length; i++) {
+    if (visitor.visitees[i].id === visitee.id) {
+      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+      return;
+    }
+  }
+};
 
 module.exports = UserIndexItem;

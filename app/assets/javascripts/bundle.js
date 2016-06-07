@@ -36886,6 +36886,15 @@
 	  displayName: 'UserIndexItem',
 	
 	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
+	    this.context.router.push("profile/" + this.props.person.id);
+	  },
+	
 	  render: function () {
 	    // debugger
 	    var oldness = new Date() - new Date(this.props.person.birthdate);
@@ -36895,7 +36904,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      null,
+	      { onClick: this._goToProfile },
 	      React.createElement('img', { src: window.peterImage }),
 	      React.createElement(
 	        'h3',
@@ -36918,6 +36927,20 @@
 	  }
 	
 	});
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
 	
 	module.exports = UserIndexItem;
 
@@ -37328,6 +37351,7 @@
 	// var VisitsStore = require('../../stores/visits_store');
 	
 	var VisitApiUtil = __webpack_require__(311);
+	var SessionApiUtil = __webpack_require__(234);
 	
 	var IncomingVisits = __webpack_require__(308),
 	    OutgoingVisits = __webpack_require__(309);
@@ -37337,6 +37361,7 @@
 	
 	
 	  getInitialState: function () {
+	    SessionApiUtil.fetchCurrentUser();
 	    return { whichTab: "incoming" };
 	  },
 	
@@ -37527,6 +37552,15 @@
 	  displayName: 'VisitIndexItem',
 	
 	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
+	    this.context.router.push("profile/" + this.props.person.id);
+	  },
+	
 	  render: function () {
 	
 	    var oldness = new Date() - new Date(this.props.person.birthdate);
@@ -37535,18 +37569,18 @@
 	    var date;
 	    date = new Date(this.props.person.last_visit);
 	
-	    var hours = date.getHours() % 12;
 	    var theM = "am";
-	
 	    if (date.getHours() >= 12) {
 	      theM = "pm";
 	    }
+	
+	    var hours = date.getHours() % 12;
 	    if (hours === 0) {
 	      hours = 12;
 	    }
 	
 	    var theColon = ":";
-	    if (date.getMinutes() <= 10) {
+	    if (date.getMinutes() < 10) {
 	      theColon = ":0";
 	    }
 	
@@ -37558,7 +37592,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      null,
+	      { onClick: this._goToProfile },
 	      React.createElement('img', { src: window.peterImage }),
 	      React.createElement(
 	        'h3',
@@ -37593,6 +37627,20 @@
 	  }
 	
 	});
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
 	
 	module.exports = VisitIndexItem;
 
