@@ -1,8 +1,9 @@
 var AppDispatcher = require('../dispatcher/dispatcher.js');
 var Store = require('flux/utils').Store;
 
-var _incoming = [];
-var _outoging = [];
+var _incoming;
+var _outgoing;
+var aVisit;
 
 var VisitsStore = new Store(AppDispatcher);
 
@@ -11,11 +12,14 @@ VisitsStore.incoming = function () {
 };
 
 VisitsStore.outgoing = function () {
-  return _outoging;
+  return _outgoing;
+};
+
+VisitsStore.show = function () {
+  return aVisit;
 };
 
 VisitsStore.__onDispatch = function (payload) {
-  debugger
   switch (payload.actionType) {
     case "VISITS_RECEIVED":
       if (payload.type === "incoming") {
@@ -23,6 +27,10 @@ VisitsStore.__onDispatch = function (payload) {
       } else {
         _outgoing = payload.visits;
       }
+      VisitsStore.__emitChange();
+      break;
+    case "VISIT_RECEIVED":
+      aVisit = payload.visit;
       VisitsStore.__emitChange();
       break;
   }

@@ -41,6 +41,18 @@ var VisitApiUtil = {
         ServerActions.receiveAllVisits(theVisits, theType);
       }
     });
+  },
+
+  getOneVisit: function (visitor_id, visitee_id) {
+    $.ajax({
+      method: 'GET',
+      url: 'api/visits',
+      dataType: 'json',
+      data: { visit: { visitor_id: visitor_id, visitee_id: visitee_id } },
+      success: function (theVisit) {
+        ServerActions.receiveOneVisit(theVisit);
+      }
+    });
   }
 };
 

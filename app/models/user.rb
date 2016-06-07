@@ -26,6 +26,12 @@ class User < ActiveRecord::Base
 
   has_one :profile
 
+  def last_visit(user)
+    self.outgoing_visits.each do |visit|
+      return visit.updated_at if visit.visitee_id == user.id
+    end
+  end
+
 	def password= password
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password

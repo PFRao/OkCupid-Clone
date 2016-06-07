@@ -36103,12 +36103,18 @@
 	    });
 	  },
 	
-	  receiveAllVisits: function (theVisits, type) {
-	    debugger;
+	  // receiveAllVisits: function (theVisits, type) {
+	  //   AppDispatcher.dispatch({
+	  //     actionType: "VISITS_RECEIVED",
+	  //     visits: theVisits,
+	  //     type: type
+	  //   });
+	  // }
+	
+	  receiveOneVisit: function (theVisit) {
 	    AppDispatcher.dispatch({
-	      actionType: "VISITS_RECEIVED",
-	      visits: theVisits,
-	      type: type
+	      actionType: "VISIT_RECEIVED",
+	      visit: theVisit
 	    });
 	  }
 	};
@@ -37319,7 +37325,7 @@
 	var React = __webpack_require__(1);
 	
 	var SessionStore = __webpack_require__(237);
-	var VisitsStore = __webpack_require__(312);
+	// var VisitsStore = require('../../stores/visits_store');
 	
 	var VisitApiUtil = __webpack_require__(311);
 	
@@ -37333,8 +37339,6 @@
 	  getInitialState: function () {
 	    return { whichTab: "incoming" };
 	  },
-	
-	  componentDidMount: function () {},
 	
 	  _changeTab: function (event) {
 	    this.setState({ whichTab: event.target.value });
@@ -37413,7 +37417,7 @@
 	var PropTypes = React.PropTypes;
 	
 	var SessionStore = __webpack_require__(237);
-	var VisitsStore = __webpack_require__(312);
+	// var VisitsStore = require('../../stores/visits_store');
 	
 	var VisitIndexItem = __webpack_require__(310);
 	
@@ -37425,14 +37429,9 @@
 	
 	  render: function () {
 	
-	    VisitApiUtil.getAllVisits(SessionStore.currentUser().id, "incoming");
-	
-	    var theVisit;
-	
 	    var kiwi = this.props.theList.map(function (element, index) {
-	      theVisit = _find_visit1(element.id);
-	      return React.createElement(VisitIndexItem, { key: element.id, person: element, time: theVisit.updated_at });
-	    });
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
+	    }).reverse();
 	
 	    return React.createElement(
 	      'div',
@@ -37452,17 +37451,6 @@
 	
 	});
 	
-	_find_visit1 = function (visitorId) {
-	  debugger;
-	  var incomingVisits = VisitsStore.incoming();
-	  for (var i = 0; i < incomingVisits.length; i++) {
-	    console.log(incomingVisits[i].visitor_id, visitorId);
-	    if (incomingVisits[i].visitor_id == visitorId) {
-	      return incomingVisits[i];
-	    }
-	  }
-	};
-	
 	module.exports = IncomingVisits;
 
 /***/ },
@@ -37472,11 +37460,10 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var VisitsStore = __webpack_require__(312);
+	// var VisitsStore = require('../../stores/visits_store');
+	var SessionStore = __webpack_require__(237);
 	
 	var VisitIndexItem = __webpack_require__(310);
-	
-	var VisitApiUtil = __webpack_require__(311);
 	
 	var OutgoingVisits = React.createClass({
 	  displayName: 'OutgoingVisits',
@@ -37484,15 +37471,9 @@
 	
 	  render: function () {
 	
-	    VisitApiUtil.getAllVisits(SessionStore.currentUser().id, "outgoing");
-	
-	    var theVisit;
-	
 	    var rhea = this.props.theList.map(function (element, index) {
-	      theVisit = _find_visit(element.id);
-	
-	      return React.createElement(VisitIndexItem, { key: element.id, person: element, time: theVisit.updated_at });
-	    });
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
+	    }).reverse();
 	
 	    return React.createElement(
 	      'div',
@@ -37512,16 +37493,6 @@
 	
 	});
 	
-	_find_visit = function (visiteeId) {
-	  var outgoingVisits = VisitsStore.outgoing();
-	  for (var i = 0; i < outgoingVisits.length; i++) {
-	    console.log(outgoingVisits[i].visitee_id, visiteeId);
-	    if (outgoingVisits[i].visitee_id == visiteeId) {
-	      return outgoingVisits[i];
-	    }
-	  }
-	};
-	
 	module.exports = OutgoingVisits;
 
 /***/ },
@@ -37533,16 +37504,55 @@
 	
 	var SessionStore = __webpack_require__(237);
 	var MatchesStore = __webpack_require__(287);
-	var VisitsStore = __webpack_require__(312);
+	// var VisitsStore = require('../../stores/visits_store');
+	
+	var VisitApiUtil = __webpack_require__(311);
+	
+	var theMonths = {
+	  0: "January",
+	  1: "February",
+	  2: "March",
+	  3: "April",
+	  4: "May",
+	  5: "June",
+	  6: "July",
+	  7: "August",
+	  8: "September",
+	  9: "October",
+	  10: "November",
+	  11: "December"
+	};
 	
 	var VisitIndexItem = React.createClass({
 	  displayName: 'VisitIndexItem',
 	
 	
 	  render: function () {
-	    // debugger
+	
 	    var oldness = new Date() - new Date(this.props.person.birthdate);
 	    var oldness2 = Math.floor(oldness / 31536000000);
+	
+	    var date;
+	    date = new Date(this.props.person.last_visit);
+	
+	    var hours = date.getHours() % 12;
+	    var theM = "am";
+	
+	    if (date.getHours() >= 12) {
+	      theM = "pm";
+	    }
+	    if (hours === 0) {
+	      hours = 12;
+	    }
+	
+	    var theColon = ":";
+	    if (date.getMinutes() <= 10) {
+	      theColon = ":0";
+	    }
+	
+	    var time = hours + theColon + date.getMinutes() + theM;
+	
+	    var timeStamp = theMonths[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " at " + time;
 	
 	    oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
 	
@@ -37571,7 +37581,13 @@
 	        'p',
 	        null,
 	        'Last visit was: ',
-	        this.props.time
+	        React.createElement(
+	          'span',
+	          { className: 'datDateDoe' },
+	          ' ',
+	          timeStamp,
+	          ' '
+	        )
 	      )
 	    );
 	  }
@@ -37627,46 +37643,22 @@
 	        ServerActions.receiveAllVisits(theVisits, theType);
 	      }
 	    });
+	  },
+	
+	  getOneVisit: function (visitor_id, visitee_id) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: { visitor_id: visitor_id, visitee_id: visitee_id } },
+	      success: function (theVisit) {
+	        ServerActions.receiveOneVisit(theVisit);
+	      }
+	    });
 	  }
 	};
 	
 	module.exports = VisitApiUtil;
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(238);
-	var Store = __webpack_require__(242).Store;
-	
-	var _incoming = [];
-	var _outoging = [];
-	
-	var VisitsStore = new Store(AppDispatcher);
-	
-	VisitsStore.incoming = function () {
-	  return _incoming;
-	};
-	
-	VisitsStore.outgoing = function () {
-	  return _outoging;
-	};
-	
-	VisitsStore.__onDispatch = function (payload) {
-	  debugger;
-	  switch (payload.actionType) {
-	    case "VISITS_RECEIVED":
-	      if (payload.type === "incoming") {
-	        _incoming = payload.visits;
-	      } else {
-	        _outgoing = payload.visits;
-	      }
-	      VisitsStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = VisitsStore;
 
 /***/ }
 /******/ ]);

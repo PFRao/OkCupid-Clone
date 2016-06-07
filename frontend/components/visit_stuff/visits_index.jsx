@@ -1,7 +1,7 @@
 var React = require('react');
 
 var SessionStore = require('../../stores/session_store');
-var VisitsStore = require('../../stores/visits_store');
+// var VisitsStore = require('../../stores/visits_store');
 
 var VisitApiUtil = require('../../util/visit_api_util');
 
@@ -12,9 +12,6 @@ var VisitsIndex = React.createClass({
 
   getInitialState: function () {
     return { whichTab: "incoming" };
-  },
-
-  componentDidMount: function () {
   },
 
   _changeTab: function (event) {
