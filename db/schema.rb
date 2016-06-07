@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160605215959) do
+ActiveRecord::Schema.define(version: 20160606231914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,23 @@ ActiveRecord::Schema.define(version: 20160605215959) do
 
   add_index "likes", ["likee_id"], name: "index_likes_on_likee_id", using: :btree
   add_index "likes", ["liker_id"], name: "index_likes_on_liker_id", using: :btree
+
+  create_table "profiles", force: :cascade do |t|
+    t.text     "self_summary",   default: ""
+    t.text     "do_with_life",   default: ""
+    t.text     "real_good_at",   default: ""
+    t.text     "first_thing",    default: ""
+    t.text     "favorites",      default: ""
+    t.text     "six_things",     default: ""
+    t.text     "think_about",    default: ""
+    t.text     "typical_friday", default: ""
+    t.text     "message_if",     default: ""
+    t.integer  "user_id",                     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", unique: true, using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.string   "description",                 null: false

@@ -87,7 +87,7 @@ var SignupForm = React.createClass({
   },
 
   fieldErrors: function (field) {
-    var errors = ErrorStore.formErrors("login");
+    var errors = ErrorStore.formErrors("signup");
     if (!errors[field]) { return; }
 
     var messages = errors[field].map(function (errorMsg, i) {

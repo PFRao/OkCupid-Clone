@@ -39,7 +39,7 @@ MatchesStore.beChoosy = function (susan) {
   _stinkers = _remove(_stinkers, _stinker);
 
   kyle = _stinkers.map(function (person, index) {
-    return [person, MatchesStore.beJudgemental(_stinker, person), index];
+    return [person, MatchesStore.beJudgemental(_stinker, person)];
   });
 
   _matches = MatchesStore.beSelective(kyle, susan);

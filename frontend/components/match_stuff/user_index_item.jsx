@@ -1,9 +1,20 @@
 var React = require('react');
 var LikeButton = require('../like_button');
 
+var hashHistory = require('react-router').hashHistory;
+var Link = require('react-router').Link;
+
 var SessionStore = require('../../stores/session_store');
 
 var UserIndexItem = React.createClass({
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
+  _goToProfile: function (event) {
+    this.context.router.push("profile/" + this.props.person.id);
+  },
 
   render: function () {
     // debugger
@@ -17,7 +28,7 @@ var UserIndexItem = React.createClass({
     }
 
     return (
-      <li>
+      <li onClick={this._goToProfile}>
         <img src={window.peterImage} />
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>

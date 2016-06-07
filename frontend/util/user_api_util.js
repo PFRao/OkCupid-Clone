@@ -1,12 +1,15 @@
 var SessionActions = require('./../actions/session_actions');
 var ErrorActions = require('./../actions/error_actions');
+var ProfileActions = require('./../actions/profile_actions');
+
+var ProfileApiUtil = require('./profile_api_util');
 
 var UserApiUtil = {
 
   signup: function (formData) {
     $.ajax({
       url: '/api/user',
-      type: 'POST',
+      method: 'POST',
       dataType: 'json',
       data: {user: formData},
       success: function (currentUser) {
@@ -39,6 +42,7 @@ var UserApiUtil = {
             religious: 0
           }})
         });
+        ProfileApiUtil.createProfile({ user_id: currentUser.id });
       },
       error: function (xhr) {
         console.log('UserApiUtil#createAccount error');
@@ -51,7 +55,7 @@ var UserApiUtil = {
   update: function (formData) {
     $.ajax({
       url: '/api/user',
-      type: 'PATCH',
+      method: 'PATCH',
       dataType: 'json',
       data: {user: formData},
       success: function (currentUser) {
@@ -62,6 +66,19 @@ var UserApiUtil = {
         var errors = xhr.responseJSON;
         ErrorActions.setErrors("login", errors);
       }
+    });
+  },
+
+  fetchOneUser: function (id) {
+    $.ajax({
+      method: 'GET',
+      url: '/api/peeps/' + id,
+      dataType: 'json',
+      data: { id: id },
+      success: function (theResult) {
+        // debugger
+        ProfileActions.receiveSingleUser(theResult);
+      },
     });
   }
 

@@ -45,10 +45,12 @@ var Questions = React.createClass({
       demPrefsTho = this.state.thePreferences.map(function (thingy) {
         return _values[thingy];
       });
+
       formAnswer.answer_choice_id = this.state.theChoice;
       formAnswer.acceptable_choices = JSON.stringify(this.state.thePreferences);
       formAnswer.weight = this.state.theWeight;
       formAnswer.user_id = SessionStore.currentUser().id;
+
       formData.category = this.state.question.answer_choices[0].category;
       formData.theChoice = _values[this.state.theChoice] * this.state.theWeight;
       formData.thePref = _average(demPrefsTho) * this.state.theWeight;
@@ -131,12 +133,9 @@ var Questions = React.createClass({
     var stuffToRender;
 
     if (this.state.question) {
-      // console.log("current question:", this.state.question.description);
-      // console.log("current answer:", this.state.theChoice);
-      // console.log(this.state.thePreferences);
 
       stuffToRender = (
-        <div>
+        <div className="main_question_area">
           <form onSubmit={this._handleAnswer}>
 
             <h4>{this.state.question.description}</h4>
@@ -153,7 +152,7 @@ var Questions = React.createClass({
 
             <br />
 
-            <h4>Which answers would you want to see from your matches?</h4>
+            <h4>Which answers would you want to see from your ideal match?</h4>
             {
               this.state.question.answer_choices.map(function (thing, index) {
                 return (<label key={index}>
@@ -205,7 +204,7 @@ var Questions = React.createClass({
     } else {
       stuffToRender = (
         <div className="no_more_questions">
-          You've answered every question we've got, you crazy sonuvagun.<br />
+          You've answered every question we've got. All of your secrets have been submitted to the NSA database. Thank you for your participation, citizen.<br />
         </div>
       );
     }

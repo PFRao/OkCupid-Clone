@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :questions
     resources :answers
     resources :likes, only: [:create, :destroy]
+    resources :profiles
   end
 
   root "static_pages#root"
