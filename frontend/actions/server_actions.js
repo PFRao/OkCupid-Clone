@@ -34,12 +34,18 @@ var ApiActions = {
     });
   },
 
-  receiveAllVisits: function (theVisits, type) {
-    debugger
+  // receiveAllVisits: function (theVisits, type) {
+  //   AppDispatcher.dispatch({
+  //     actionType: "VISITS_RECEIVED",
+  //     visits: theVisits,
+  //     type: type
+  //   });
+  // }
+
+  receiveOneVisit: function (theVisit) {
     AppDispatcher.dispatch({
-      actionType: "VISITS_RECEIVED",
-      visits: theVisits,
-      type: type
+      actionType: "VISIT_RECEIVED",
+      visit: theVisit
     });
   }
 };

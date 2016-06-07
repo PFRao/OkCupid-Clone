@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :questions
     resources :answers
     resources :likes, only: [:create, :destroy, :index]
-    resources :visits, only: [:create, :destroy, :index]
+    resources :visits, only: [:create, :destroy, :index, :show]
     resources :profiles
   end
 
