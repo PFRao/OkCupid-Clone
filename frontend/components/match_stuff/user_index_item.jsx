@@ -6,6 +6,8 @@ var Link = require('react-router').Link;
 
 var SessionStore = require('../../stores/session_store');
 
+var VisitApiUtil = require('../../util/visit_api_util');
+
 var UserIndexItem = React.createClass({
 
   contextTypes: {
@@ -13,6 +15,7 @@ var UserIndexItem = React.createClass({
   },
 
   _goToProfile: function (event) {
+    _registerVisit(SessionStore.currentUser(), this.props.person);
     this.context.router.push("profile/" + this.props.person.id);
   },
 
@@ -40,5 +43,19 @@ var UserIndexItem = React.createClass({
   }
 
 });
+
+_registerVisit = function (visitor, visitee) {
+  _visitSeekAndDestroy(visitor, visitee);
+  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+};
+
+_visitSeekAndDestroy = function (visitor, visitee) {
+  for (var i = 0; i < visitor.visitees.length; i++) {
+    if (visitor.visitees[i].id === visitee.id) {
+      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+      return;
+    }
+  }
+};
 
 module.exports = UserIndexItem;
