@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   has_many :likers, through: :incoming_likes, source: :liker
   has_many :likees, through: :outgoing_likes, source: :likee
 
+  has_one :profile
+
 	def password= password
 		self.password_digest = BCrypt::Password.create(password)
 		@password = password

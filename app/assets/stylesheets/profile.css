@@ -1,0 +1,25 @@
+.user_profile {
+  color: yellow;
+}
+
+.main_profile_photo {
+  height: 200px;
+  width: 200px;
+}
+
+.edit_profile_button {
+  height: 20px;
+  width: 50px;
+  background: red;
+  text-align: center;
+}
+
+.profile_words {
+  color: white;
+  font-style: italic;
+}
+
+.profile_edit {
+  background: white;
+  color: black;
+}

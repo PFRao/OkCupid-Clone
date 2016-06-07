@@ -7,7 +7,12 @@ class Api::UsersController < ApplicationController
 			login(@user)
 			render "api/users/show"
 		else
-			render json: @user.errors, status: 422
+      render(
+        json: {
+          base: ["Invalid username/password combination"]
+        },
+        status: 401
+      )
 		end
 	end
 

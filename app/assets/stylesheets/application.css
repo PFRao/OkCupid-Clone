@@ -18,6 +18,10 @@
  *= require sign_up
  *= require main
  *= require matches
+ *= require like_button
+ *= require questions
+ *= require profile
+ *= likes
  */
 
 body {
