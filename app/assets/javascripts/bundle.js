@@ -33657,6 +33657,17 @@
 	    UserApiUtil.signup(this.state);
 	  },
 	
+	  _guest_login: function () {
+	    UserApiUtil.signup({
+	      username: "guest",
+	      password: "fzfgT76Kjh0",
+	      location: "10001",
+	      birthdate: new Date(),
+	      gender: "man",
+	      last_online: new Date()
+	    });
+	  },
+	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
 	  },
@@ -33729,6 +33740,27 @@
 	    return React.createElement(
 	      'div',
 	      { id: 'steven' },
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
+	        { className: 'guest_button', onClick: this._guest_login },
+	        'Guest Login'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'div',
+	        { className: 'sign_in_button' },
+	        React.createElement(
+	          'span',
+	          { className: 'sign_text' },
+	          'What\'s that? You\'re already a member?'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'guest_button', onClick: this._openModal },
+	          'Sign in!'
+	        )
+	      ),
 	      React.createElement(
 	        'form',
 	        { className: 'sign_up', onSubmit: this._handleSubmit },
@@ -33773,6 +33805,11 @@
 	          this.fieldErrors("password")
 	        ),
 	        React.createElement('input', { type: 'password', onChange: this._changePassword, value: this.state.password }),
+	        React.createElement(
+	          'div',
+	          { className: 'help' },
+	          'Your password must be at least 6 letters long!'
+	        ),
 	        React.createElement(
 	          'label',
 	          null,
@@ -36745,6 +36782,8 @@
 	var LikesStore = __webpack_require__(299);
 	var SessionStore = __webpack_require__(237);
 	
+	var SessionApiUtil = __webpack_require__(234);
+	
 	var IncomingLikes = __webpack_require__(300),
 	    OutgoingLikes = __webpack_require__(302),
 	    MutualLikes = __webpack_require__(303);
@@ -36754,6 +36793,7 @@
 	
 	
 	  getInitialState: function () {
+	    SessionApiUtil.fetchCurrentUser();
 	    return { whichTab: "incoming" };
 	  },
 	
@@ -37072,6 +37112,8 @@
 	var ProfileField = __webpack_require__(306);
 	var Modal = __webpack_require__(266);
 	
+	var _conversation_already_exists;
+	
 	Modal.setAppElement("#content");
 	
 	var UserProfile = React.createClass({
@@ -37090,8 +37132,15 @@
 	  },
 	
 	  _openModal: function (e) {
+	
 	    e.preventDefault();
-	    this.setState({ modalIsOpen: true });
+	    _conversation_already_exists = MessageStore.existing(parseInt(this.props.params.user_id));
+	
+	    if (_conversation_already_exists) {
+	      this.context.router.push("messages/" + _conversation_already_exists);
+	    } else {
+	      this.setState({ modalIsOpen: true });
+	    }
 	  },
 	
 	  afterOpenModal: function () {
@@ -37106,6 +37155,10 @@
 	  componentDidMount: function () {
 	    this.listener = ProfileStore.addListener(this._gotUser);
 	    UserApiUtil.fetchOneUser(this.props.params.user_id);
+	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	    // if (_conversation_already_exists) {
+	    //   MessageApiUtil.getOneConvo(_conversation_already_exists);
+	    // }
 	  },
 	
 	  componentWillUnmount: function () {
@@ -37135,6 +37188,7 @@
 	    }
 	
 	    var warning;
+	    var existence;
 	    var modal;
 	    var messageButton;
 	
@@ -37145,6 +37199,7 @@
 	        'Welcome to your own profile!'
 	      );
 	    } else {
+	
 	      warning = React.createElement(
 	        'p',
 	        null,
@@ -37158,7 +37213,7 @@
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
 	          onRequestClose: this._closeModal },
-	        React.createElement(MessageForm, { receiver: this.state.theState.user, sender: SessionStore.currentUser(), modal: true })
+	        React.createElement(MessageForm, { receiver: this.state.theState.user, sender: SessionStore.currentUser() })
 	      );
 	      messageButton = React.createElement(
 	        'button',
@@ -37459,10 +37514,7 @@
 	        React.createElement('br', null),
 	        'It simply... slips away... ',
 	        React.createElement('br', null),
-	        React.createElement('br', null),
-	        'DON\'T LET THAT HAPPEN TO YOU, ',
-	        SessionStore.currentUser().username,
-	        '!'
+	        React.createElement('br', null)
 	      ),
 	      React.createElement('br', null),
 	      React.createElement('br', null),
@@ -38017,6 +38069,16 @@
 	  }
 	};
 	
+	MessageStore.existing = function (counterpartyId) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    console.log(_convos[i], counterpartyId);
+	    if (_convos[i].user.id === counterpartyId || _convos[i].user2.id === counterpartyId) {
+	      return _convos[i].id;
+	    }
+	  }
+	  return false;
+	};
+	
 	MessageStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "ALL_MESSAGES":
@@ -38073,7 +38135,7 @@
 	    });
 	  },
 	
-	  createConversation: function (theParams, messageBody) {
+	  createConversation: function (theParams, messageBody, callback) {
 	    $.ajax({
 	      method: 'POST',
 	      url: 'api/conversations',
@@ -38086,6 +38148,8 @@
 	          receiver_id: theParams.user2_id,
 	          body: messageBody
 	        });
+	
+	        callback(newConvo.id);
 	      }
 	    });
 	  },
@@ -38097,7 +38161,6 @@
 	      dataType: 'json',
 	      data: { message: theParams },
 	      success: function (newMessage) {
-	        console.log("You made this:", newMessage);
 	        MessageActions.receiveNewMessage(newMessage);
 	      }
 	    });
@@ -38298,9 +38361,12 @@
 	    router: React.PropTypes.object.isRequired
 	  },
 	
+	  _redirectToConvo: function (convo_id) {
+	    this.context.router.push("messages/" + convo_id);
+	  },
+	
 	  _handleSubmit: function (event) {
 	    event.preventDefault();
-	    console.log("this would have submitted the message:", this.state.contents);
 	
 	    if (this.props.convo_id) {
 	
@@ -38315,11 +38381,7 @@
 	      MessageApiUtil.createConversation({
 	        user_id: this.props.sender.id,
 	        user2_id: this.props.receiver.id
-	      }, this.state.contents);
-	    }
-	
-	    if (this.props.modal) {
-	      this.context.router.push("messages/" + MessageStore.oneConvo().id);
+	      }, this.state.contents, this._redirectToConvo);
 	    }
 	
 	    this.setState({ contents: "" });

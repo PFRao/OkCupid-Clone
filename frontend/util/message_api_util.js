@@ -28,7 +28,7 @@ var MessageApiUtil = {
     });
   },
 
-  createConversation: function (theParams, messageBody) {
+  createConversation: function (theParams, messageBody, callback) {
     $.ajax({
       method: 'POST',
       url: 'api/conversations',
@@ -41,7 +41,9 @@ var MessageApiUtil = {
           receiver_id: theParams.user2_id,
           body: messageBody
         });
-      }
+
+        callback(newConvo.id);
+      },
     });
   },
 
@@ -52,7 +54,6 @@ var MessageApiUtil = {
       dataType: 'json',
       data: {message: theParams},
       success: function (newMessage) {
-        console.log("You made this:", newMessage);
         MessageActions.receiveNewMessage(newMessage);
       }
     });
