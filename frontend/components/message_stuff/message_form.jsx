@@ -15,6 +15,10 @@ var MessageForm = React.createClass({
     return { contents: "" };
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   _handleSubmit: function (event) {
     event.preventDefault();
     console.log("this would have submitted the message:", this.state.contents);
@@ -35,6 +39,10 @@ var MessageForm = React.createClass({
         user2_id: this.props.receiver.id
       }, this.state.contents);
 
+    }
+
+    if (this.props.modal) {
+      this.context.router.push("messages/" + MessageStore.oneConvo().id);
     }
 
     this.setState({ contents: "" });
