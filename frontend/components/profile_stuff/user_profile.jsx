@@ -3,17 +3,43 @@ var PropTypes = React.PropTypes;
 
 var ProfileStore = require('../../stores/profile_store');
 var SessionStore = require('../../stores/session_store');
+var MessageStore = require('../../stores/message_store');
 
+var MessageApiUtil = require('../../util/message_api_util');
 var UserApiUtil = require('../../util/user_api_util');
 
+var MessageForm = require('../message_stuff/message_form');
+
 var ProfileField = require('./profile_field');
+var Modal = require('react-modal');
+
+Modal.setAppElement("#content");
 
 var UserProfile = React.createClass({
   getInitialState: function () {
     return {
       theState: null,
-      isThisUs: (SessionStore.currentUser().id === parseInt(this.props.params.user_id))
+      isThisUs: (SessionStore.currentUser().id === parseInt(this.props.params.user_id)),
+      modalIsOpen: false
     };
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
+  _openModal: function (e) {
+    e.preventDefault();
+    this.setState({ modalIsOpen: true });
+  },
+
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+
+  _closeModal: function () {
+    this.setState({ modalIsOpen: false });
   },
 
   componentDidMount: function () {
@@ -37,24 +63,35 @@ var UserProfile = React.createClass({
     this.setState({ theState: ProfileStore.userIs() });
   },
 
-  // _registerVisit: function () {
-  //   var you = SessionStore.currentUser();
-  //   var them = this.state.theState.user;
-  //
-  // },
-  //
-  // _visitSeekAndDestroy: function () {
-  //
-  // },
-
   render: function() {
 
+    if (!this.state.theState) {
+      return (<p className="loading_message">Please wait, your content is loading...</p>);
+    }
+
     var warning;
+    var modal;
+    var messageButton;
 
     if (this.state.isThisUs) {
       warning = (<p>Welcome to your own profile!</p>);
     } else {
       warning = (<p>Careful, this user isn't you! Don't trust them!</p>);
+      modal = (
+        <Modal
+          className="charles"
+          ref="mymodal"
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.handleOnAfterOpenModal}
+          onRequestClose={this._closeModal}>
+
+          <MessageForm receiver={this.state.theState.user} sender={SessionStore.currentUser()} modal={true}/>
+
+        </Modal>
+      );
+      messageButton = (
+        <button className="submit_that_message" onClick={this._openModal}>Message this fool</button>
+      );
     }
 
     if (this.state.theState) {
@@ -68,8 +105,12 @@ var UserProfile = React.createClass({
           <img className="main_profile_photo" src={window.peterImage} />
 
           <br />
+
           {warning}
-          <br />
+          {modal}
+          {messageButton}
+
+          <br /><br />
 
           My Self-Summary:
           <br />

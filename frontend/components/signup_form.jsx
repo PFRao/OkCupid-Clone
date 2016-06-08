@@ -9,7 +9,6 @@ var UserApiUtil = require('./../util/user_api_util');
 var LoginForm = require('./login_form');
 var Modal = require('react-modal');
 
-
 Modal.setAppElement("#content");
 
 var SignupForm = React.createClass({

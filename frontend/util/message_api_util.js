@@ -39,7 +39,7 @@ var MessageApiUtil = {
           convo_id: newConvo.id,
           sender_id: theParams.user_id,
           receiver_id: theParams.user2_id,
-          body: this.state.contents
+          body: messageBody
         });
       }
     });

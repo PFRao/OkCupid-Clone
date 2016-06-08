@@ -37062,10 +37062,17 @@
 	
 	var ProfileStore = __webpack_require__(305);
 	var SessionStore = __webpack_require__(237);
+	var MessageStore = __webpack_require__(315);
 	
+	var MessageApiUtil = __webpack_require__(316);
 	var UserApiUtil = __webpack_require__(261);
 	
+	var MessageForm = __webpack_require__(319);
+	
 	var ProfileField = __webpack_require__(306);
+	var Modal = __webpack_require__(266);
+	
+	Modal.setAppElement("#content");
 	
 	var UserProfile = React.createClass({
 	  displayName: 'UserProfile',
@@ -37073,8 +37080,27 @@
 	  getInitialState: function () {
 	    return {
 	      theState: null,
-	      isThisUs: SessionStore.currentUser().id === parseInt(this.props.params.user_id)
+	      isThisUs: SessionStore.currentUser().id === parseInt(this.props.params.user_id),
+	      modalIsOpen: false
 	    };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _openModal: function (e) {
+	    e.preventDefault();
+	    this.setState({ modalIsOpen: true });
+	  },
+	
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	    this.refs.subtitle.style.color = '#f00';
+	  },
+	
+	  _closeModal: function () {
+	    this.setState({ modalIsOpen: false });
 	  },
 	
 	  componentDidMount: function () {
@@ -37098,19 +37124,19 @@
 	    this.setState({ theState: ProfileStore.userIs() });
 	  },
 	
-	  // _registerVisit: function () {
-	  //   var you = SessionStore.currentUser();
-	  //   var them = this.state.theState.user;
-	  //
-	  // },
-	  //
-	  // _visitSeekAndDestroy: function () {
-	  //
-	  // },
-	
 	  render: function () {
 	
+	    if (!this.state.theState) {
+	      return React.createElement(
+	        'p',
+	        { className: 'loading_message' },
+	        'Please wait, your content is loading...'
+	      );
+	    }
+	
 	    var warning;
+	    var modal;
+	    var messageButton;
 	
 	    if (this.state.isThisUs) {
 	      warning = React.createElement(
@@ -37123,6 +37149,21 @@
 	        'p',
 	        null,
 	        'Careful, this user isn\'t you! Don\'t trust them!'
+	      );
+	      modal = React.createElement(
+	        Modal,
+	        {
+	          className: 'charles',
+	          ref: 'mymodal',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.handleOnAfterOpenModal,
+	          onRequestClose: this._closeModal },
+	        React.createElement(MessageForm, { receiver: this.state.theState.user, sender: SessionStore.currentUser(), modal: true })
+	      );
+	      messageButton = React.createElement(
+	        'button',
+	        { className: 'submit_that_message', onClick: this._openModal },
+	        'Message this fool'
 	      );
 	    }
 	
@@ -37140,6 +37181,9 @@
 	        React.createElement('img', { className: 'main_profile_photo', src: window.peterImage }),
 	        React.createElement('br', null),
 	        warning,
+	        modal,
+	        messageButton,
+	        React.createElement('br', null),
 	        React.createElement('br', null),
 	        'My Self-Summary:',
 	        React.createElement('br', null),
@@ -38040,7 +38084,7 @@
 	          convo_id: newConvo.id,
 	          sender_id: theParams.user_id,
 	          receiver_id: theParams.user2_id,
-	          body: this.state.contents
+	          body: messageBody
 	        });
 	      }
 	    });
@@ -38250,6 +38294,10 @@
 	    return { contents: "" };
 	  },
 	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
 	  _handleSubmit: function (event) {
 	    event.preventDefault();
 	    console.log("this would have submitted the message:", this.state.contents);
@@ -38268,6 +38316,10 @@
 	        user_id: this.props.sender.id,
 	        user2_id: this.props.receiver.id
 	      }, this.state.contents);
+	    }
+	
+	    if (this.props.modal) {
+	      this.context.router.push("messages/" + MessageStore.oneConvo().id);
 	    }
 	
 	    this.setState({ contents: "" });
