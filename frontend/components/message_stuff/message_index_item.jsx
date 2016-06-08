@@ -1,9 +1,22 @@
 var React = require('react');
 var PropTypes = React.PropTypes;
 
+var SessionStore = require('../../stores/session_store');
+var MessageStore = require('../../stores/message_store');
+
+var VisitApiUtil = require('../../util/visit_api_util');
+
 var MessageIndexItem = React.createClass({
   getInitialState: function () {
-    return { latestPreview: null };
+    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+  },
+
+  componentDidMount: function () {
+    this.listener = MessageStore.addListener(this._newMessage);
+  },
+
+  componentWillUnmount: function () {
+    this.listener.remove();
   },
 
   contextTypes: {
@@ -15,19 +28,71 @@ var MessageIndexItem = React.createClass({
     this.context.router.push("profile/" + this.props.person.id);
   },
 
-  componentDidMount: function () {
+  _seeMessageDetails: function () {
+    this.context.router.push("messages/" + this.props.convo.id);
+  },
 
+  _newMessage: function () {
+    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+  },
+
+  _shorten: function (string) {
+    if (string.length < 20) { return string; }
+
+    var arr = string.split("");
+
+    return arr.slice(0, 20).join("") + "...";
   },
 
   render: function() {
-    return (
-      <div>
-        <li>
-          <img onClick={this._goToProfile} src={window.peterImage} />
-          <h3>{this.props.person.username}</h3>
 
-        </li>
-      </div>
+    if (!this.state.latestPreview) {
+      return (
+        <div>
+          <li>
+            <img onClick={this._goToProfile} src={window.peterImage} />
+            <h3>{this.props.person.username}</h3>
+          </li>
+        </div>
+      );
+    }
+
+    var hours_ago;
+    var milliseconds = new Date() - new Date(this.state.latestPreview.created_at);
+    var hours = milliseconds / 3600000;
+
+    if (hours < 1) {
+      hours_ago = "less than 1 hour";
+    } else {
+
+      hours = Math.floor(hours);
+
+      if (hours === 1){
+        hours_ago = "1 hour";
+      } else if (hours < 24) {
+        hours_ago = Math.floor(hours) + " hours";
+      } else if (hours < 48) {
+        hours_ago = "1 day";
+      } else {
+        hours_ago = (hours/24) + " days";
+      }
+
+    }
+
+    var theClass = "sent_message";
+    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
+      theClass = "received_message";
+    }
+
+    return (
+      <li>
+        <img onClick={this._goToProfile} src={window.peterImage} />
+        <span onClick={this._seeMessageDetails}>
+          <h3>{this.props.person.username}</h3>
+          <p className={theClass}>{this._shorten(this.state.latestPreview.body)}</p>
+          <p className="message_timestamp">{hours_ago} ago</p>
+        </span>
+      </li>
     );
   }
 

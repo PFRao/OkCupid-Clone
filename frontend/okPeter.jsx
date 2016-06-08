@@ -17,6 +17,7 @@ var LikesIndex = require('./components/like_stuff/likes_index');
 var VisitsIndex = require('./components/visit_stuff/visits_index');
 var UserProfile = require('./components/profile_stuff/user_profile');
 var MessageIndex = require('./components/message_stuff/message_index');
+var MessageDetail = require('./components/message_stuff/message_detail');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
@@ -89,6 +90,7 @@ routes = (
       <Route path="visits" component={VisitsIndex} onEnter={ _ensureLoggedIn } />
       <Route path="profile/:user_id" component={UserProfile} onEnter={ _ensureLoggedIn } />
       <Route path="messages" component={MessageIndex} onEnter={ _ensureLoggedIn } />
+      <Route path="messages/:convo_id" component={MessageDetail} onEnter={ _ensureLoggedIn } />
     </Route>
   </Router>
 );

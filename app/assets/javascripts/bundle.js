@@ -63,6 +63,7 @@
 	var VisitsIndex = __webpack_require__(307);
 	var UserProfile = __webpack_require__(304);
 	var MessageIndex = __webpack_require__(313);
+	var MessageDetail = __webpack_require__(318);
 	//Stores
 	var SessionStore = __webpack_require__(237);
 	//Other Stuff
@@ -174,7 +175,8 @@
 	    React.createElement(Route, { path: 'likes', component: LikesIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'visits', component: VisitsIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/:user_id', component: UserProfile, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'messages', component: MessageIndex, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'messages', component: MessageIndex, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'messages/:convo_id', component: MessageDetail, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -37733,14 +37735,48 @@
 	
 	
 	  getInitialState: function () {
-	    return {};
+	    return { convos: null };
 	  },
 	
 	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._updateConvos);
 	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
 	  },
 	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _updateConvos: function () {
+	    this.setState({ convos: MessageStore.allConvos() });
+	  },
+	
 	  render: function () {
+	
+	    var board;
+	    var person;
+	
+	    if (this.state.convos) {
+	
+	      board = this.state.convos.map(function (convo) {
+	
+	        if (SessionStore.currentUser().id === convo.user.id) {
+	          person = convo.user2;
+	        } else {
+	          person = convo.user;
+	        }
+	
+	        return React.createElement(MessageIndexItem, { key: convo.id, person: person, convo: convo });
+	      });
+	    } else {
+	
+	      return React.createElement(
+	        'p',
+	        null,
+	        'You don\'t have any messages... yet!'
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37749,7 +37785,11 @@
 	        null,
 	        'Your conversations'
 	      ),
-	      React.createElement('ul', null)
+	      React.createElement(
+	        'ul',
+	        null,
+	        board
+	      )
 	    );
 	  }
 	
@@ -37764,11 +37804,24 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
+	var SessionStore = __webpack_require__(237);
+	var MessageStore = __webpack_require__(315);
+	
+	var VisitApiUtil = __webpack_require__(311);
+	
 	var MessageIndexItem = React.createClass({
-	  displayName: "MessageIndexItem",
+	  displayName: 'MessageIndexItem',
 	
 	  getInitialState: function () {
-	    return { latestPreview: null };
+	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._newMessage);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
 	  },
 	
 	  contextTypes: {
@@ -37780,20 +37833,91 @@
 	    this.context.router.push("profile/" + this.props.person.id);
 	  },
 	
-	  componentDidMount: function () {},
+	  _seeMessageDetails: function () {
+	    this.context.router.push("messages/" + this.props.convo.id);
+	  },
+	
+	  _newMessage: function () {
+	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	  },
+	
+	  _shorten: function (string) {
+	    if (string.length < 20) {
+	      return string;
+	    }
+	
+	    var arr = string.split("");
+	
+	    return arr.slice(0, 20).join("") + "...";
+	  },
 	
 	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "li",
+	
+	    if (!this.state.latestPreview) {
+	      return React.createElement(
+	        'div',
 	        null,
-	        React.createElement("img", { onClick: this._goToProfile, src: window.peterImage }),
 	        React.createElement(
-	          "h3",
+	          'li',
+	          null,
+	          React.createElement('img', { onClick: this._goToProfile, src: window.peterImage }),
+	          React.createElement(
+	            'h3',
+	            null,
+	            this.props.person.username
+	          )
+	        )
+	      );
+	    }
+	
+	    var hours_ago;
+	    var milliseconds = new Date() - new Date(this.state.latestPreview.created_at);
+	    var hours = milliseconds / 3600000;
+	
+	    if (hours < 1) {
+	      hours_ago = "less than 1 hour";
+	    } else {
+	
+	      hours = Math.floor(hours);
+	
+	      if (hours === 1) {
+	        hours_ago = "1 hour";
+	      } else if (hours < 24) {
+	        hours_ago = Math.floor(hours) + " hours";
+	      } else if (hours < 48) {
+	        hours_ago = "1 day";
+	      } else {
+	        hours_ago = hours / 24 + " days";
+	      }
+	    }
+	
+	    var theClass = "sent_message";
+	    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
+	      theClass = "received_message";
+	    }
+	
+	    return React.createElement(
+	      'li',
+	      null,
+	      React.createElement('img', { onClick: this._goToProfile, src: window.peterImage }),
+	      React.createElement(
+	        'span',
+	        { onClick: this._seeMessageDetails },
+	        React.createElement(
+	          'h3',
 	          null,
 	          this.props.person.username
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: theClass },
+	          this._shorten(this.state.latestPreview.body)
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'message_timestamp' },
+	          hours_ago,
+	          ' ago'
 	        )
 	      )
 	    );
@@ -37824,11 +37948,30 @@
 	var AppDispatcher = __webpack_require__(238);
 	var Store = __webpack_require__(242).Store;
 	
+	var MessageApiUtil = __webpack_require__(316);
+	
 	var _convos = [];
 	var _messages = [];
+	var _convo;
 	var _message;
 	
 	var MessageStore = new Store(AppDispatcher);
+	
+	MessageStore.allConvos = function () {
+	  return _convos;
+	};
+	
+	MessageStore.oneConvo = function () {
+	  return _convo;
+	};
+	
+	MessageStore.getLatestMessage = function (convo_id) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    if (_convos[i].id === convo_id) {
+	      return _convos[i].messages[_convos[i].messages.length - 1];
+	    }
+	  }
+	};
 	
 	MessageStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
@@ -37837,15 +37980,20 @@
 	      MessageStore.__emitChange();
 	      break;
 	    case "NEW_MESSAGE":
-	      _message = payload.message;
-	      MessageStore.__emitChange();
+	      MessageApiUtil.getOneConvo(payload.convo_id);
 	      break;
 	    case "CONVERSATIONS":
-	      _convos = payload.convo;
+	      _convos = payload.convos;
+	      MessageStore.__emitChange();
+	      break;
+	    case "CONVERSATION":
+	      _convo = payload.convo;
 	      MessageStore.__emitChange();
 	      break;
 	  }
 	};
+	
+	module.exports = MessageStore;
 
 /***/ },
 /* 316 */
@@ -37853,11 +38001,9 @@
 
 	var SessionActions = __webpack_require__(235);
 	var ErrorActions = __webpack_require__(259);
-	var MessageActions = __webpack_require__(262);
+	var MessageActions = __webpack_require__(317);
 	
 	var MessageApiUtil = {
-	
-	  // attatch a "last message" type of method to
 	
 	  getAllConvos: function (theUserId) {
 	    $.ajax({
@@ -37866,16 +38012,293 @@
 	      dataType: 'json',
 	      data: { conversation: theUserId },
 	      success: function (result) {
-	        console.log(result);
+	        MessageActions.receiveAllConvos(result);
 	      }
 	    });
 	  },
 	
-	  getOneConvo: function () {}
+	  getOneConvo: function (theConvoId) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/conversations/' + theConvoId,
+	      dataType: 'json',
+	      data: {},
+	      success: function (result) {
+	        MessageActions.receiveOneConvo(result);
+	      }
+	    });
+	  },
+	
+	  createConversation: function (theParams, messageBody) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/conversations',
+	      dataType: 'json',
+	      data: { conversation: theParams },
+	      success: function (newConvo) {
+	        MessageApiUtil.createMessage({
+	          convo_id: newConvo.id,
+	          sender_id: theParams.user_id,
+	          receiver_id: theParams.user2_id,
+	          body: this.state.contents
+	        });
+	      }
+	    });
+	  },
+	
+	  createMessage: function (theParams) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/messages',
+	      dataType: 'json',
+	      data: { message: theParams },
+	      success: function (newMessage) {
+	        console.log("You made this:", newMessage);
+	        MessageActions.receiveNewMessage(newMessage);
+	      }
+	    });
+	  }
 	
 	};
 	
 	module.exports = MessageApiUtil;
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionApiUtil = __webpack_require__(234);
+	var SessionStore = __webpack_require__(237);
+	var AppDispatcher = __webpack_require__(238);
+	
+	var MessageActions = {
+	
+	  receiveAllConvos: function (convos) {
+	    AppDispatcher.dispatch({
+	      actionType: "CONVERSATIONS",
+	      convos: convos
+	    });
+	  },
+	
+	  receiveOneConvo: function (convo) {
+	    AppDispatcher.dispatch({
+	      actionType: "CONVERSATION",
+	      convo: convo
+	    });
+	  },
+	
+	  receiveNewMessage: function (message) {
+	    AppDispatcher.dispatch({
+	      actionType: "NEW_MESSAGE",
+	      convo_id: message.convo_id
+	    });
+	  }
+	
+	};
+	
+	module.exports = MessageActions;
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var SessionStore = __webpack_require__(237);
+	var MessageStore = __webpack_require__(315);
+	
+	var MessageApiUtil = __webpack_require__(316);
+	
+	var MessageForm = __webpack_require__(319);
+	
+	var MessageDetail = React.createClass({
+	  displayName: 'MessageDetail',
+	
+	  getInitialState: function () {
+	    return { theConvo: null };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._getToTheConvo);
+	    MessageApiUtil.getOneConvo(this.props.params.convo_id);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _getToTheConvo: function () {
+	    this.setState({ theConvo: MessageStore.oneConvo() });
+	  },
+	
+	  render: function () {
+	
+	    if (!this.state.theConvo) {
+	      return React.createElement(
+	        'p',
+	        { className: 'loading_message' },
+	        'Please wait, your content is loading...'
+	      );
+	    }
+	
+	    var us;
+	    var them;
+	
+	    if (this.state.theConvo.user.id === SessionStore.currentUser().id) {
+	      us = this.state.theConvo.user;
+	      them = this.state.theConvo.user2;
+	    } else {
+	      us = this.state.theConvo.user2;
+	      them = this.state.theConvo.user;
+	    }
+	
+	    var classiness;
+	
+	    var hours_ago;
+	    var milliseconds;
+	    var hours;
+	
+	    var messages = this.state.theConvo.messages.map(function (message, index) {
+	
+	      milliseconds = new Date() - new Date(message.created_at);
+	      hours = milliseconds / 3600000;
+	
+	      if (hours < 1) {
+	
+	        var mintues = hours * 60;
+	
+	        hours_ago = Math.floor(mintues) + " minute(s)";
+	      } else {
+	
+	        hours = Math.floor(hours);
+	
+	        if (hours === 1) {
+	          hours_ago = "an hour";
+	        } else if (hours < 24) {
+	          hours_ago = Math.floor(hours) + " hours";
+	        } else if (hours < 48) {
+	          hours_ago = "a day";
+	        } else {
+	          hours_ago = hours / 24 + " days";
+	        }
+	      }
+	
+	      if (message.receiver_id === SessionStore.currentUser().id) {
+	        classiness = "received";
+	      } else {
+	        classiness = "sent";
+	      }
+	
+	      return React.createElement(
+	        'li',
+	        { className: classiness, key: message.id },
+	        message.body,
+	        React.createElement('br', null),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'p',
+	          { className: 'message_timestamp' },
+	          classiness,
+	          ' ',
+	          hours_ago,
+	          ' ago'
+	        )
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      React.createElement(
+	        'p',
+	        null,
+	        'THIS IS CONVERSATION #',
+	        this.props.params.convo_id
+	      ),
+	      messages,
+	      React.createElement('br', null),
+	      React.createElement('br', null),
+	      React.createElement(MessageForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	    );
+	  }
+	
+	});
+	
+	module.exports = MessageDetail;
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var MessageStore = __webpack_require__(315);
+	
+	var MessageApiUtil = __webpack_require__(316);
+	
+	// WE NEED THE FOLLOWING PROPS:
+	// SENDER
+	// RECEIVER
+	// CONVO_ID
+	
+	var MessageForm = React.createClass({
+	  displayName: 'MessageForm',
+	
+	  getInitialState: function () {
+	    return { contents: "" };
+	  },
+	
+	  _handleSubmit: function (event) {
+	    event.preventDefault();
+	    console.log("this would have submitted the message:", this.state.contents);
+	
+	    if (this.props.convo_id) {
+	
+	      MessageApiUtil.createMessage({
+	        convo_id: this.props.convo_id,
+	        sender_id: this.props.sender.id,
+	        receiver_id: this.props.receiver.id,
+	        body: this.state.contents
+	      });
+	    } else {
+	
+	      MessageApiUtil.createConversation({
+	        user_id: this.props.sender.id,
+	        user2_id: this.props.receiver.id
+	      }, this.state.contents);
+	    }
+	
+	    this.setState({ contents: "" });
+	  },
+	
+	  _changeContents: function (event) {
+	    this.setState({ contents: event.target.value });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'form',
+	      { onSubmit: this._handleSubmit },
+	      React.createElement(
+	        'p',
+	        { className: 'datDateDoe' },
+	        'Message ',
+	        this.props.receiver.username
+	      ),
+	      React.createElement('textarea', { className: 'new_message_text', value: this.state.contents, onChange: this._changeContents }),
+	      React.createElement(
+	        'button',
+	        { className: 'submit_that_message' },
+	        'Submit'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = MessageForm;
 
 /***/ }
 /******/ ]);

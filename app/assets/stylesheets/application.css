@@ -54,3 +54,8 @@ button.go_home:active {
   border: 10px inset #29d58f;
   color: #29d58f;
 }
+
+.loading_message {
+  font-size: 48px;
+  color: white;
+}
