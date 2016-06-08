@@ -22,7 +22,7 @@ class Api::ConversationsController < ApplicationController
   end
 
   def show
-    @conversation = Conversation.find_by(id: params[:id])
+    @conversation = Conversation.find(params[:id])
 
     render "api/conversations/show"
   end

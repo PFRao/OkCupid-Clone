@@ -41,7 +41,6 @@ var VisitsIndex = React.createClass({
         But that's the thing, they say <br />
         It's not that the spark can <span className="poem_italics">end</span>, as such. <br />
         It simply... slips away... <br /><br />
-        DON'T LET THAT HAPPEN TO YOU, {SessionStore.currentUser().username}!
         </p>
 
         <br /><br />

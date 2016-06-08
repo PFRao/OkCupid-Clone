@@ -66,6 +66,26 @@
   color: #474d59;
 }
 
+.guest_button {
+  background-color: transparent;
+  border: 2px solid #ADD8E6;
+  color: #ADD8E6;
+  padding: 10px;
+  margin:10px;
+}
+
+.guest_button:hover {
+  border: 2px solid #ff4500;
+}
+
+.sign_in_button {
+  font-style: italic;
+}
+
+.sign_text {
+  color: #adf121;
+}
+
 .charles {
   background-color: transparent;
 }

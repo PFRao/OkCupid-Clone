@@ -44,6 +44,17 @@ var SignupForm = React.createClass({
     UserApiUtil.signup(this.state);
   },
 
+  _guest_login: function () {
+    UserApiUtil.signup({
+      username: "guest",
+      password: "fzfgT76Kjh0",
+      location: "10001",
+      birthdate: new Date(),
+      gender: "man",
+      last_online: new Date(),
+    });
+  },
+
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -105,6 +116,19 @@ var SignupForm = React.createClass({
   render: function () {
     return (
       <div id="steven">
+
+        <br />
+
+        <button className="guest_button" onClick={this._guest_login}>Guest Login</button>
+
+        <br />
+
+        <div className="sign_in_button">
+          <span className="sign_text">What's that? You're already a member?</span>
+
+          <button className="guest_button" onClick={this._openModal}>Sign in!</button>
+        </div>
+
         <form className="sign_up" onSubmit={this._handleSubmit}>
 
           <header>Join OkPeter today! It's totally free and rather easy!</header>
@@ -125,6 +149,7 @@ var SignupForm = React.createClass({
             { this.fieldErrors("password") }
           </label>
           <input type="password" onChange={this._changePassword} value={this.state.password} />
+          <div className="help">Your password must be at least 6 letters long!</div>
 
           <label>
             Zip Code:

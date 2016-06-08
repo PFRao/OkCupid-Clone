@@ -13,6 +13,8 @@ var MessageForm = require('../message_stuff/message_form');
 var ProfileField = require('./profile_field');
 var Modal = require('react-modal');
 
+var _conversation_already_exists
+
 Modal.setAppElement("#content");
 
 var UserProfile = React.createClass({
@@ -29,8 +31,16 @@ var UserProfile = React.createClass({
   },
 
   _openModal: function (e) {
+
     e.preventDefault();
-    this.setState({ modalIsOpen: true });
+    _conversation_already_exists = MessageStore.existing(parseInt(this.props.params.user_id));
+
+    if(_conversation_already_exists) {
+      this.context.router.push("messages/" + _conversation_already_exists);
+    } else {
+      this.setState({ modalIsOpen: true });
+    }
+
   },
 
   afterOpenModal: function() {
@@ -45,6 +55,10 @@ var UserProfile = React.createClass({
   componentDidMount: function () {
     this.listener = ProfileStore.addListener(this._gotUser);
     UserApiUtil.fetchOneUser(this.props.params.user_id);
+    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+    // if (_conversation_already_exists) {
+    //   MessageApiUtil.getOneConvo(_conversation_already_exists);
+    // }
   },
 
   componentWillUnmount: function () {
@@ -70,12 +84,14 @@ var UserProfile = React.createClass({
     }
 
     var warning;
+    var existence;
     var modal;
     var messageButton;
 
     if (this.state.isThisUs) {
       warning = (<p>Welcome to your own profile!</p>);
     } else {
+
       warning = (<p>Careful, this user isn't you! Don't trust them!</p>);
       modal = (
         <Modal
@@ -85,7 +101,7 @@ var UserProfile = React.createClass({
           onAfterOpen={this.handleOnAfterOpenModal}
           onRequestClose={this._closeModal}>
 
-          <MessageForm receiver={this.state.theState.user} sender={SessionStore.currentUser()} modal={true}/>
+          <MessageForm receiver={this.state.theState.user} sender={SessionStore.currentUser()} />
 
         </Modal>
       );

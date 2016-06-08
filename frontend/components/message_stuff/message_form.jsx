@@ -19,9 +19,12 @@ var MessageForm = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
+  _redirectToConvo: function (convo_id) {
+    this.context.router.push("messages/" + convo_id);
+  },
+
   _handleSubmit: function (event) {
     event.preventDefault();
-    console.log("this would have submitted the message:", this.state.contents);
 
     if (this.props.convo_id) {
 
@@ -37,12 +40,8 @@ var MessageForm = React.createClass({
       MessageApiUtil.createConversation({
         user_id: this.props.sender.id,
         user2_id: this.props.receiver.id
-      }, this.state.contents);
+      }, this.state.contents, this._redirectToConvo);
 
-    }
-
-    if (this.props.modal) {
-      this.context.router.push("messages/" + MessageStore.oneConvo().id);
     }
 
     this.setState({ contents: "" });
