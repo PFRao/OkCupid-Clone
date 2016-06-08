@@ -6,6 +6,27 @@ class Api::ConversationsController < ApplicationController
     render "api/conversations/index"
   end
 
+  def create
+    @conversation = Conversation.new(convo_params)
+
+    if @conversation.save
+      render "api/conversations/show"
+    else
+      render(
+        json: {
+          base: ["Something went wrong!"]
+        },
+        status: 401
+      )
+    end
+  end
+
+  def show
+    @conversation = Conversation.find_by(id: params[:id])
+
+    render "api/conversations/show"
+  end
+
   private
   def convo_params
     params.require(:conversation).permit(:user_id, :user2_id)

@@ -1,11 +1,30 @@
 var AppDispatcher = require('../dispatcher/dispatcher.js');
 var Store = require('flux/utils').Store;
 
+var MessageApiUtil = require('../util/message_api_util');
+
 var _convos = [];
 var _messages = [];
+var _convo;
 var _message;
 
 var MessageStore = new Store(AppDispatcher);
+
+MessageStore.allConvos = function () {
+  return _convos;
+};
+
+MessageStore.oneConvo = function () {
+  return _convo;
+};
+
+MessageStore.getLatestMessage = function (convo_id) {
+  for (var i = 0; i < _convos.length; i++) {
+    if (_convos[i].id === convo_id) {
+      return _convos[i].messages[_convos[i].messages.length - 1];
+    }
+  }
+};
 
 MessageStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
@@ -14,12 +33,17 @@ MessageStore.__onDispatch = function (payload) {
       MessageStore.__emitChange();
       break;
     case "NEW_MESSAGE":
-      _message = payload.message;
-      MessageStore.__emitChange();
+      MessageApiUtil.getOneConvo(payload.convo_id);
       break;
     case "CONVERSATIONS":
-      _convos = payload.convo;
+      _convos = payload.convos;
+      MessageStore.__emitChange();
+      break;
+    case "CONVERSATION":
+      _convo = payload.convo;
       MessageStore.__emitChange();
       break;
   }
 };
+
+module.exports = MessageStore;

@@ -1,0 +1,68 @@
+.sent_message {
+  color: #add8e6;
+}
+
+.received_message {
+  color: #0f0;
+}
+
+.sent {
+  background: #add8e6;
+  border-radius: 5px;
+  border: 2px solid black;
+  margin: 10px;
+  padding: 5px;
+}
+
+.sent:hover {
+  background: #add8e6;
+  border-radius: 5px;
+  border: 2px solid red;
+}
+
+.received {
+  background: #d3d3d3;
+  border-radius: 5px;
+  border: 2px solid black;
+  margin: 10px;
+  padding: 5px;
+}
+
+.received:hover {
+  background: #d3d3d3;
+  border-radius: 5px;
+  border: 2px solid red;
+}
+
+.message_timestamp {
+  font-style: italic;
+}
+
+.new_message_text {
+  background: white;
+  color: black;
+  height: 175px;
+  width: 300px;
+  border: 5px ridge purple;
+}
+
+.submit_that_message {
+  background-color: white;
+  border-radius: 80px;
+  padding: 5px;
+  border: 5px groove purple;
+  font-family: sans-serif;
+  font-weight: 1000;
+}
+
+.submit_that_message:hover {
+  background-color: purple;
+  border: 5px dotted white;
+  color: white;
+}
+
+.submit_that_message:active {
+  background-color: #104da1;
+  border: 5px dotted red;
+  color: yellow;
+}
