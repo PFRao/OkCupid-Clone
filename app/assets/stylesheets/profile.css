@@ -22,4 +22,7 @@
 .profile_edit {
   background: white;
   color: black;
+  border: 5px ridge green;
+  height: 50px;
+  width: 200px;
 }

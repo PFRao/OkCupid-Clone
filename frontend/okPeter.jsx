@@ -16,6 +16,7 @@ var Questions = require('./components/question_stuff/questions');
 var LikesIndex = require('./components/like_stuff/likes_index');
 var VisitsIndex = require('./components/visit_stuff/visits_index');
 var UserProfile = require('./components/profile_stuff/user_profile');
+var MessageIndex = require('./components/message_stuff/message_index');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
@@ -46,7 +47,7 @@ var App = React.createClass({
       candyCorn = [
         <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
         <li key={"likes"}><a href="#/likes">Likes</a></li>,
-        <li key={"messages"}><a href="#/main">Messages</a></li>,
+        <li key={"messages"}><a href="#/messages">Messages</a></li>,
         <li className="yer_face" onClick={this._goToProfile} key={"person"}><img src={window.peterImage} /></li>
       ];
     } else {
@@ -87,6 +88,7 @@ routes = (
       <Route path="likes" component={LikesIndex} onEnter={ _ensureLoggedIn } />
       <Route path="visits" component={VisitsIndex} onEnter={ _ensureLoggedIn } />
       <Route path="profile/:user_id" component={UserProfile} onEnter={ _ensureLoggedIn } />
+      <Route path="messages" component={MessageIndex} onEnter={ _ensureLoggedIn } />
     </Route>
   </Router>
 );

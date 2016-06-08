@@ -24,12 +24,29 @@ class User < ActiveRecord::Base
   has_many :visitors, through: :incoming_visits, source: :visitor
   has_many :visitees, through: :outgoing_visits, source: :visitee
 
+  has_many :gotten_messages, class_name: "Message", foreign_key: :receiver_id, primary_key: :id
+  has_many :sent_messages, class_name: "Message", foreign_key: :sender_id, primary_key: :id
+
+  has_many :correspodentsA, through: :gotten_messages, source: :sender_id
+  has_many :correspodentsB, through: :sent_messages, source: :receiver_id
+
+  has_many :conversationsA, class_name: "Conversation", foreign_key: :user_id, primary_key: :id
+  has_many :conversationsB, class_name: "Conversation", foreign_key: :user2_id, primary_key: :id
+
   has_one :profile
 
   def last_visit(user)
     self.outgoing_visits.each do |visit|
       return visit.updated_at if visit.visitee_id == user.id
     end
+  end
+
+  def correspodents
+    self.correspodentsA | self.correspodentsB
+  end
+
+  def conversations
+    self.conversationsA | self.conversationsB
   end
 
 	def password= password

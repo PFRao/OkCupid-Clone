@@ -62,6 +62,7 @@
 	var LikesIndex = __webpack_require__(298);
 	var VisitsIndex = __webpack_require__(307);
 	var UserProfile = __webpack_require__(304);
+	var MessageIndex = __webpack_require__(313);
 	//Stores
 	var SessionStore = __webpack_require__(237);
 	//Other Stuff
@@ -112,7 +113,7 @@
 	        { key: "messages" },
 	        React.createElement(
 	          'a',
-	          { href: '#/main' },
+	          { href: '#/messages' },
 	          'Messages'
 	        )
 	      ), React.createElement(
@@ -172,7 +173,8 @@
 	    React.createElement(Route, { path: 'questions', component: Questions, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'likes', component: LikesIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'visits', component: VisitsIndex, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'profile/:user_id', component: UserProfile, onEnter: _ensureLoggedIn })
+	    React.createElement(Route, { path: 'profile/:user_id', component: UserProfile, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'messages', component: MessageIndex, onEnter: _ensureLoggedIn })
 	  )
 	);
 	
@@ -37711,6 +37713,169 @@
 	};
 	
 	module.exports = VisitApiUtil;
+
+/***/ },
+/* 312 */,
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var MessageIndexItem = __webpack_require__(314);
+	var SessionStore = __webpack_require__(237);
+	var MessageStore = __webpack_require__(315);
+	
+	var MessageApiUtil = __webpack_require__(316);
+	
+	var MessageIndex = React.createClass({
+	  displayName: 'MessageIndex',
+	
+	
+	  getInitialState: function () {
+	    return {};
+	  },
+	
+	  componentDidMount: function () {
+	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Your conversations'
+	      ),
+	      React.createElement('ul', null)
+	    );
+	  }
+	
+	});
+	
+	module.exports = MessageIndex;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var MessageIndexItem = React.createClass({
+	  displayName: "MessageIndexItem",
+	
+	  getInitialState: function () {
+	    return { latestPreview: null };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
+	    this.context.router.push("profile/" + this.props.person.id);
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "li",
+	        null,
+	        React.createElement("img", { onClick: this._goToProfile, src: window.peterImage }),
+	        React.createElement(
+	          "h3",
+	          null,
+	          this.props.person.username
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
+	
+	module.exports = MessageIndexItem;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(238);
+	var Store = __webpack_require__(242).Store;
+	
+	var _convos = [];
+	var _messages = [];
+	var _message;
+	
+	var MessageStore = new Store(AppDispatcher);
+	
+	MessageStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "ALL_MESSAGES":
+	      _messages = payload.messages;
+	      MessageStore.__emitChange();
+	      break;
+	    case "NEW_MESSAGE":
+	      _message = payload.message;
+	      MessageStore.__emitChange();
+	      break;
+	    case "CONVERSATIONS":
+	      _convos = payload.convo;
+	      MessageStore.__emitChange();
+	      break;
+	  }
+	};
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionActions = __webpack_require__(235);
+	var ErrorActions = __webpack_require__(259);
+	var MessageActions = __webpack_require__(262);
+	
+	var MessageApiUtil = {
+	
+	  // attatch a "last message" type of method to
+	
+	  getAllConvos: function (theUserId) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/conversations',
+	      dataType: 'json',
+	      data: { conversation: theUserId },
+	      success: function (result) {
+	        console.log(result);
+	      }
+	    });
+	  },
+	
+	  getOneConvo: function () {}
+	
+	};
+	
+	module.exports = MessageApiUtil;
 
 /***/ }
 /******/ ]);
