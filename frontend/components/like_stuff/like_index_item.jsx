@@ -23,7 +23,7 @@ var UserIndexItem = React.createClass({
     oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
 
     return (
-      <li onClick={this._goToProfile}>
+      <li className="like_index_item" onClick={this._goToProfile}>
         <img src={window.peterImage} />
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>

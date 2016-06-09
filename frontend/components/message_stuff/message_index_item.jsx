@@ -80,16 +80,24 @@ var MessageIndexItem = React.createClass({
     }
 
     var theClass = "sent_message";
+    var theSayer = "you";
+
     if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
       theClass = "received_message";
+      theSayer = "they";
     }
 
     return (
-      <li>
+      <li className="message_index_item">
         <img onClick={this._goToProfile} src={window.peterImage} />
         <span onClick={this._seeMessageDetails}>
           <h3>{this.props.person.username}</h3>
-          <p className={theClass}>{this._shorten(this.state.latestPreview.body)}</p>
+          <p>
+            {theSayer} said:&nbsp;
+            <span className={theClass}>
+              {this._shorten(this.state.latestPreview.body)}
+            </span>
+          </p>
           <p className="message_timestamp">{hours_ago} ago</p>
         </span>
       </li>

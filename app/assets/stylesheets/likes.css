@@ -1,4 +1,60 @@
+.likes_main {
+  color: #2F4F4F;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  height: 5000px;
+  background: #F8F8FF;
+}
+
 .like_title {
-  font-family: fantasy;
-  color: pink;
+  font-family:fantasy;
+  color: #2F4F4F;
+  margin-left: 10px;
+}
+
+.likes_selector {
+  margin: 10px;
+  color: #104da1;
+  border-bottom: 3px solid #F8F8FF;
+}
+
+.likes_selector:hover {
+  border-bottom: 3px solid #104da1;
+}
+
+.likes_selector:active {
+  border-bottom: 3px solid red;
+}
+
+.like_index_item {
+  text-decoration: none;
+  color: #2F4F4F;
+  display: block;
+  width: 350px;
+  margin:50px;
+  border-top-left-radius: 1000px;
+  border-top-right-radius: 300px;
+  border-bottom-left-radius: 425px;
+  border-bottom-right-radius: 300px;
+
+  -webkit-transition: all 0.3s ease, background-color 0.3s ease;
+  -moz-transition: all 0.3s ease, background-color 0.3s ease;
+  -o-transition: all 0.3s ease, background-color 0.3s ease;
+  -ms-transition: all 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease, background-color 0.3s ease;
+}
+
+.like_index_item:hover {
+  transform: translate(10%, 0);
+  cursor: pointer;
+  background-color: #ADD8E6;
+}
+
+.like_index_item > img {
+  display: block;
+  float:left;
+  height:100px;
+  width: 100px;
+  border-radius: 50px;
 }

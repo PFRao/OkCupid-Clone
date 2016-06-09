@@ -127,7 +127,7 @@ var SignupForm = React.createClass({
 
         <form className="sign_up" onSubmit={this._handleSubmit}>
 
-          <header>Join OkPeter today! It's totally free and rather easy!</header>
+          <header>Join LoLCupid today! It's totally free and rather easy!</header>
 
           { this.fieldErrors("base") }
 
@@ -137,7 +137,7 @@ var SignupForm = React.createClass({
             { this.fieldErrors("username") }
           </label>
           <input type="text" onChange={this._changeUsername} value={this.state.username} />
-          <div className="help">What's that? You're already a member? <span className="implore" onClick={this._openModal}>Click here</span> to log in!</div>
+          <div className="help">Pick something unique and memorable. This is the name that your matches will know you by!</div>
 
           <label>
             Password:

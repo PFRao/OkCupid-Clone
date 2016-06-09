@@ -9,11 +9,27 @@ var MessageApiUtil = require('../../util/message_api_util');
 var UserApiUtil = require('../../util/user_api_util');
 
 var MessageForm = require('../message_stuff/message_form');
+var ProfileInfo = require('./profile_info');
+var Questions = require('../question_stuff/questions');
 
-var ProfileField = require('./profile_field');
 var Modal = require('react-modal');
 
-var _conversation_already_exists
+var _conversation_already_exists;
+
+var theMonths = {
+  0: "January",
+  1: "February",
+  2: "March",
+  3: "April",
+  4: "May",
+  5: "June",
+  6: "July",
+  7: "August",
+  8: "September",
+  9: "October",
+  10: "November",
+  11: "December",
+};
 
 Modal.setAppElement("#content");
 
@@ -22,7 +38,8 @@ var UserProfile = React.createClass({
     return {
       theState: null,
       isThisUs: (SessionStore.currentUser().id === parseInt(this.props.params.user_id)),
-      modalIsOpen: false
+      modalIsOpen: false,
+      whichPane: "info"
     };
   },
 
@@ -56,9 +73,6 @@ var UserProfile = React.createClass({
     this.listener = ProfileStore.addListener(this._gotUser);
     UserApiUtil.fetchOneUser(this.props.params.user_id);
     MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
-    // if (_conversation_already_exists) {
-    //   MessageApiUtil.getOneConvo(_conversation_already_exists);
-    // }
   },
 
   componentWillUnmount: function () {
@@ -77,22 +91,54 @@ var UserProfile = React.createClass({
     this.setState({ theState: ProfileStore.userIs() });
   },
 
+  _changeTab: function (event) {
+    this.setState({ whichPane: event.target.value });
+  },
+
   render: function() {
 
     if (!this.state.theState) {
-      return (<p className="loading_message">Please wait, your content is loading...</p>);
+      return (<div className="loading_message">Please wait, your content is loading...</div>);
     }
+
+    var date;
+    date = new Date(this.state.theState.user.last_online);
+
+    var theM = "am";
+    if (date.getHours() >= 12) { theM = "pm"; }
+
+    var hours = (date.getHours() % 12);
+    if (hours === 0) { hours = 12; }
+
+    var theColon = ":";
+    if (date.getMinutes() < 10) { theColon = ":0"; }
+
+    var time = hours + theColon + date.getMinutes() + theM;
+
+    var last_login = theMonths[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " at " + time;
 
     var warning;
     var existence;
     var modal;
     var messageButton;
+    var theChoice;
+    var thePane = (<ProfileInfo
+      theprops={this.state.theState}
+      isThisUs={this.state.isThisUs} />);
 
     if (this.state.isThisUs) {
-      warning = (<p>Welcome to your own profile!</p>);
+      warning = (<p>You last logged in at: {last_login}</p>);
+      if (this.state.whichPane === "q&a") {
+        thePane = (<Questions />);
+      }
+      theChoice = (
+        <div>
+          <button className="visits_selector" onClick={this._changeTab} value="info">Your Profile</button>
+          <button className="visits_selector" onClick={this._changeTab} value="q&a">Find Yourself</button>
+        </div>
+      );
     } else {
-
-      warning = (<p>Careful, this user isn't you! Don't trust them!</p>);
+      warning = (<p className="last_login">This user last logged in at: {last_login}</p>);
       modal = (
         <Modal
           className="charles"
@@ -106,19 +152,18 @@ var UserProfile = React.createClass({
         </Modal>
       );
       messageButton = (
-        <button className="submit_that_message" onClick={this._openModal}>Message this fool</button>
+        <button className="profile_message_button" onClick={this._openModal}>Send a Message</button>
       );
+
     }
 
     if (this.state.theState) {
       return (
         <div className="user_profile">
-          You have reached the profile of: {this.state.theState.user.username}
-
-          <br /><br />
-
-          Here's a picture of {this.state.theState.user.username}! Wow!
-          <img className="main_profile_photo" src={window.peterImage} />
+          <div className="user_name_header">
+            <img className="main_profile_photo" src={window.peterImage} />
+            {this.state.theState.user.username}
+          </div>
 
           <br />
 
@@ -126,79 +171,12 @@ var UserProfile = React.createClass({
           {modal}
           {messageButton}
 
+          {theChoice}
+
           <br /><br />
 
-          My Self-Summary:
-          <br />
-          <ProfileField
-            fieldName="self_summary" fieldContents={this.state.theState.info.self_summary}
-            canWeEdit={this.state.isThisUs}
-            theUserId={this.state.theState.user.id} />
-          <br />
+          {thePane}
 
-          What I'm doing with my life:
-          <br />
-            <ProfileField
-              fieldName="do_with_life" fieldContents={this.state.theState.info.do_with_life}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          I'm really good at:
-          <br />
-            <ProfileField
-              fieldName="real_good_at" fieldContents={this.state.theState.info.real_good_at}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          The first thing people usually notice about me:
-          <br />
-            <ProfileField
-              fieldName="first_thing" fieldContents={this.state.theState.info.first_thing}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          My favorite things:
-          <br />
-            <ProfileField
-              fieldName="favorites" fieldContents={this.state.theState.info.favorites}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          The six things I could never do without:
-          <br />
-            <ProfileField
-              fieldName="six_things" fieldContents={this.state.theState.info.six_things}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          I spend a lot of time thinking about:
-          <br />
-            <ProfileField
-              fieldName="think_about" fieldContents={this.state.theState.info.think_about}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          On a typical friday, I am:
-          <br />
-            <ProfileField
-              fieldName="typical_friday" fieldContents={this.state.theState.info.typical_friday}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
-
-          You should message me if:
-          <br />
-            <ProfileField
-              fieldName="message_if" fieldContents={this.state.theState.info.message_if}
-              canWeEdit={this.state.isThisUs}
-              theUserId={this.state.theState.user.id} />
-          <br />
         </div>
       );
     } else {

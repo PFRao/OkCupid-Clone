@@ -52,34 +52,10 @@ var Main = React.createClass({
 
   render: function () {
 
-    var candy;
-    var bar;
-
-    if (this.state.user.gender === "man")  {
-      bar = "man";
-    } else if (this.state.user.gender === "woman") {
-      bar = "woman";
-    } else {
-      bar = "???";
-    }
-
-    if (this.state.user) {
-      candy = (
-        <p>
-          You logged in at: {this.state.user.last_online} <br />
-          You are a {bar}
-        </p>
-      );
-    } else {
-      candy = <p>There is nothing here, lad.</p>;
-    }
-
     return (
       <div>
-        {candy}
-        <button className="main_page_button" onClick={this._logout}>Log out</button><br />
         <button className="main_page_button" onClick={this._browse}>Browse  matches</button><br />
-        <button className="main_page_button" onClick={this._interrogate}>Find yourself</button><br />
+        <button className="main_page_button" onClick={this._logout}>Log out</button><br />
       </div>
     );
 
