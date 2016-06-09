@@ -42,6 +42,8 @@
 .yer_face {
   height: 30px;
   width: 30px;
+  position: relative;
+  top: 50%;
+  transform: translateY(22%);
   border-radius: 15px;
-  overflow: hidden;
 }

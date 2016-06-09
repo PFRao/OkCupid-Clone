@@ -145,7 +145,7 @@
 	            React.createElement(
 	              'a',
 	              { href: '#/main' },
-	              'LoLCupid'
+	              'LoLQetesh'
 	            )
 	          ),
 	          React.createElement(
@@ -171,7 +171,6 @@
 	    React.createElement(IndexRoute, { component: SignupForm, onEnter: _ensureLoggedOut }),
 	    React.createElement(Route, { path: 'main', component: Main, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'matches', component: UsersIndex, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'questions', component: Questions, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'likes', component: LikesIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'visits', component: VisitsIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'profile/:user_id', component: UserProfile, onEnter: _ensureLoggedIn }),
@@ -37270,7 +37269,6 @@
 	        modal,
 	        messageButton,
 	        theChoice,
-	        React.createElement('br', null),
 	        React.createElement('br', null),
 	        thePane
 	      );
