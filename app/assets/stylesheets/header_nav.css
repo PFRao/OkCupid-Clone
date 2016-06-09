@@ -23,7 +23,7 @@
 }
 
 .header-logo:hover {
-  background: #000;
+  background: blue;
 }
 
 .header-list {
@@ -42,6 +42,6 @@
 .yer_face {
   height: 30px;
   width: 30px;
-  border-radius: 0px;
+  border-radius: 15px;
   overflow: hidden;
 }

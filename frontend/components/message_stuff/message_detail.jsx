@@ -94,11 +94,8 @@ var MessageDetail = React.createClass({
 
     return (
       <ul>
-        <p>THIS IS CONVERSATION #{this.props.params.convo_id}</p>
         {messages}
-
         <br /><br />
-
         <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
       </ul>
     );

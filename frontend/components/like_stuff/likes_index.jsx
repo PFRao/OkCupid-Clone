@@ -34,13 +34,10 @@ var LikesIndex = React.createClass({
 
     return (
       <div className="likes_main">
-        Likes are natural, Likes are good. Not everyone gets them, but everyone should.
 
-        <br /><br />
-
-        <button className="go_home" onClick={this._changeTab} value="incoming">Who Likes You</button>
-        <button className="go_home" onClick={this._changeTab} value="outgoing">Who You Like</button>
-        <button className="go_home" onClick={this._changeTab} value="mutual">Mutual Likes</button>
+        <button className="likes_selector" onClick={this._changeTab} value="incoming">Who Likes You</button>
+        <button className="likes_selector" onClick={this._changeTab} value="outgoing">Who You Like</button>
+        <button className="likes_selector" onClick={this._changeTab} value="mutual">Mutual Likes</button>
 
         <br /><br />
 

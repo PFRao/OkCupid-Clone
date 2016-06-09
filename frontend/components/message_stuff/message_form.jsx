@@ -54,7 +54,7 @@ var MessageForm = React.createClass({
   render: function() {
     return (
       <form onSubmit={this._handleSubmit}>
-        <p className="datDateDoe">Message {this.props.receiver.username}</p>
+        <p className="who_are_they">Message {this.props.receiver.username}</p>
         <textarea className="new_message_text" value={this.state.contents} onChange={this._changeContents} />
         <button className="submit_that_message">Submit</button>
       </form>

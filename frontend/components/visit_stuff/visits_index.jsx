@@ -32,21 +32,9 @@ var VisitsIndex = React.createClass({
 
     return (
       <div className="visits_main">
-        <p className="visits_poem">
-        Remember what we used to do, <br />
-        And how it used to be? <br />
-        I always knew to count on you, <br />
-        And you, depend on me. <br />
-        I guess we drifted out of touch - <br />
-        But that's the thing, they say <br />
-        It's not that the spark can <span className="poem_italics">end</span>, as such. <br />
-        It simply... slips away... <br /><br />
-        </p>
 
-        <br /><br />
-
-        <button className="go_home" onClick={this._changeTab} value="incoming">Recently Visited You</button>
-        <button className="go_home" onClick={this._changeTab} value="outgoing">You Recently Visited</button>
+        <button className="visits_selector" onClick={this._changeTab} value="incoming">Recently Visited You</button>
+        <button className="visits_selector" onClick={this._changeTab} value="outgoing">You Recently Visited</button>
 
         <br /><br />
 

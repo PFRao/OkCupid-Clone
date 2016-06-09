@@ -145,7 +145,7 @@
 	            React.createElement(
 	              'a',
 	              { href: '#/main' },
-	              'LMAOPeter'
+	              'LoLCupid'
 	            )
 	          ),
 	          React.createElement(
@@ -33767,7 +33767,7 @@
 	        React.createElement(
 	          'header',
 	          null,
-	          'Join OkPeter today! It\'s totally free and rather easy!'
+	          'Join LoLCupid today! It\'s totally free and rather easy!'
 	        ),
 	        this.fieldErrors("base"),
 	        React.createElement(
@@ -33785,13 +33785,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'help' },
-	          'What\'s that? You\'re already a member? ',
-	          React.createElement(
-	            'span',
-	            { className: 'implore', onClick: this._openModal },
-	            'Click here'
-	          ),
-	          ' to log in!'
+	          'Pick something unique and memorable. This is the name that your matches will know you by!'
 	        ),
 	        React.createElement(
 	          'label',
@@ -35877,46 +35871,9 @@
 	
 	  render: function () {
 	
-	    var candy;
-	    var bar;
-	
-	    if (this.state.user.gender === "man") {
-	      bar = "man";
-	    } else if (this.state.user.gender === "woman") {
-	      bar = "woman";
-	    } else {
-	      bar = "???";
-	    }
-	
-	    if (this.state.user) {
-	      candy = React.createElement(
-	        'p',
-	        null,
-	        'You logged in at: ',
-	        this.state.user.last_online,
-	        ' ',
-	        React.createElement('br', null),
-	        'You are a ',
-	        bar
-	      );
-	    } else {
-	      candy = React.createElement(
-	        'p',
-	        null,
-	        'There is nothing here, lad.'
-	      );
-	    }
-	
 	    return React.createElement(
 	      'div',
 	      null,
-	      candy,
-	      React.createElement(
-	        'button',
-	        { className: 'main_page_button', onClick: this._logout },
-	        'Log out'
-	      ),
-	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
 	        { className: 'main_page_button', onClick: this._browse },
@@ -35925,8 +35882,8 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'main_page_button', onClick: this._interrogate },
-	        'Find yourself'
+	        { className: 'main_page_button', onClick: this._logout },
+	        'Log out'
 	      ),
 	      React.createElement('br', null)
 	    );
@@ -36352,7 +36309,7 @@
 	    if (SessionStore.isCurrentUserLikedBy(this.props.person)) {
 	      oldness = React.createElement(
 	        'p',
-	        null,
+	        { className: 'list_o_matches' },
 	        'This person likes you!'
 	      );
 	    } else {
@@ -36364,28 +36321,32 @@
 	      null,
 	      React.createElement(
 	        'li',
-	        { onClick: this._goToProfile },
-	        React.createElement('img', { src: window.peterImage }),
+	        { className: 'list_o_matches' },
 	        React.createElement(
-	          'h3',
-	          null,
-	          this.props.person.username
+	          'span',
+	          { onClick: this._goToProfile },
+	          React.createElement('img', { className: 'list_o_matches', src: window.peterImage }),
+	          React.createElement(
+	            'h3',
+	            { className: 'list_o_matches' },
+	            this.props.person.username
+	          ),
+	          React.createElement(
+	            'p',
+	            { className: 'list_o_matches' },
+	            'Age ',
+	            oldness2
+	          ),
+	          React.createElement(
+	            'p',
+	            { className: 'list_o_matches' },
+	            this.props.rating,
+	            ' % Match'
+	          ),
+	          oldness
 	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Age ',
-	          oldness2
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          this.props.rating,
-	          ' % Match'
-	        ),
-	        oldness
-	      ),
-	      React.createElement(LikeButton, { className: 'build_a_bridge', person: this.props.person })
+	        React.createElement(LikeButton, { className: 'build_a_bridge', person: this.props.person })
+	      )
 	    );
 	  }
 	
@@ -36646,61 +36607,62 @@
 	          'form',
 	          { onSubmit: this._handleAnswer },
 	          React.createElement(
-	            'h4',
-	            null,
-	            this.state.question.description
+	            'div',
+	            { className: 'part1' },
+	            React.createElement(
+	              'h4',
+	              null,
+	              this.state.question.description
+	            ),
+	            this.state.question.answer_choices.map(function (thing, index) {
+	              return React.createElement(
+	                'label',
+	                { key: index },
+	                React.createElement('input', { type: 'radio', value: thing.id, checked: this.state.theChoice === thing.id, onChange: this._changeChoice }),
+	                thing.body,
+	                React.createElement('br', null)
+	              );
+	            }.bind(this))
 	          ),
-	          this.state.question.answer_choices.map(function (thing, index) {
-	            return React.createElement(
-	              'label',
-	              { key: index },
-	              React.createElement('input', { type: 'radio', value: thing.id, checked: this.state.theChoice === thing.id, onChange: this._changeChoice }),
-	              thing.body,
-	              React.createElement('br', null)
-	            );
-	          }.bind(this)),
-	          React.createElement('br', null),
 	          React.createElement(
-	            'h4',
-	            null,
-	            'Which answers would you want to see from your ideal match?'
+	            'div',
+	            { className: 'part1' },
+	            React.createElement(
+	              'h4',
+	              null,
+	              'Which answers would you want to see from your ideal match?'
+	            ),
+	            this.state.question.answer_choices.map(function (thing, index) {
+	              return React.createElement(
+	                'label',
+	                { key: index },
+	                React.createElement('input', { type: 'checkbox', value: thing.id, checked: this.state.thePreferences.includes(thing.id), onChange: this._changePreferences }),
+	                thing.body,
+	                React.createElement('br', null)
+	              );
+	            }.bind(this))
 	          ),
-	          this.state.question.answer_choices.map(function (thing, index) {
-	            return React.createElement(
-	              'label',
-	              { key: index },
-	              React.createElement('input', { type: 'checkbox', value: thing.id, checked: this.state.thePreferences.includes(thing.id), onChange: this._changePreferences }),
-	              thing.body,
-	              React.createElement('br', null)
-	            );
-	          }.bind(this)),
 	          React.createElement('br', null)
 	        ),
 	        React.createElement(
-	          'h4',
-	          null,
-	          'How important is this question to you?'
+	          'div',
+	          { className: 'part2' },
+	          React.createElement(
+	            'h4',
+	            null,
+	            'How important is this question to you?'
+	          ),
+	          'Don\'t give a shit',
+	          React.createElement('input', {
+	            type: 'range',
+	            min: '0',
+	            max: '10',
+	            step: '.1',
+	            value: this.state.theWeight,
+	            onChange: this._changeWeight }),
+	          'Absolute dealbreaker'
 	        ),
-	        'Don\'t give a shit',
-	        React.createElement('input', {
-	          type: 'range',
-	          min: '0',
-	          max: '10',
-	          step: '.1',
-	          value: this.state.theWeight,
-	          onChange: this._changeWeight }),
-	        'Absolute dealbreaker',
-	        React.createElement('br', null),
-	        React.createElement(
-	          'button',
-	          { onClick: this._handleAnswer, className: 'go_home' },
-	          'Yes, that is my final answer'
-	        ),
-	        React.createElement(
-	          'button',
-	          { onClick: this._skip, className: 'go_home' },
-	          'Skip this question for now'
-	        )
+	        React.createElement('br', null)
 	      );
 	    } else {
 	      stuffToRender = React.createElement(
@@ -36715,10 +36677,17 @@
 	      'div',
 	      null,
 	      stuffToRender,
+	      React.createElement('br', null),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._backItUp },
-	        'Ok, I\'m done'
+	        { onClick: this._handleAnswer, className: 'question_button' },
+	        'Submit this answer'
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this._skip, className: 'question_button' },
+	        'Skip this question for now'
 	      )
 	    );
 	  }
@@ -36821,22 +36790,19 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'likes_main' },
-	      'Likes are natural, Likes are good. Not everyone gets them, but everyone should.',
-	      React.createElement('br', null),
-	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._changeTab, value: 'incoming' },
+	        { className: 'likes_selector', onClick: this._changeTab, value: 'incoming' },
 	        'Who Likes You'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._changeTab, value: 'outgoing' },
+	        { className: 'likes_selector', onClick: this._changeTab, value: 'outgoing' },
 	        'Who You Like'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._changeTab, value: 'mutual' },
+	        { className: 'likes_selector', onClick: this._changeTab, value: 'mutual' },
 	        'Mutual Likes'
 	      ),
 	      React.createElement('br', null),
@@ -36957,7 +36923,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      { onClick: this._goToProfile },
+	      { className: 'like_index_item', onClick: this._goToProfile },
 	      React.createElement('img', { src: window.peterImage }),
 	      React.createElement(
 	        'h3',
@@ -37113,11 +37079,27 @@
 	var UserApiUtil = __webpack_require__(261);
 	
 	var MessageForm = __webpack_require__(319);
+	var ProfileInfo = __webpack_require__(320);
+	var Questions = __webpack_require__(297);
 	
-	var ProfileField = __webpack_require__(306);
 	var Modal = __webpack_require__(266);
 	
 	var _conversation_already_exists;
+	
+	var theMonths = {
+	  0: "January",
+	  1: "February",
+	  2: "March",
+	  3: "April",
+	  4: "May",
+	  5: "June",
+	  6: "July",
+	  7: "August",
+	  8: "September",
+	  9: "October",
+	  10: "November",
+	  11: "December"
+	};
 	
 	Modal.setAppElement("#content");
 	
@@ -37128,7 +37110,8 @@
 	    return {
 	      theState: null,
 	      isThisUs: SessionStore.currentUser().id === parseInt(this.props.params.user_id),
-	      modalIsOpen: false
+	      modalIsOpen: false,
+	      whichPane: "info"
 	    };
 	  },
 	
@@ -37161,9 +37144,6 @@
 	    this.listener = ProfileStore.addListener(this._gotUser);
 	    UserApiUtil.fetchOneUser(this.props.params.user_id);
 	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
-	    // if (_conversation_already_exists) {
-	    //   MessageApiUtil.getOneConvo(_conversation_already_exists);
-	    // }
 	  },
 	
 	  componentWillUnmount: function () {
@@ -37182,33 +37162,81 @@
 	    this.setState({ theState: ProfileStore.userIs() });
 	  },
 	
+	  _changeTab: function (event) {
+	    this.setState({ whichPane: event.target.value });
+	  },
+	
 	  render: function () {
 	
 	    if (!this.state.theState) {
 	      return React.createElement(
-	        'p',
+	        'div',
 	        { className: 'loading_message' },
 	        'Please wait, your content is loading...'
 	      );
 	    }
 	
+	    var date;
+	    date = new Date(this.state.theState.user.last_online);
+	
+	    var theM = "am";
+	    if (date.getHours() >= 12) {
+	      theM = "pm";
+	    }
+	
+	    var hours = date.getHours() % 12;
+	    if (hours === 0) {
+	      hours = 12;
+	    }
+	
+	    var theColon = ":";
+	    if (date.getMinutes() < 10) {
+	      theColon = ":0";
+	    }
+	
+	    var time = hours + theColon + date.getMinutes() + theM;
+	
+	    var last_login = theMonths[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " at " + time;
+	
 	    var warning;
 	    var existence;
 	    var modal;
 	    var messageButton;
+	    var theChoice;
+	    var thePane = React.createElement(ProfileInfo, {
+	      theprops: this.state.theState,
+	      isThisUs: this.state.isThisUs });
 	
 	    if (this.state.isThisUs) {
 	      warning = React.createElement(
 	        'p',
 	        null,
-	        'Welcome to your own profile!'
+	        'You last logged in at: ',
+	        last_login
+	      );
+	      if (this.state.whichPane === "q&a") {
+	        thePane = React.createElement(Questions, null);
+	      }
+	      theChoice = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'button',
+	          { className: 'visits_selector', onClick: this._changeTab, value: 'info' },
+	          'Your Profile'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'visits_selector', onClick: this._changeTab, value: 'q&a' },
+	          'Find Yourself'
+	        )
 	      );
 	    } else {
-	
 	      warning = React.createElement(
 	        'p',
-	        null,
-	        'Careful, this user isn\'t you! Don\'t trust them!'
+	        { className: 'last_login' },
+	        'This user last logged in at: ',
+	        last_login
 	      );
 	      modal = React.createElement(
 	        Modal,
@@ -37222,8 +37250,8 @@
 	      );
 	      messageButton = React.createElement(
 	        'button',
-	        { className: 'submit_that_message', onClick: this._openModal },
-	        'Message this fool'
+	        { className: 'profile_message_button', onClick: this._openModal },
+	        'Send a Message'
 	      );
 	    }
 	
@@ -37231,83 +37259,20 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'user_profile' },
-	        'You have reached the profile of: ',
-	        this.state.theState.user.username,
-	        React.createElement('br', null),
-	        React.createElement('br', null),
-	        'Here\'s a picture of ',
-	        this.state.theState.user.username,
-	        '! Wow!',
-	        React.createElement('img', { className: 'main_profile_photo', src: window.peterImage }),
+	        React.createElement(
+	          'div',
+	          { className: 'user_name_header' },
+	          React.createElement('img', { className: 'main_profile_photo', src: window.peterImage }),
+	          this.state.theState.user.username
+	        ),
 	        React.createElement('br', null),
 	        warning,
 	        modal,
 	        messageButton,
+	        theChoice,
 	        React.createElement('br', null),
 	        React.createElement('br', null),
-	        'My Self-Summary:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'self_summary', fieldContents: this.state.theState.info.self_summary,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'What I\'m doing with my life:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'do_with_life', fieldContents: this.state.theState.info.do_with_life,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'I\'m really good at:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'real_good_at', fieldContents: this.state.theState.info.real_good_at,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'The first thing people usually notice about me:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'first_thing', fieldContents: this.state.theState.info.first_thing,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'My favorite things:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'favorites', fieldContents: this.state.theState.info.favorites,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'The six things I could never do without:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'six_things', fieldContents: this.state.theState.info.six_things,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'I spend a lot of time thinking about:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'think_about', fieldContents: this.state.theState.info.think_about,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'On a typical friday, I am:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'typical_friday', fieldContents: this.state.theState.info.typical_friday,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null),
-	        'You should message me if:',
-	        React.createElement('br', null),
-	        React.createElement(ProfileField, {
-	          fieldName: 'message_if', fieldContents: this.state.theState.info.message_if,
-	          canWeEdit: this.state.isThisUs,
-	          theUserId: this.state.theState.user.id }),
-	        React.createElement('br', null)
+	        thePane
 	      );
 	    } else {
 	      return React.createElement('div', null);
@@ -37495,42 +37460,13 @@
 	      'div',
 	      { className: 'visits_main' },
 	      React.createElement(
-	        'p',
-	        { className: 'visits_poem' },
-	        'Remember what we used to do, ',
-	        React.createElement('br', null),
-	        'And how it used to be? ',
-	        React.createElement('br', null),
-	        'I always knew to count on you, ',
-	        React.createElement('br', null),
-	        'And you, depend on me. ',
-	        React.createElement('br', null),
-	        'I guess we drifted out of touch - ',
-	        React.createElement('br', null),
-	        'But that\'s the thing, they say ',
-	        React.createElement('br', null),
-	        'It\'s not that the spark can ',
-	        React.createElement(
-	          'span',
-	          { className: 'poem_italics' },
-	          'end'
-	        ),
-	        ', as such. ',
-	        React.createElement('br', null),
-	        'It simply... slips away... ',
-	        React.createElement('br', null),
-	        React.createElement('br', null)
-	      ),
-	      React.createElement('br', null),
-	      React.createElement('br', null),
-	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._changeTab, value: 'incoming' },
+	        { className: 'visits_selector', onClick: this._changeTab, value: 'incoming' },
 	        'Recently Visited You'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._changeTab, value: 'outgoing' },
+	        { className: 'visits_selector', onClick: this._changeTab, value: 'outgoing' },
 	        'You Recently Visited'
 	      ),
 	      React.createElement('br', null),
@@ -37701,7 +37637,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      { onClick: this._goToProfile },
+	      { className: 'visit_index_item', onClick: this._goToProfile },
 	      React.createElement('img', { src: window.peterImage }),
 	      React.createElement(
 	        'h3',
@@ -37871,19 +37807,15 @@
 	      });
 	    } else {
 	
-	      return React.createElement(
-	        'p',
-	        null,
-	        'You don\'t have any messages... yet!'
-	      );
+	      return React.createElement('div', { className: 'loading_message' });
 	    }
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'message_main' },
 	      React.createElement(
-	        'h2',
-	        null,
+	        'h1',
+	        { className: 'message_header_thing' },
 	        'Your conversations'
 	      ),
 	      React.createElement(
@@ -37993,13 +37925,16 @@
 	    }
 	
 	    var theClass = "sent_message";
+	    var theSayer = "you";
+	
 	    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
 	      theClass = "received_message";
+	      theSayer = "they";
 	    }
 	
 	    return React.createElement(
 	      'li',
-	      null,
+	      { className: 'message_index_item' },
 	      React.createElement('img', { onClick: this._goToProfile, src: window.peterImage }),
 	      React.createElement(
 	        'span',
@@ -38011,8 +37946,14 @@
 	        ),
 	        React.createElement(
 	          'p',
-	          { className: theClass },
-	          this._shorten(this.state.latestPreview.body)
+	          null,
+	          theSayer,
+	          ' said: ',
+	          React.createElement(
+	            'span',
+	            { className: theClass },
+	            this._shorten(this.state.latestPreview.body)
+	          )
 	        ),
 	        React.createElement(
 	          'p',
@@ -38322,12 +38263,6 @@
 	    return React.createElement(
 	      'ul',
 	      null,
-	      React.createElement(
-	        'p',
-	        null,
-	        'THIS IS CONVERSATION #',
-	        this.props.params.convo_id
-	      ),
 	      messages,
 	      React.createElement('br', null),
 	      React.createElement('br', null),
@@ -38402,7 +38337,7 @@
 	      { onSubmit: this._handleSubmit },
 	      React.createElement(
 	        'p',
-	        { className: 'datDateDoe' },
+	        { className: 'who_are_they' },
 	        'Message ',
 	        this.props.receiver.username
 	      ),
@@ -38418,6 +38353,129 @@
 	});
 	
 	module.exports = MessageForm;
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var ProfileField = __webpack_require__(306);
+	
+	var ProfileInfo = React.createClass({
+	  displayName: 'ProfileInfo',
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'question_pane' },
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'My Self-Summary:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'self_summary', fieldContents: this.props.theprops.info.self_summary,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'What I\'m doing with my life:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'do_with_life', fieldContents: this.props.theprops.info.do_with_life,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'I\'m really good at:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'real_good_at', fieldContents: this.props.theprops.info.real_good_at,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'The first thing people usually notice about me:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'first_thing', fieldContents: this.props.theprops.info.first_thing,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'My favorite things:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'favorites', fieldContents: this.props.theprops.info.favorites,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'The six things I could never do without:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'six_things', fieldContents: this.props.theprops.info.six_things,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'I spend a lot of time thinking about:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'think_about', fieldContents: this.props.theprops.info.think_about,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'On a typical friday, I am:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'typical_friday', fieldContents: this.props.theprops.info.typical_friday,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'You should message me if:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'message_if', fieldContents: this.props.theprops.info.message_if,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null)
+	    );
+	  }
+	
+	});
+	
+	module.exports = ProfileInfo;
 
 /***/ }
 /******/ ]);

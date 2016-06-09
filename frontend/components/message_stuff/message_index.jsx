@@ -49,13 +49,13 @@ var MessageIndex = React.createClass({
 
     } else {
 
-      return (<p>You don't have any messages... yet!</p>);
+      return (<div className="loading_message"></div>);
 
     }
 
     return (
-      <div>
-        <h2>Your conversations</h2>
+      <div className="message_main">
+        <h1 className="message_header_thing">Your conversations</h1>
         <ul>
           {board}
         </ul>

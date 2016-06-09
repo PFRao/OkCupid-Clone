@@ -1,24 +1,18 @@
 button.like_button {
   background-color: yellow;
-  border-radius: 20px;
+  border-radius: 5px;
   padding: 5px;
-  border: 10px solid #FF8300;
-  font-family: cursive;
+  border: 5px solid #FF8300;
+  font-family: sans-serif;
   font-weight: 1000;
 }
 
 button.like_button:hover {
-  background-color: tan;
-  border-radius: 20px;
-  padding: 5px;
-  border: 10px outset #654321;
-  color: purple;
+  transform: scale(1.2, 1.2);
+  transition: all 0.15s ease-in-out;
 }
 
 button.like_button:active {
-  background-color: red;
-  border-radius: 20px;
-  padding: 5px;
-  border: 10px inset #654321;
-  color: #29d58f;
+  background-color: #FF8300;
+  border: 5px solid red;
 }

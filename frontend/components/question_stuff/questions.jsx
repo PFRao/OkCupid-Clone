@@ -138,6 +138,7 @@ var Questions = React.createClass({
         <div className="main_question_area">
           <form onSubmit={this._handleAnswer}>
 
+            <div className="part1">
             <h4>{this.state.question.description}</h4>
             {
               this.state.question.answer_choices.map(function (thing, index) {
@@ -149,9 +150,9 @@ var Questions = React.createClass({
                 );
               }.bind(this))
             }
+            </div>
 
-            <br />
-
+            <div className="part1">
             <h4>Which answers would you want to see from your ideal match?</h4>
             {
               this.state.question.answer_choices.map(function (thing, index) {
@@ -163,12 +164,12 @@ var Questions = React.createClass({
                 );
               }.bind(this))
             }
+            </div>
 
             <br />
 
-
           </form>
-
+          <div className="part2">
           <h4>How important is this question to you?</h4>
           Don't give a shit
           <input
@@ -179,11 +180,8 @@ var Questions = React.createClass({
             value ={this.state.theWeight}
             onChange={this._changeWeight} />
           Absolute dealbreaker
-
+          </div>
           <br />
-
-          <button onClick={this._handleAnswer} className="go_home">Yes, that is my final answer</button>
-          <button onClick={this._skip} className="go_home">Skip this question for now</button>
         </div>
       );
     } else {
@@ -197,7 +195,9 @@ var Questions = React.createClass({
     return (
       <div>
         {stuffToRender}
-        <button className="go_home" onClick={this._backItUp}>Ok, I'm done</button>
+        <br /><br />
+        <button onClick={this._handleAnswer} className="question_button">Submit this answer</button>
+        <button onClick={this._skip} className="question_button">Skip this question for now</button>
       </div>
     );
   }

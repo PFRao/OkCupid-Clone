@@ -1,9 +1,56 @@
+.message_main {
+  color: #2F4F4F;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  height: 5000px;
+  background: #F8F8FF;
+}
+
+.message_main > h1 {
+  padding: 20px;
+  font-size: 24px;
+  text-decoration: underline;
+}
+
 .sent_message {
-  color: #add8e6;
+  color: #808080;
 }
 
 .received_message {
-  color: #0f0;
+  color: #ce2029;
+}
+
+.message_index_item {
+  text-decoration: none;
+  color: #2F4F4F;
+  display: block;
+  width: 350px;
+  margin:50px;
+  border-top-left-radius: 1000px;
+  border-top-right-radius: 300px;
+  border-bottom-left-radius: 700px;
+  border-bottom-right-radius: 300px;
+
+  -webkit-transition: all 0.3s ease, background-color 0.3s ease;
+  -moz-transition: all 0.3s ease, background-color 0.3s ease;
+  -o-transition: all 0.3s ease, background-color 0.3s ease;
+  -ms-transition: all 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease, background-color 0.3s ease;
+}
+
+.message_index_item:hover {
+  transform: translate(10%, 0);
+  cursor: pointer;
+  background-color: #add8e6;
+}
+
+.message_index_item > img {
+  display: block;
+  float:left;
+  height:100px;
+  width: 100px;
+  border-radius: 50px;
 }
 
 .sent {
@@ -12,12 +59,21 @@
   border: 2px solid black;
   margin: 10px;
   padding: 5px;
+  text-align: right;
+}
+
+.who_are_they {
+  display:block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  color: #F8F8FF;
 }
 
 .sent:hover {
   background: #add8e6;
   border-radius: 5px;
-  border: 2px solid red;
+  border: 2px solid pink;
 }
 
 .received {
@@ -31,7 +87,7 @@
 .received:hover {
   background: #d3d3d3;
   border-radius: 5px;
-  border: 2px solid red;
+  border: 2px solid pink;
 }
 
 .message_timestamp {
@@ -39,20 +95,28 @@
 }
 
 .new_message_text {
+  display: block;
   background: white;
   color: black;
-  height: 175px;
-  width: 300px;
-  border: 5px ridge purple;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  height: 200px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .submit_that_message {
+  display: block;
   background-color: white;
   border-radius: 80px;
   padding: 5px;
   border: 5px groove purple;
   font-family: sans-serif;
   font-weight: 1000;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .submit_that_message:hover {
