@@ -61,7 +61,7 @@ var App = React.createClass({
           <nav className="header-nav group">
 
             <h1 className="header-logo">
-              <a href="#/main">LoLCupid</a>
+              <a href="#/main">LoLQetesh</a>
             </h1>
 
             <ul className="header-list group">
@@ -85,7 +85,6 @@ routes = (
       <IndexRoute component={SignupForm} onEnter={ _ensureLoggedOut }/>
       <Route path="main" component={Main} onEnter={ _ensureLoggedIn } />
       <Route path="matches" component={UsersIndex} onEnter={ _ensureLoggedIn } />
-      <Route path="questions" component={Questions} onEnter={ _ensureLoggedIn } />
       <Route path="likes" component={LikesIndex} onEnter={ _ensureLoggedIn } />
       <Route path="visits" component={VisitsIndex} onEnter={ _ensureLoggedIn } />
       <Route path="profile/:user_id" component={UserProfile} onEnter={ _ensureLoggedIn } />

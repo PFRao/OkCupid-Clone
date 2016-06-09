@@ -173,7 +173,7 @@ var UserProfile = React.createClass({
 
           {theChoice}
 
-          <br /><br />
+          <br />
 
           {thePane}
 
