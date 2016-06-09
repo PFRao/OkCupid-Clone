@@ -1,3 +1,6 @@
+.steven {
+}
+
 .sign_up {
   background: #104da1;
   width: 100%;
@@ -75,15 +78,25 @@
 }
 
 .guest_button:hover {
-  border: 2px solid #ff4500;
+  border: 2px solid #29d58f;
+}
+
+.guest_button:active {
+  border: 2px solid #FF0080;
+}
+
+.top_part {
+  display: block;
 }
 
 .sign_in_button {
-  font-style: italic;
+  float:right;
 }
 
 .sign_text {
-  color: #adf121;
+  float: right;
+  color: #ADD8E6;
+  margin-top: 22px;
 }
 
 .charles {

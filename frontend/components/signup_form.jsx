@@ -45,13 +45,9 @@ var SignupForm = React.createClass({
   },
 
   _guest_login: function () {
-    UserApiUtil.signup({
+    SessionApiUtil.login({
       username: "guest",
       password: "fzfgT76Kjh0",
-      location: "10001",
-      birthdate: new Date(),
-      gender: "man",
-      last_online: new Date(),
     });
   },
 
@@ -114,19 +110,19 @@ var SignupForm = React.createClass({
   },
 
   render: function () {
+
     return (
       <div id="steven">
 
         <br />
 
-        <button className="guest_button" onClick={this._guest_login}>Guest Login</button>
 
-        <br />
-
-        <div className="sign_in_button">
-          <span className="sign_text">What's that? You're already a member?</span>
-
-          <button className="guest_button" onClick={this._openModal}>Sign in!</button>
+        <div className="top_stuff group">
+          <button className="guest_button" onClick={this._guest_login}>Guest Login</button>
+          <span className="sign_in_button">
+            <button className="guest_button sign_in_button" onClick={this._openModal}>Sign in!</button>
+            <span className="sign_text">What's that? You're already a member?</span>
+          </span>
         </div>
 
         <form className="sign_up" onSubmit={this._handleSubmit}>
