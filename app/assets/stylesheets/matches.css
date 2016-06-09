@@ -5,8 +5,8 @@ div.list_o_matches {
   width: 33%;
   padding: 10px;
   background: #ccc;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  /*border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;*/
 }
 
 ul {
