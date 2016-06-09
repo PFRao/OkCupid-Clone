@@ -165,35 +165,20 @@ var Questions = React.createClass({
             }
 
             <br />
+
+
           </form>
 
-          <form>
-            <h4>How important is this question to you?</h4>
-
-            <label>
-              <input type="radio" value={0} checked={this.state.theWeight === 0} onChange={this._changeWeight} />
-              I honestly don't give a shit
-              <br />
-            </label>
-
-            <label>
-              <input type="radio" value={1} checked={this.state.theWeight === 1} onChange={this._changeWeight} />
-              I care a little bit, bit it's really no big deal, you know?
-              <br />
-            </label>
-
-            <label>
-              <input type="radio" value={2} checked={this.state.theWeight === 2} onChange={this._changeWeight} />
-              This is something that I would definitely consider when selecting a mate
-              <br />
-            </label>
-
-            <label>
-              <input type="radio" value={10} checked={this.state.theWeight === 10} onChange={this._changeWeight} />
-              This is basically a dealbreaker
-              <br />
-            </label>
-          </form>
+          <h4>How important is this question to you?</h4>
+          Don't give a shit
+          <input
+            type ="range"
+            min ="0"
+            max="10"
+            step =".1"
+            value ={this.state.theWeight}
+            onChange={this._changeWeight} />
+          Absolute dealbreaker
 
           <br />
 
@@ -239,3 +224,31 @@ var _average = function (theArray) {
 };
 
 module.exports = Questions;
+
+// <form>
+//   <h4>How important is this question to you?</h4>
+//
+//   <label>
+//     <input type="radio" value={0} checked={this.state.theWeight === 0} onChange={this._changeWeight} />
+//     I honestly don't give a shit
+//     <br />
+//   </label>
+//
+//   <label>
+//     <input type="radio" value={1} checked={this.state.theWeight === 1} onChange={this._changeWeight} />
+//     I care a little bit, bit it's really no big deal, you know?
+//     <br />
+//   </label>
+//
+//   <label>
+//     <input type="radio" value={2} checked={this.state.theWeight === 2} onChange={this._changeWeight} />
+//     This is something that I would definitely consider when selecting a mate
+//     <br />
+//   </label>
+//
+//   <label>
+//     <input type="radio" value={10} checked={this.state.theWeight === 10} onChange={this._changeWeight} />
+//     This is basically a dealbreaker
+//     <br />
+//   </label>
+// </form>

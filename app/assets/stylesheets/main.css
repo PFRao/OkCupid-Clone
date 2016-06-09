@@ -1,0 +1,27 @@
+.main_page_button {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  left: 50%;
+  font-family: inherit;
+  color: white;
+  background: #29d58f;
+  outline: none;
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.3em;
+  font-weight: 400;
+  border-radius: 3px;
+  box-shadow: 0 10px 10px #07408d;
+  cursor: pointer;
+  transform: translate(-50%, 0);
+  transition: all 0.15s ease-in-out;
+}
+
+.main_page_button:hover {
+  border: 1px solid #ADD8E6;
+}
+
+.main_page_button:active {
+  background: #FF0080;
+}

@@ -77,9 +77,9 @@ var Main = React.createClass({
     return (
       <div>
         {candy}
-        <button className="go_home" onClick={this._logout}>Log out</button><br />
-        <button className="go_home" onClick={this._browse}>Browse thy matches</button><br />
-        <button className="go_home" onClick={this._interrogate}>Find thyself</button><br />
+        <button className="main_page_button" onClick={this._logout}>Log out</button><br />
+        <button className="main_page_button" onClick={this._browse}>Browse  matches</button><br />
+        <button className="main_page_button" onClick={this._interrogate}>Find yourself</button><br />
       </div>
     );
 

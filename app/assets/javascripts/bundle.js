@@ -33658,13 +33658,9 @@
 	  },
 	
 	  _guest_login: function () {
-	    UserApiUtil.signup({
+	    SessionApiUtil.login({
 	      username: "guest",
-	      password: "fzfgT76Kjh0",
-	      location: "10001",
-	      birthdate: new Date(),
-	      gender: "man",
-	      last_online: new Date()
+	      password: "fzfgT76Kjh0"
 	    });
 	  },
 	
@@ -33737,28 +33733,32 @@
 	  },
 	
 	  render: function () {
+	
 	    return React.createElement(
 	      'div',
 	      { id: 'steven' },
 	      React.createElement('br', null),
 	      React.createElement(
-	        'button',
-	        { className: 'guest_button', onClick: this._guest_login },
-	        'Guest Login'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(
 	        'div',
-	        { className: 'sign_in_button' },
-	        React.createElement(
-	          'span',
-	          { className: 'sign_text' },
-	          'What\'s that? You\'re already a member?'
-	        ),
+	        { className: 'top_stuff group' },
 	        React.createElement(
 	          'button',
-	          { className: 'guest_button', onClick: this._openModal },
-	          'Sign in!'
+	          { className: 'guest_button', onClick: this._guest_login },
+	          'Guest Login'
+	        ),
+	        React.createElement(
+	          'span',
+	          { className: 'sign_in_button' },
+	          React.createElement(
+	            'button',
+	            { className: 'guest_button sign_in_button', onClick: this._openModal },
+	            'Sign in!'
+	          ),
+	          React.createElement(
+	            'span',
+	            { className: 'sign_text' },
+	            'What\'s that? You\'re already a member?'
+	          )
 	        )
 	      ),
 	      React.createElement(
@@ -35913,20 +35913,20 @@
 	      candy,
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._logout },
+	        { className: 'main_page_button', onClick: this._logout },
 	        'Log out'
 	      ),
 	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._browse },
-	        'Browse thy matches'
+	        { className: 'main_page_button', onClick: this._browse },
+	        'Browse  matches'
 	      ),
 	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
-	        { className: 'go_home', onClick: this._interrogate },
-	        'Find thyself'
+	        { className: 'main_page_button', onClick: this._interrogate },
+	        'Find yourself'
 	      ),
 	      React.createElement('br', null)
 	    );
@@ -36677,42 +36677,19 @@
 	          React.createElement('br', null)
 	        ),
 	        React.createElement(
-	          'form',
+	          'h4',
 	          null,
-	          React.createElement(
-	            'h4',
-	            null,
-	            'How important is this question to you?'
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            React.createElement('input', { type: 'radio', value: 0, checked: this.state.theWeight === 0, onChange: this._changeWeight }),
-	            'I honestly don\'t give a shit',
-	            React.createElement('br', null)
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            React.createElement('input', { type: 'radio', value: 1, checked: this.state.theWeight === 1, onChange: this._changeWeight }),
-	            'I care a little bit, bit it\'s really no big deal, you know?',
-	            React.createElement('br', null)
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            React.createElement('input', { type: 'radio', value: 2, checked: this.state.theWeight === 2, onChange: this._changeWeight }),
-	            'This is something that I would definitely consider when selecting a mate',
-	            React.createElement('br', null)
-	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            React.createElement('input', { type: 'radio', value: 10, checked: this.state.theWeight === 10, onChange: this._changeWeight }),
-	            'This is basically a dealbreaker',
-	            React.createElement('br', null)
-	          )
+	          'How important is this question to you?'
 	        ),
+	        'Don\'t give a shit',
+	        React.createElement('input', {
+	          type: 'range',
+	          min: '0',
+	          max: '10',
+	          step: '.1',
+	          value: this.state.theWeight,
+	          onChange: this._changeWeight }),
+	        'Absolute dealbreaker',
 	        React.createElement('br', null),
 	        React.createElement(
 	          'button',
@@ -36772,6 +36749,34 @@
 	};
 	
 	module.exports = Questions;
+	
+	// <form>
+	//   <h4>How important is this question to you?</h4>
+	//
+	//   <label>
+	//     <input type="radio" value={0} checked={this.state.theWeight === 0} onChange={this._changeWeight} />
+	//     I honestly don't give a shit
+	//     <br />
+	//   </label>
+	//
+	//   <label>
+	//     <input type="radio" value={1} checked={this.state.theWeight === 1} onChange={this._changeWeight} />
+	//     I care a little bit, bit it's really no big deal, you know?
+	//     <br />
+	//   </label>
+	//
+	//   <label>
+	//     <input type="radio" value={2} checked={this.state.theWeight === 2} onChange={this._changeWeight} />
+	//     This is something that I would definitely consider when selecting a mate
+	//     <br />
+	//   </label>
+	//
+	//   <label>
+	//     <input type="radio" value={10} checked={this.state.theWeight === 10} onChange={this._changeWeight} />
+	//     This is basically a dealbreaker
+	//     <br />
+	//   </label>
+	// </form>
 
 /***/ },
 /* 298 */

@@ -6,6 +6,42 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+User.create!(
+  username: "guest",
+  password: "fzfgT76Kjh0",
+  location: "10001",
+  birthdate: Date.new,
+  gender: "man",
+  last_online: Date.new,
+  personality: { you: {
+    active: 0,
+    outdoorsy: 0,
+    outgoing: 0,
+    sports: 0,
+    pop_culture: 0,
+    conservative: 0,
+    rebellious: 0,
+    optimistic: 0,
+    traditional: 0,
+    organized: 0,
+    religious: 0
+  }, them: {
+    active: 0,
+    outdoorsy: 0,
+    outgoing: 0,
+    sports: 0,
+    pop_culture: 0,
+    conservative: 0,
+    rebellious: 0,
+    optimistic: 0,
+    traditional: 0,
+    organized: 0,
+    religious: 0
+  } },
+)
+
+Profile.create!(user_id: 1)
+
 # create_table "questions", force: :cascade do |t|
 #   t.string   "description",                 null: false
 #   t.boolean  "multiple",    default: false, null: false
