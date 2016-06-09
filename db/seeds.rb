@@ -37,7 +37,7 @@ User.create!(
     traditional: 0,
     organized: 0,
     religious: 0
-  } },
+  } }.to_json,
 )
 
 Profile.create!(user_id: 1)
