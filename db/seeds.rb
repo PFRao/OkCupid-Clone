@@ -10,7 +10,7 @@ User.create!(
   username: "guest",
   password: "fzfgT76Kjh0",
   location: "10001",
-  birthdate: Date.new,
+  birthdate: Date.new(1989,8,8),
   gender: "man",
   last_online: Date.new,
   personality: { you: {
