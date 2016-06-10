@@ -54,6 +54,11 @@ MatchesStore.beJudgemental = function (stinker, otherStinker) {
   var thePersonality = JSON.parse(stinker.personality);
   var theOtherPersonality = JSON.parse(otherStinker.personality);
 
+  console.log("your personality:", thePersonality);
+  console.log(stinker.personality);
+  console.log("their personality:", theOtherPersonality);
+  console.log(otherStinker.personality);
+
   var theScore = 0;
 
   _ATTRIBUTES.forEach(function (attr) {
