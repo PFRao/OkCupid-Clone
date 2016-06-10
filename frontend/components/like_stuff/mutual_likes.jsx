@@ -15,7 +15,6 @@ var MutualLikes = React.createClass({
 
     return (
       <div>
-        <h1 className="like_title">WHO LIKES WHO??</h1>
         <ul>
           {cassowary}
         </ul>

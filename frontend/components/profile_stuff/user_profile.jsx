@@ -11,6 +11,7 @@ var UserApiUtil = require('../../util/user_api_util');
 var MessageForm = require('../message_stuff/message_form');
 var ProfileInfo = require('./profile_info');
 var Questions = require('../question_stuff/questions');
+var UploadButton = require('../upload_button');
 
 var Modal = require('react-modal');
 
@@ -122,9 +123,12 @@ var UserProfile = React.createClass({
     var modal;
     var messageButton;
     var theChoice;
+    var thePicture = (<img className="main_profile_photo" src={this.state.theState.user.image_url} />);
     var thePane = (<ProfileInfo
       theprops={this.state.theState}
       isThisUs={this.state.isThisUs} />);
+
+    var tab = this.state.whichPane;
 
     if (this.state.isThisUs) {
       warning = (<p>You last logged in at: {last_login}</p>);
@@ -133,10 +137,11 @@ var UserProfile = React.createClass({
       }
       theChoice = (
         <div>
-          <button className="visits_selector" onClick={this._changeTab} value="info">Your Profile</button>
-          <button className="visits_selector" onClick={this._changeTab} value="q&a">Find Yourself</button>
+          <button className={"likes_selector" + (tab === "info" ? " active" : "")} onClick={this._changeTab} value="info">Your Profile</button>
+          <button className={"likes_selector" + (tab === "q&a" ? " active" : "")} onClick={this._changeTab} value="q&a">Find Yourself</button>
         </div>
       );
+      thePicture = (<UploadButton user={this.state.theState.user} />);
     } else {
       warning = (<p className="last_login">This user last logged in at: {last_login}</p>);
       modal = (
@@ -161,7 +166,7 @@ var UserProfile = React.createClass({
       return (
         <div className="user_profile">
           <div className="user_name_header">
-            <img className="main_profile_photo" src={window.peterImage} />
+            {thePicture}
             {this.state.theState.user.username}
           </div>
 

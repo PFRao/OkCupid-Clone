@@ -13,7 +13,6 @@ var OutgoingLikes = React.createClass({
 
     return (
       <div>
-        <h1 className="like_title">WHO YOU LIKE</h1>
         <ul>
           {penguin}
         </ul>

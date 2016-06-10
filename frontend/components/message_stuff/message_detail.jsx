@@ -95,6 +95,7 @@ var MessageDetail = React.createClass({
     return (
       <div className="message_detail_list">
         <h1>Conversation with {them.username}</h1>
+        <img src={them.image_url} />
         <ul >
           {messages}
           <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
