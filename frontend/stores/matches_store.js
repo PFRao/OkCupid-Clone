@@ -58,6 +58,7 @@ MatchesStore.beJudgemental = function (stinker, otherStinker) {
   console.log(stinker.personality);
   console.log("their personality:", theOtherPersonality);
   console.log(otherStinker.personality);
+  console.log(otherStinker);
 
   var theScore = 0;
 
