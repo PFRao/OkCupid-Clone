@@ -106,6 +106,8 @@ var MessageIndexItem = React.createClass({
 
 });
 
+// WTF
+
 _registerVisit = function (visitor, visitee) {
   _visitSeekAndDestroy(visitor, visitee);
   VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
