@@ -88,7 +88,7 @@ var MessageIndexItem = React.createClass({
     }
 
     return (
-      <li className="message_index_item">
+      <li className="like_index_item">
         <img onClick={this._goToProfile} src={window.peterImage} />
         <span onClick={this._seeMessageDetails}>
           <h3>{this.props.person.username}</h3>
