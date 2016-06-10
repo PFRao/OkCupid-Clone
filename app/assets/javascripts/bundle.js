@@ -36261,7 +36261,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'list_o_matches' },
+	      { className: 'matches_main' },
 	      React.createElement(
 	        'ul',
 	        { className: 'list_o_matches' },
@@ -36316,36 +36316,32 @@
 	    }
 	
 	    return React.createElement(
-	      'div',
+	      'li',
 	      null,
 	      React.createElement(
-	        'li',
-	        { className: 'list_o_matches' },
+	        'span',
+	        { onClick: this._goToProfile },
+	        React.createElement('img', { src: window.peterImage }),
 	        React.createElement(
-	          'span',
-	          { onClick: this._goToProfile },
-	          React.createElement('img', { className: 'list_o_matches', src: window.peterImage }),
-	          React.createElement(
-	            'h3',
-	            { className: 'list_o_matches' },
-	            this.props.person.username
-	          ),
-	          React.createElement(
-	            'p',
-	            { className: 'list_o_matches' },
-	            'Age ',
-	            oldness2
-	          ),
-	          React.createElement(
-	            'p',
-	            { className: 'list_o_matches' },
-	            this.props.rating,
-	            ' % Match'
-	          ),
-	          oldness
+	          'h3',
+	          null,
+	          this.props.person.username
 	        ),
-	        React.createElement(LikeButton, { className: 'build_a_bridge', person: this.props.person })
-	      )
+	        React.createElement(
+	          'p',
+	          null,
+	          'Age ',
+	          oldness2
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          this.props.rating,
+	          ' % Match'
+	        ),
+	        oldness
+	      ),
+	      React.createElement(LikeButton, { person: this.props.person })
 	    );
 	  }
 	
@@ -36786,22 +36782,24 @@
 	      theTab = React.createElement(MutualLikes, { theLikers: SessionStore.currentUser().likers, theLikees: SessionStore.currentUser().likees });
 	    }
 	
+	    var tab = this.state.whichTab;
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'likes_main' },
 	      React.createElement(
 	        'button',
-	        { className: 'likes_selector', onClick: this._changeTab, value: 'incoming' },
+	        { className: "likes_selector" + (tab === "incoming" ? " active" : ""), onClick: this._changeTab, value: 'incoming' },
 	        'Who Likes You'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'likes_selector', onClick: this._changeTab, value: 'outgoing' },
+	        { className: "likes_selector" + (tab === "outgoing" ? " active" : ""), onClick: this._changeTab, value: 'outgoing' },
 	        'Who You Like'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'likes_selector', onClick: this._changeTab, value: 'mutual' },
+	        { className: "likes_selector" + (tab === "mutual" ? " active" : ""), onClick: this._changeTab, value: 'mutual' },
 	        'Mutual Likes'
 	      ),
 	      React.createElement('br', null),
@@ -38259,12 +38257,20 @@
 	    }.bind(this));
 	
 	    return React.createElement(
-	      'ul',
-	      null,
-	      messages,
-	      React.createElement('br', null),
-	      React.createElement('br', null),
-	      React.createElement(MessageForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	      'div',
+	      { className: 'message_detail_list' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Conversation with ',
+	        them.username
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        messages,
+	        React.createElement(MessageForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	      )
 	    );
 	  }
 	
@@ -38331,19 +38337,17 @@
 	
 	  render: function () {
 	    return React.createElement(
-	      'form',
-	      { onSubmit: this._handleSubmit },
+	      'li',
+	      { className: 'sent' },
 	      React.createElement(
-	        'p',
-	        { className: 'who_are_they' },
-	        'Message ',
-	        this.props.receiver.username
-	      ),
-	      React.createElement('textarea', { className: 'new_message_text', value: this.state.contents, onChange: this._changeContents }),
-	      React.createElement(
-	        'button',
-	        { className: 'submit_that_message' },
-	        'Submit'
+	        'form',
+	        { onSubmit: this._handleSubmit },
+	        React.createElement('textarea', { className: 'new_message_text', value: this.state.contents, placeholder: "Write " + this.props.receiver.username + " a nice message", onChange: this._changeContents }),
+	        React.createElement(
+	          'button',
+	          { className: 'submit_that_message' },
+	          'Submit'
+	        )
 	      )
 	    );
 	  }

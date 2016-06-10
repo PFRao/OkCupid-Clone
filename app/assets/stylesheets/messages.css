@@ -53,41 +53,32 @@
   border-radius: 50px;
 }
 
-.sent {
-  background: #add8e6;
-  border-radius: 5px;
-  border: 2px solid black;
-  margin: 10px;
-  padding: 5px;
-  text-align: right;
-}
-
 .who_are_they {
   display:block;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  color: #F8F8FF;
+  color: #2F4F4F;
+}
+
+.sent {
+  background: #add8e6;
+  margin: 10px 0 10px 20px;
+  text-align: right;
+  padding: 30px;
 }
 
 .sent:hover {
-  background: #add8e6;
-  border-radius: 5px;
-  border: 2px solid pink;
 }
 
 .received {
   background: #d3d3d3;
-  border-radius: 5px;
-  border: 2px solid black;
-  margin: 10px;
-  padding: 5px;
+  padding: 30px;
+  margin: 10px 20px 10px 0;
 }
 
 .received:hover {
-  background: #d3d3d3;
-  border-radius: 5px;
-  border: 2px solid pink;
+
 }
 
 .message_timestamp {
@@ -98,35 +89,41 @@
   display: block;
   background: white;
   color: black;
-  border: 2px solid black;
-  border-radius: 5px;
+  border: 1px solid #aeb4bf;
+  border-radius: 2px;
   padding: 10px;
-  height: 200px;
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 698px;
+  height: 100px;
+  margin: 0 0 10px 0;
+  text-align: left;
+  resize:none;
 }
 
 .submit_that_message {
   display: block;
-  background-color: white;
-  border-radius: 80px;
-  padding: 5px;
-  border: 5px groove purple;
+  background-color: #3260c7;
+  color: #f3f5f9;
+  border-radius: 2px;
+  padding: 15px;
   font-family: sans-serif;
   font-weight: 1000;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .submit_that_message:hover {
-  background-color: purple;
-  border: 5px dotted white;
-  color: white;
+  background: #4c7bd9;
 }
 
 .submit_that_message:active {
-  background-color: #104da1;
-  border: 5px dotted red;
-  color: yellow;
+}
+
+.message_detail_list {
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 50px;
+  width: 800px;
+}
+
+.message_detail_list > h1 {
+  font-size: 24px;
 }

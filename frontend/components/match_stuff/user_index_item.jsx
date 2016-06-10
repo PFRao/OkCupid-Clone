@@ -31,18 +31,18 @@ var UserIndexItem = React.createClass({
     }
 
     return (
-      <div>
-        <li className="list_o_matches">
-          <span onClick={this._goToProfile}>
-            <img className="list_o_matches" src={window.peterImage} />
-            <h3 className="list_o_matches">{this.props.person.username}</h3>
-            <p className="list_o_matches">Age {oldness2}</p>
-            <p className="list_o_matches">{this.props.rating} % Match</p>
-            {oldness}
-          </span>
-          <LikeButton className="build_a_bridge" person={this.props.person}/>
-        </li>
-      </div>
+
+      <li>
+        <span onClick={this._goToProfile}>
+          <img src={window.peterImage} />
+          <h3>{this.props.person.username}</h3>
+          <p>Age {oldness2}</p>
+          <p>{this.props.rating} % Match</p>
+          {oldness}
+        </span>
+        <LikeButton person={this.props.person}/>
+      </li>
+
     );
   }
 

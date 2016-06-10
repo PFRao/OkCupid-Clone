@@ -1,10 +1,10 @@
 .likes_main {
   color: #2F4F4F;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  height: 5000px;
-  background: #F8F8FF;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 50px;
+  width: 800px;
 }
 
 .like_title {
@@ -16,15 +16,11 @@
 .likes_selector {
   margin: 10px;
   color: #104da1;
-  border-bottom: 3px solid #F8F8FF;
+  border-bottom: 3px solid #f3f5f9;
 }
 
 .likes_selector:hover {
   border-bottom: 3px solid #104da1;
-}
-
-.likes_selector:active {
-  border-bottom: 3px solid red;
 }
 
 .like_index_item {
@@ -32,7 +28,7 @@
   color: #2F4F4F;
   display: block;
   width: 350px;
-  margin:50px;
+  margin: 50px 0 50px 0;
   border-top-left-radius: 1000px;
   border-top-right-radius: 300px;
   border-bottom-left-radius: 425px;
@@ -46,7 +42,7 @@
 }
 
 .like_index_item:hover {
-  transform: translate(10%, 0);
+  transform: translate(8%, 0);
   cursor: pointer;
   background-color: #ADD8E6;
 }
@@ -57,4 +53,16 @@
   height:100px;
   width: 100px;
   border-radius: 50px;
+}
+
+.like_index_item > h3 {
+  margin-left: 10px;
+}
+
+.like_index_item > p {
+  margin-left: 10px;
+}
+
+.active {
+  border-bottom: 3px solid #104da1;
 }

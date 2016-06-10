@@ -32,12 +32,14 @@ var LikesIndex = React.createClass({
       theTab = (<MutualLikes theLikers={SessionStore.currentUser().likers} theLikees={SessionStore.currentUser().likees}/>);
     }
 
+    var tab = this.state.whichTab;
+
     return (
       <div className="likes_main">
 
-        <button className="likes_selector" onClick={this._changeTab} value="incoming">Who Likes You</button>
-        <button className="likes_selector" onClick={this._changeTab} value="outgoing">Who You Like</button>
-        <button className="likes_selector" onClick={this._changeTab} value="mutual">Mutual Likes</button>
+        <button className={"likes_selector" + (tab === "incoming" ? " active" : "")} onClick={this._changeTab} value="incoming">Who Likes You</button>
+        <button className={"likes_selector" + (tab === "outgoing" ? " active" : "")} onClick={this._changeTab} value="outgoing">Who You Like</button>
+        <button className={"likes_selector" + (tab === "mutual" ? " active" : "")} onClick={this._changeTab} value="mutual">Mutual Likes</button>
 
         <br /><br />
 
