@@ -27,32 +27,7 @@
 
 body {
   background: #104da1;
-  font-family: 'Alegreya', serif;
-}
-
-button.go_home {
-  background-color: white;
-  border-radius: 20px;
-  padding: 5px;
-  border: 10px solid purple;
-  font-family: cursive;
-  font-weight: 1000;
-}
-
-button.go_home:hover {
-  background-color: purple;
-  border-radius: 20px;
-  padding: 5px;
-  border: 10px outset #29d58f;
-  color: purple;
-}
-
-button.go_home:active {
-  background-color: purple;
-  border-radius: 20px;
-  padding: 5px;
-  border: 10px inset #29d58f;
-  color: #29d58f;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .loading_message {

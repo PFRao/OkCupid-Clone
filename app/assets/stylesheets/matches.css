@@ -1,24 +1,24 @@
-* {margin: 0; padding: 0;}
-
-div.list_o_matches {
-  color: #2F4F4F;
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-  height: 5000px;
-  background: #F8F8FF;
+.matches_main {
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 30px 30px;
+  width: 800px;
 }
 
-ul.list_o_matches {
+.list_o_matches {
   list-style-type: none;
-  width: 600px;
+  width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
 }
 
-h3.list_o_matches {
+.list_o_matches h3 {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
 }
 
-li img.list_o_matches {
+.list_o_matches li img {
   height: 100px;
   width: 100px;
   float: left;
@@ -26,13 +26,12 @@ li img.list_o_matches {
   border-radius: 50px;
 }
 
-li p.list_o_matches {
+.list_o_matches li p {
   font: 200 12px/1.5 Georgia, Times New Roman, serif;
 }
 
-li.list_o_matches {
+.list_o_matches li {
   display:inline-block;
-  float:left;
   background: #E8E8EE;
   padding: 10px;
   margin: 10px;
@@ -40,7 +39,7 @@ li.list_o_matches {
   width: 350px;
 }
 
-li.list_o_matches:hover {
+.list_o_matches li:hover {
   background: #4c7bd9;
   cursor: pointer;
 }

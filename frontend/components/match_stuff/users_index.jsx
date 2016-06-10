@@ -39,7 +39,7 @@ var UsersIndex = React.createClass({
     }
 
     return (
-      <div className="list_o_matches">
+      <div className="matches_main">
         <ul className="list_o_matches">
           {wesley}
         </ul>

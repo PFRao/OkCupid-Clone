@@ -93,11 +93,13 @@ var MessageDetail = React.createClass({
     }.bind(this));
 
     return (
-      <ul>
-        {messages}
-        <br /><br />
-        <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
-      </ul>
+      <div className="message_detail_list">
+        <h1>Conversation with {them.username}</h1>
+        <ul >
+          {messages}
+          <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
+        </ul>
+      </div>
     );
   }
 

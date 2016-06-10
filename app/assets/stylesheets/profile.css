@@ -1,9 +1,9 @@
 .user_profile {
-  color: #2F4F4F;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  background: #F8F8FF;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 50px;
+  width: 800px;
 }
 
 .user_name_header {
