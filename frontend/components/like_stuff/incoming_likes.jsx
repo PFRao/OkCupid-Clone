@@ -13,7 +13,6 @@ var IncomingLikes = React.createClass({
 
     return (
       <div>
-        <h1 className="like_title">WHO LIKES YOU</h1>
         <ul>
           {peacock}
         </ul>

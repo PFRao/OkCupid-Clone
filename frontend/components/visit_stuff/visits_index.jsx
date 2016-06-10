@@ -30,11 +30,13 @@ var VisitsIndex = React.createClass({
       theTab = (<OutgoingVisits theList={SessionStore.currentUser().visitees}/>);
     }
 
-    return (
-      <div className="visits_main">
+    var tab = this.state.whichTab;
 
-        <button className="visits_selector" onClick={this._changeTab} value="incoming">Recently Visited You</button>
-        <button className="visits_selector" onClick={this._changeTab} value="outgoing">You Recently Visited</button>
+    return (
+      <div className="likes_main">
+
+        <button className={"likes_selector" + (tab === "incoming" ? " active" : "")} onClick={this._changeTab} value="incoming">Recently Visited You</button>
+        <button className={"likes_selector" + (tab === "outgoing" ? " active" : "")} onClick={this._changeTab} value="outgoing">You Recently Visited</button>
 
         <br /><br />
 

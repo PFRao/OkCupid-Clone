@@ -18,7 +18,6 @@ var IncomingVisits = React.createClass({
 
     return (
       <div>
-        <h1 className="visit_title">People who recently visited you:</h1>
         <ul>
           {kiwi}
         </ul>

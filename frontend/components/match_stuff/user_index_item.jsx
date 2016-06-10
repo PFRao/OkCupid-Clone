@@ -34,7 +34,7 @@ var UserIndexItem = React.createClass({
 
       <li>
         <span onClick={this._goToProfile}>
-          <img src={window.peterImage} />
+          <img src={this.props.person.image_url} />
           <h3>{this.props.person.username}</h3>
           <p>Age {oldness2}</p>
           <p>{this.props.rating} % Match</p>

@@ -120,7 +120,7 @@
 	      ), React.createElement(
 	        'li',
 	        { className: 'yer_face', onClick: this._goToProfile, key: "person" },
-	        React.createElement('img', { src: window.peterImage })
+	        React.createElement('img', { src: SessionStore.currentUser().image_url })
 	      )];
 	    } else {
 	      React.createElement(
@@ -36321,7 +36321,7 @@
 	      React.createElement(
 	        'span',
 	        { onClick: this._goToProfile },
-	        React.createElement('img', { src: window.peterImage }),
+	        React.createElement('img', { src: this.props.person.image_url }),
 	        React.createElement(
 	          'h3',
 	          null,
@@ -36872,11 +36872,6 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h1',
-	        { className: 'like_title' },
-	        'WHO LIKES YOU'
-	      ),
-	      React.createElement(
 	        'ul',
 	        null,
 	        peacock
@@ -36921,7 +36916,7 @@
 	    return React.createElement(
 	      'li',
 	      { className: 'like_index_item', onClick: this._goToProfile },
-	      React.createElement('img', { src: window.peterImage }),
+	      React.createElement('img', { src: this.props.person.image_url }),
 	      React.createElement(
 	        'h3',
 	        null,
@@ -36983,11 +36978,6 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h1',
-	        { className: 'like_title' },
-	        'WHO YOU LIKE'
-	      ),
-	      React.createElement(
 	        'ul',
 	        null,
 	        penguin
@@ -37023,11 +37013,6 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'like_title' },
-	        'WHO LIKES WHO??'
-	      ),
 	      React.createElement(
 	        'ul',
 	        null,
@@ -37078,6 +37063,7 @@
 	var MessageForm = __webpack_require__(319);
 	var ProfileInfo = __webpack_require__(320);
 	var Questions = __webpack_require__(297);
+	var UploadButton = __webpack_require__(321);
 	
 	var Modal = __webpack_require__(266);
 	
@@ -37200,9 +37186,12 @@
 	    var modal;
 	    var messageButton;
 	    var theChoice;
+	    var thePicture = React.createElement('img', { className: 'main_profile_photo', src: this.state.theState.user.image_url });
 	    var thePane = React.createElement(ProfileInfo, {
 	      theprops: this.state.theState,
 	      isThisUs: this.state.isThisUs });
+	
+	    var tab = this.state.whichPane;
 	
 	    if (this.state.isThisUs) {
 	      warning = React.createElement(
@@ -37219,15 +37208,16 @@
 	        null,
 	        React.createElement(
 	          'button',
-	          { className: 'visits_selector', onClick: this._changeTab, value: 'info' },
+	          { className: "likes_selector" + (tab === "info" ? " active" : ""), onClick: this._changeTab, value: 'info' },
 	          'Your Profile'
 	        ),
 	        React.createElement(
 	          'button',
-	          { className: 'visits_selector', onClick: this._changeTab, value: 'q&a' },
+	          { className: "likes_selector" + (tab === "q&a" ? " active" : ""), onClick: this._changeTab, value: 'q&a' },
 	          'Find Yourself'
 	        )
 	      );
+	      thePicture = React.createElement(UploadButton, { user: this.state.theState.user });
 	    } else {
 	      warning = React.createElement(
 	        'p',
@@ -37259,7 +37249,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'user_name_header' },
-	          React.createElement('img', { className: 'main_profile_photo', src: window.peterImage }),
+	          thePicture,
 	          this.state.theState.user.username
 	        ),
 	        React.createElement('br', null),
@@ -37452,17 +37442,19 @@
 	      theTab = React.createElement(OutgoingVisits, { theList: SessionStore.currentUser().visitees });
 	    }
 	
+	    var tab = this.state.whichTab;
+	
 	    return React.createElement(
 	      'div',
-	      { className: 'visits_main' },
+	      { className: 'likes_main' },
 	      React.createElement(
 	        'button',
-	        { className: 'visits_selector', onClick: this._changeTab, value: 'incoming' },
+	        { className: "likes_selector" + (tab === "incoming" ? " active" : ""), onClick: this._changeTab, value: 'incoming' },
 	        'Recently Visited You'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'visits_selector', onClick: this._changeTab, value: 'outgoing' },
+	        { className: "likes_selector" + (tab === "outgoing" ? " active" : ""), onClick: this._changeTab, value: 'outgoing' },
 	        'You Recently Visited'
 	      ),
 	      React.createElement('br', null),
@@ -37503,11 +37495,6 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h1',
-	        { className: 'visit_title' },
-	        'People who recently visited you:'
-	      ),
-	      React.createElement(
 	        'ul',
 	        null,
 	        kiwi
@@ -37544,11 +37531,6 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'visit_title' },
-	        'People whom you have recently visited:'
-	      ),
 	      React.createElement(
 	        'ul',
 	        null,
@@ -37633,8 +37615,8 @@
 	
 	    return React.createElement(
 	      'li',
-	      { className: 'visit_index_item', onClick: this._goToProfile },
-	      React.createElement('img', { src: window.peterImage }),
+	      { className: 'like_index_item', onClick: this._goToProfile },
+	      React.createElement('img', { src: this.props.person.image_url }),
 	      React.createElement(
 	        'h3',
 	        null,
@@ -38265,6 +38247,7 @@
 	        'Conversation with ',
 	        them.username
 	      ),
+	      React.createElement('img', { src: them.image_url }),
 	      React.createElement(
 	        'ul',
 	        null,
@@ -38478,6 +38461,62 @@
 	});
 	
 	module.exports = ProfileInfo;
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	// need user prop
+	
+	var UploadButton = React.createClass({
+	  displayName: 'UploadButton',
+	
+	  getInitialState: function () {
+	    return { image: this.props.user.image_url };
+	  },
+	
+	  _postImage: function (url) {
+	    var img = {
+	      image_url: url,
+	      id: this.props.user.id
+	    };
+	    $.ajax({
+	      method: 'PATCH',
+	      url: 'api/user',
+	      dataType: 'json',
+	      data: { user: img },
+	      success: function (user) {
+	        this.setState({ image: user.image_url });
+	      }.bind(this)
+	    });
+	  },
+	
+	  _upload: function (event) {
+	    event.preventDefault();
+	
+	    cloudinary.openUploadWidget(window.cloudinary_options, function (error, images) {
+	      if (error === null) {
+	        // successful upload
+	        this._postImage(images[0].url);
+	      }
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'button',
+	      { onClick: this._upload },
+	      React.createElement('img', { className: 'main_profile_photo', src: this.state.image })
+	    );
+	  }
+	
+	});
+	
+	module.exports = UploadButton;
 
 /***/ }
 /******/ ]);

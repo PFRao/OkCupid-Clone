@@ -4,8 +4,13 @@
   <title>Ok, Peter!</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
+  <script type="text/javascript" src="http://widget.cloudinary.com/global/all.js"></script>
   <script type="text/javascript">
     window.peterImage = "<%= asset_url "jimmy.jpg" %>"
+    window.cloudinary_options = {
+      cloud_name: "<%= ENV['CLOUD_NAME'] %>",
+      upload_preset: "<%= ENV['UPLOAD_PRESET'] %>"
+    }
   </script>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
 </head>

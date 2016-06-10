@@ -16,7 +16,6 @@ var OutgoingVisits = React.createClass({
 
     return (
       <div>
-        <h1 className="visit_title">People whom you have recently visited:</h1>
         <ul>
           {rhea}
         </ul>

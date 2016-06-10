@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608002134) do
+ActiveRecord::Schema.define(version: 20160610145918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,16 +97,17 @@ ActiveRecord::Schema.define(version: 20160608002134) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",                        null: false
-    t.string   "password_digest",                 null: false
+    t.string   "username",                                                                                                          null: false
+    t.string   "password_digest",                                                                                                   null: false
     t.string   "personality"
-    t.string   "location",                        null: false
-    t.datetime "last_online",                     null: false
-    t.string   "session_token",                   null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.datetime "birthdate",                       null: false
-    t.string   "gender",          default: "man", null: false
+    t.string   "location",                                                                                                          null: false
+    t.datetime "last_online",                                                                                                       null: false
+    t.string   "session_token",                                                                                                     null: false
+    t.datetime "created_at",                                                                                                        null: false
+    t.datetime "updated_at",                                                                                                        null: false
+    t.datetime "birthdate",                                                                                                         null: false
+    t.string   "gender",          default: "man",                                                                                   null: false
+    t.string   "image_url",       default: "http://res.cloudinary.com/di4l0rwwz/image/upload/v1465569852/xvtakubbgwsz9rhpqe6h.jpg"
   end
 
   add_index "users", ["personality"], name: "index_users_on_personality", using: :btree

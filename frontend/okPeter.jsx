@@ -49,7 +49,7 @@ var App = React.createClass({
         <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
         <li key={"likes"}><a href="#/likes">Likes</a></li>,
         <li key={"messages"}><a href="#/messages">Messages</a></li>,
-        <li className="yer_face" onClick={this._goToProfile} key={"person"}><img src={window.peterImage} /></li>
+        <li className="yer_face" onClick={this._goToProfile} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
       ];
     } else {
       <li>Please log in or sign up!</li>;
