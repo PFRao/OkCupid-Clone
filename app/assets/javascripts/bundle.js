@@ -58,12 +58,12 @@
 	var SignupForm = __webpack_require__(265);
 	var Main = __webpack_require__(286);
 	var UsersIndex = __webpack_require__(293);
-	var Questions = __webpack_require__(297);
-	var LikesIndex = __webpack_require__(298);
-	var VisitsIndex = __webpack_require__(307);
-	var UserProfile = __webpack_require__(304);
-	var MessageIndex = __webpack_require__(313);
-	var MessageDetail = __webpack_require__(318);
+	var Questions = __webpack_require__(298);
+	var LikesIndex = __webpack_require__(299);
+	var VisitsIndex = __webpack_require__(305);
+	var UserProfile = __webpack_require__(309);
+	var MessageIndex = __webpack_require__(318);
+	var MessageDetail = __webpack_require__(320);
 	//Stores
 	var SessionStore = __webpack_require__(237);
 	//Other Stuff
@@ -36291,7 +36291,7 @@
 	
 	var SessionStore = __webpack_require__(237);
 	
-	var VisitApiUtil = __webpack_require__(311);
+	var VisitApiUtil = __webpack_require__(297);
 	
 	var UserIndexItem = React.createClass({
 	  displayName: 'UserIndexItem',
@@ -36463,6 +36463,70 @@
 
 /***/ },
 /* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerActions = __webpack_require__(289);
+	
+	var VisitApiUtil = {
+	  createVisit: function (theIds) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: theIds },
+	      success: function () {
+	        console.log("Visit created!");
+	      },
+	      faliure: function (xhr) {
+	        console.log("Somebody set us up the bomb!");
+	      }
+	    });
+	  },
+	
+	  deleteVisit: function (theIds) {
+	    $.ajax({
+	      method: 'DELETE',
+	      url: 'api/visits/1',
+	      dataType: 'json',
+	      data: { visit: theIds },
+	      success: function () {
+	        console.log("Visit destroyed!");
+	      },
+	      faliure: function (xhr) {
+	        console.log("Somebody set us up the bomb!");
+	      }
+	    });
+	  },
+	
+	  getAllVisits: function (theCurrentUserId, theType) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: { visitor_id: theCurrentUserId, type: theType } },
+	      success: function (theVisits) {
+	        ServerActions.receiveAllVisits(theVisits, theType);
+	      }
+	    });
+	  },
+	
+	  getOneVisit: function (visitor_id, visitee_id) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/visits',
+	      dataType: 'json',
+	      data: { visit: { visitor_id: visitor_id, visitee_id: visitee_id } },
+	      success: function (theVisit) {
+	        ServerActions.receiveOneVisit(theVisit);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = VisitApiUtil;
+
+/***/ },
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36749,19 +36813,19 @@
 	// </form>
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
-	var LikesStore = __webpack_require__(299);
+	var LikesStore = __webpack_require__(300);
 	var SessionStore = __webpack_require__(237);
 	
 	var SessionApiUtil = __webpack_require__(234);
 	
-	var IncomingLikes = __webpack_require__(300),
-	    OutgoingLikes = __webpack_require__(302),
-	    MutualLikes = __webpack_require__(303);
+	var IncomingLikes = __webpack_require__(301),
+	    OutgoingLikes = __webpack_require__(303),
+	    MutualLikes = __webpack_require__(304);
 	
 	var LikesIndex = React.createClass({
 	  displayName: 'LikesIndex',
@@ -36819,7 +36883,7 @@
 	module.exports = LikesIndex;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(238);
@@ -36856,13 +36920,13 @@
 	module.exports = LikesStore;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var LikeIndexItem = __webpack_require__(301);
+	var LikeIndexItem = __webpack_require__(302);
 	
 	var IncomingLikes = React.createClass({
 	  displayName: 'IncomingLikes',
@@ -36890,7 +36954,7 @@
 	module.exports = IncomingLikes;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36962,13 +37026,13 @@
 	module.exports = UserIndexItem;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var LikeIndexItem = __webpack_require__(301);
+	var LikeIndexItem = __webpack_require__(302);
 	
 	var OutgoingLikes = React.createClass({
 	  displayName: 'OutgoingLikes',
@@ -36996,13 +37060,13 @@
 	module.exports = OutgoingLikes;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var LikeIndexItem = __webpack_require__(301);
+	var LikeIndexItem = __webpack_require__(302);
 	
 	var MutualLikes = React.createClass({
 	  displayName: 'MutualLikes',
@@ -37053,23 +37117,286 @@
 	module.exports = MutualLikes;
 
 /***/ },
-/* 304 */
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var SessionStore = __webpack_require__(237);
+	// var VisitsStore = require('../../stores/visits_store');
+	
+	var VisitApiUtil = __webpack_require__(297);
+	var SessionApiUtil = __webpack_require__(234);
+	
+	var IncomingVisits = __webpack_require__(306),
+	    OutgoingVisits = __webpack_require__(308);
+	
+	var VisitsIndex = React.createClass({
+	  displayName: 'VisitsIndex',
+	
+	
+	  getInitialState: function () {
+	    SessionApiUtil.fetchCurrentUser();
+	    return { whichTab: "incoming" };
+	  },
+	
+	  _changeTab: function (event) {
+	    this.setState({ whichTab: event.target.value });
+	  },
+	
+	  render: function () {
+	
+	    var theTab;
+	
+	    if (this.state.whichTab === "incoming") {
+	      theTab = React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors });
+	    } else {
+	      theTab = React.createElement(OutgoingVisits, { theList: SessionStore.currentUser().visitees });
+	    }
+	
+	    var tab = this.state.whichTab;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'likes_main' },
+	      React.createElement(
+	        'button',
+	        { className: "likes_selector" + (tab === "incoming" ? " active" : ""), onClick: this._changeTab, value: 'incoming' },
+	        'Recently Visited You'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: "likes_selector" + (tab === "outgoing" ? " active" : ""), onClick: this._changeTab, value: 'outgoing' },
+	        'You Recently Visited'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement('br', null),
+	      theTab
+	    );
+	  }
+	
+	});
+	
+	module.exports = VisitsIndex;
+
+/***/ },
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var ProfileStore = __webpack_require__(305);
 	var SessionStore = __webpack_require__(237);
-	var MessageStore = __webpack_require__(315);
+	// var VisitsStore = require('../../stores/visits_store');
 	
-	var MessageApiUtil = __webpack_require__(316);
+	var VisitIndexItem = __webpack_require__(307);
+	
+	var VisitApiUtil = __webpack_require__(297);
+	
+	var IncomingVisits = React.createClass({
+	  displayName: 'IncomingVisits',
+	
+	
+	  render: function () {
+	
+	    var kiwi = this.props.theList.map(function (element, index) {
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
+	    }).reverse();
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'ul',
+	        null,
+	        kiwi
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = IncomingVisits;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var LikeButton = __webpack_require__(295);
+	
+	var SessionStore = __webpack_require__(237);
+	var MatchesStore = __webpack_require__(287);
+	// var VisitsStore = require('../../stores/visits_store');
+	
+	var VisitApiUtil = __webpack_require__(297);
+	
+	var theMonths = {
+	  0: "January",
+	  1: "February",
+	  2: "March",
+	  3: "April",
+	  4: "May",
+	  5: "June",
+	  6: "July",
+	  7: "August",
+	  8: "September",
+	  9: "October",
+	  10: "November",
+	  11: "December"
+	};
+	
+	var VisitIndexItem = React.createClass({
+	  displayName: 'VisitIndexItem',
+	
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
+	    this.context.router.push("profile/" + this.props.person.id);
+	  },
+	
+	  render: function () {
+	
+	    var oldness = new Date() - new Date(this.props.person.birthdate);
+	    var oldness2 = Math.floor(oldness / 31536000000);
+	
+	    var date;
+	    date = new Date(this.props.person.last_visit);
+	
+	    var theM = "am";
+	    if (date.getHours() >= 12) {
+	      theM = "pm";
+	    }
+	
+	    var hours = date.getHours() % 12;
+	    if (hours === 0) {
+	      hours = 12;
+	    }
+	
+	    var theColon = ":";
+	    if (date.getMinutes() < 10) {
+	      theColon = ":0";
+	    }
+	
+	    var time = hours + theColon + date.getMinutes() + theM;
+	
+	    var timeStamp = theMonths[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " at " + time;
+	
+	    oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
+	
+	    return React.createElement(
+	      'li',
+	      { className: 'like_index_item', onClick: this._goToProfile },
+	      React.createElement('img', { src: this.props.person.image_url }),
+	      React.createElement(
+	        'h3',
+	        null,
+	        this.props.person.username
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Age ',
+	        oldness2
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        oldness,
+	        ' % Match'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Last visit: ',
+	        React.createElement(
+	          'span',
+	          { className: 'datDateDoe' },
+	          ' ',
+	          timeStamp,
+	          ' '
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
+	
+	module.exports = VisitIndexItem;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	// var VisitsStore = require('../../stores/visits_store');
+	var SessionStore = __webpack_require__(237);
+	
+	var VisitIndexItem = __webpack_require__(307);
+	
+	var OutgoingVisits = React.createClass({
+	  displayName: 'OutgoingVisits',
+	
+	
+	  render: function () {
+	
+	    var rhea = this.props.theList.map(function (element, index) {
+	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
+	    }).reverse();
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'ul',
+	        null,
+	        rhea
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = OutgoingVisits;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var ProfileStore = __webpack_require__(310);
+	var SessionStore = __webpack_require__(237);
+	var MessageStore = __webpack_require__(311);
+	
+	var MessageApiUtil = __webpack_require__(312);
 	var UserApiUtil = __webpack_require__(261);
 	
-	var MessageForm = __webpack_require__(319);
-	var ProfileInfo = __webpack_require__(320);
-	var Questions = __webpack_require__(297);
-	var UploadButton = __webpack_require__(321);
+	var MessageForm = __webpack_require__(314);
+	var ProfileInfo = __webpack_require__(315);
+	var Questions = __webpack_require__(298);
+	var UploadButton = __webpack_require__(317);
 	
 	var Modal = __webpack_require__(266);
 	
@@ -37276,7 +37603,7 @@
 	module.exports = UserProfile;
 
 /***/ },
-/* 305 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(238);
@@ -37319,13 +37646,382 @@
 	module.exports = ProfileStore;
 
 /***/ },
-/* 306 */
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(238);
+	var Store = __webpack_require__(242).Store;
+	
+	var MessageApiUtil = __webpack_require__(312);
+	
+	var _convos = [];
+	var _messages = [];
+	var _convo;
+	var _message;
+	
+	var MessageStore = new Store(AppDispatcher);
+	
+	MessageStore.allConvos = function () {
+	  return _convos;
+	};
+	
+	MessageStore.oneConvo = function () {
+	  return _convo;
+	};
+	
+	MessageStore.getLatestMessage = function (convo_id) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    if (_convos[i].id === convo_id) {
+	      return _convos[i].messages[_convos[i].messages.length - 1];
+	    }
+	  }
+	};
+	
+	MessageStore.existing = function (counterpartyId) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    console.log(_convos[i], counterpartyId);
+	    if (_convos[i].user.id === counterpartyId || _convos[i].user2.id === counterpartyId) {
+	      return _convos[i].id;
+	    }
+	  }
+	  return false;
+	};
+	
+	MessageStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "ALL_MESSAGES":
+	      _messages = payload.messages;
+	      MessageStore.__emitChange();
+	      break;
+	    case "NEW_MESSAGE":
+	      MessageApiUtil.getOneConvo(payload.convo_id);
+	      break;
+	    case "CONVERSATIONS":
+	      _convos = payload.convos;
+	      MessageStore.__emitChange();
+	      break;
+	    case "CONVERSATION":
+	      _convo = payload.convo;
+	      MessageStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = MessageStore;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionActions = __webpack_require__(235);
+	var ErrorActions = __webpack_require__(259);
+	var MessageActions = __webpack_require__(313);
+	
+	var MessageApiUtil = {
+	
+	  getAllConvos: function (theUserId) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/conversations',
+	      dataType: 'json',
+	      data: { conversation: theUserId },
+	      success: function (result) {
+	        MessageActions.receiveAllConvos(result);
+	      }
+	    });
+	  },
+	
+	  getOneConvo: function (theConvoId) {
+	    $.ajax({
+	      method: 'GET',
+	      url: 'api/conversations/' + theConvoId,
+	      dataType: 'json',
+	      data: {},
+	      success: function (result) {
+	        MessageActions.receiveOneConvo(result);
+	      }
+	    });
+	  },
+	
+	  createConversation: function (theParams, messageBody, callback) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/conversations',
+	      dataType: 'json',
+	      data: { conversation: theParams },
+	      success: function (newConvo) {
+	        MessageApiUtil.createMessage({
+	          convo_id: newConvo.id,
+	          sender_id: theParams.user_id,
+	          receiver_id: theParams.user2_id,
+	          body: messageBody
+	        });
+	
+	        callback(newConvo.id);
+	      }
+	    });
+	  },
+	
+	  createMessage: function (theParams) {
+	    $.ajax({
+	      method: 'POST',
+	      url: 'api/messages',
+	      dataType: 'json',
+	      data: { message: theParams },
+	      success: function (newMessage) {
+	        MessageActions.receiveNewMessage(newMessage);
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = MessageApiUtil;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionApiUtil = __webpack_require__(234);
+	var SessionStore = __webpack_require__(237);
+	var AppDispatcher = __webpack_require__(238);
+	
+	var MessageActions = {
+	
+	  receiveAllConvos: function (convos) {
+	    AppDispatcher.dispatch({
+	      actionType: "CONVERSATIONS",
+	      convos: convos
+	    });
+	  },
+	
+	  receiveOneConvo: function (convo) {
+	    AppDispatcher.dispatch({
+	      actionType: "CONVERSATION",
+	      convo: convo
+	    });
+	  },
+	
+	  receiveNewMessage: function (message) {
+	    AppDispatcher.dispatch({
+	      actionType: "NEW_MESSAGE",
+	      convo_id: message.convo_id
+	    });
+	  }
+	
+	};
+	
+	module.exports = MessageActions;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var MessageStore = __webpack_require__(311);
+	
+	var MessageApiUtil = __webpack_require__(312);
+	
+	// WE NEED THE FOLLOWING PROPS:
+	// SENDER
+	// RECEIVER
+	// CONVO_ID
+	
+	var MessageForm = React.createClass({
+	  displayName: 'MessageForm',
+	
+	  getInitialState: function () {
+	    return { contents: "" };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _redirectToConvo: function (convo_id) {
+	    this.context.router.push("messages/" + convo_id);
+	  },
+	
+	  _handleSubmit: function (event) {
+	    event.preventDefault();
+	
+	    if (this.props.convo_id) {
+	
+	      MessageApiUtil.createMessage({
+	        convo_id: this.props.convo_id,
+	        sender_id: this.props.sender.id,
+	        receiver_id: this.props.receiver.id,
+	        body: this.state.contents
+	      });
+	    } else {
+	
+	      MessageApiUtil.createConversation({
+	        user_id: this.props.sender.id,
+	        user2_id: this.props.receiver.id
+	      }, this.state.contents, this._redirectToConvo);
+	    }
+	
+	    this.setState({ contents: "" });
+	  },
+	
+	  _changeContents: function (event) {
+	    this.setState({ contents: event.target.value });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'li',
+	      { className: 'sent' },
+	      React.createElement(
+	        'form',
+	        { onSubmit: this._handleSubmit },
+	        React.createElement('textarea', { className: 'new_message_text', value: this.state.contents, placeholder: "Write " + this.props.receiver.username + " a nice message", onChange: this._changeContents }),
+	        React.createElement(
+	          'button',
+	          { className: 'submit_that_message' },
+	          'Submit'
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = MessageForm;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var ProfileField = __webpack_require__(316);
+	
+	var ProfileInfo = React.createClass({
+	  displayName: 'ProfileInfo',
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'question_pane' },
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'My Self-Summary:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'self_summary', fieldContents: this.props.theprops.info.self_summary,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'What I\'m doing with my life:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'do_with_life', fieldContents: this.props.theprops.info.do_with_life,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'I\'m really good at:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'real_good_at', fieldContents: this.props.theprops.info.real_good_at,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'The first thing people usually notice about me:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'first_thing', fieldContents: this.props.theprops.info.first_thing,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'My favorite things:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'favorites', fieldContents: this.props.theprops.info.favorites,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'The six things I could never do without:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'six_things', fieldContents: this.props.theprops.info.six_things,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'I spend a lot of time thinking about:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'think_about', fieldContents: this.props.theprops.info.think_about,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'On a typical friday, I am:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'typical_friday', fieldContents: this.props.theprops.info.typical_friday,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'p',
+	        { className: 'profile_header' },
+	        'You should message me if:'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(ProfileField, {
+	        fieldName: 'message_if', fieldContents: this.props.theprops.info.message_if,
+	        canWeEdit: this.props.isThisUs,
+	        theUserId: this.props.theprops.user.id }),
+	      React.createElement('br', null)
+	    );
+	  }
+	
+	});
+	
+	module.exports = ProfileInfo;
+
+/***/ },
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	var ProfileApiUtil = __webpack_require__(263);
-	var ProfileStore = __webpack_require__(305);
+	var ProfileStore = __webpack_require__(310);
 	
 	var ProfileField = React.createClass({
 	  displayName: 'ProfileField',
@@ -37411,345 +38107,73 @@
 	module.exports = ProfileField;
 
 /***/ },
-/* 307 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
 	
-	var SessionStore = __webpack_require__(237);
-	// var VisitsStore = require('../../stores/visits_store');
+	// need user prop
 	
-	var VisitApiUtil = __webpack_require__(311);
-	var SessionApiUtil = __webpack_require__(234);
-	
-	var IncomingVisits = __webpack_require__(308),
-	    OutgoingVisits = __webpack_require__(309);
-	
-	var VisitsIndex = React.createClass({
-	  displayName: 'VisitsIndex',
-	
+	var UploadButton = React.createClass({
+	  displayName: 'UploadButton',
 	
 	  getInitialState: function () {
-	    SessionApiUtil.fetchCurrentUser();
-	    return { whichTab: "incoming" };
+	    return { image: this.props.user.image_url };
 	  },
 	
-	  _changeTab: function (event) {
-	    this.setState({ whichTab: event.target.value });
+	  _postImage: function (url) {
+	    var img = {
+	      image_url: url,
+	      id: this.props.user.id
+	    };
+	    $.ajax({
+	      method: 'PATCH',
+	      url: 'api/user',
+	      dataType: 'json',
+	      data: { user: img },
+	      success: function (user) {
+	        this.setState({ image: user.image_url });
+	      }.bind(this)
+	    });
+	  },
+	
+	  _upload: function (event) {
+	    event.preventDefault();
+	
+	    cloudinary.openUploadWidget(window.cloudinary_options, function (error, images) {
+	      if (error === null) {
+	        // successful upload
+	        this._postImage(images[0].url);
+	      }
+	    }.bind(this));
 	  },
 	
 	  render: function () {
 	
-	    var theTab;
-	
-	    if (this.state.whichTab === "incoming") {
-	      theTab = React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors });
-	    } else {
-	      theTab = React.createElement(OutgoingVisits, { theList: SessionStore.currentUser().visitees });
-	    }
-	
-	    var tab = this.state.whichTab;
-	
 	    return React.createElement(
-	      'div',
-	      { className: 'likes_main' },
-	      React.createElement(
-	        'button',
-	        { className: "likes_selector" + (tab === "incoming" ? " active" : ""), onClick: this._changeTab, value: 'incoming' },
-	        'Recently Visited You'
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: "likes_selector" + (tab === "outgoing" ? " active" : ""), onClick: this._changeTab, value: 'outgoing' },
-	        'You Recently Visited'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement('br', null),
-	      theTab
+	      'button',
+	      { onClick: this._upload },
+	      React.createElement('img', { className: 'main_profile_photo', src: this.state.image })
 	    );
 	  }
 	
 	});
 	
-	module.exports = VisitsIndex;
+	module.exports = UploadButton;
 
 /***/ },
-/* 308 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
+	var MessageIndexItem = __webpack_require__(319);
 	var SessionStore = __webpack_require__(237);
-	// var VisitsStore = require('../../stores/visits_store');
+	var MessageStore = __webpack_require__(311);
 	
-	var VisitIndexItem = __webpack_require__(310);
-	
-	var VisitApiUtil = __webpack_require__(311);
-	
-	var IncomingVisits = React.createClass({
-	  displayName: 'IncomingVisits',
-	
-	
-	  render: function () {
-	
-	    var kiwi = this.props.theList.map(function (element, index) {
-	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
-	    }).reverse();
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'ul',
-	        null,
-	        kiwi
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = IncomingVisits;
-
-/***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	// var VisitsStore = require('../../stores/visits_store');
-	var SessionStore = __webpack_require__(237);
-	
-	var VisitIndexItem = __webpack_require__(310);
-	
-	var OutgoingVisits = React.createClass({
-	  displayName: 'OutgoingVisits',
-	
-	
-	  render: function () {
-	
-	    var rhea = this.props.theList.map(function (element, index) {
-	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
-	    }).reverse();
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'ul',
-	        null,
-	        rhea
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = OutgoingVisits;
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var LikeButton = __webpack_require__(295);
-	
-	var SessionStore = __webpack_require__(237);
-	var MatchesStore = __webpack_require__(287);
-	// var VisitsStore = require('../../stores/visits_store');
-	
-	var VisitApiUtil = __webpack_require__(311);
-	
-	var theMonths = {
-	  0: "January",
-	  1: "February",
-	  2: "March",
-	  3: "April",
-	  4: "May",
-	  5: "June",
-	  6: "July",
-	  7: "August",
-	  8: "September",
-	  9: "October",
-	  10: "November",
-	  11: "December"
-	};
-	
-	var VisitIndexItem = React.createClass({
-	  displayName: 'VisitIndexItem',
-	
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  _goToProfile: function (event) {
-	    _registerVisit(SessionStore.currentUser(), this.props.person);
-	    this.context.router.push("profile/" + this.props.person.id);
-	  },
-	
-	  render: function () {
-	
-	    var oldness = new Date() - new Date(this.props.person.birthdate);
-	    var oldness2 = Math.floor(oldness / 31536000000);
-	
-	    var date;
-	    date = new Date(this.props.person.last_visit);
-	
-	    var theM = "am";
-	    if (date.getHours() >= 12) {
-	      theM = "pm";
-	    }
-	
-	    var hours = date.getHours() % 12;
-	    if (hours === 0) {
-	      hours = 12;
-	    }
-	
-	    var theColon = ":";
-	    if (date.getMinutes() < 10) {
-	      theColon = ":0";
-	    }
-	
-	    var time = hours + theColon + date.getMinutes() + theM;
-	
-	    var timeStamp = theMonths[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " at " + time;
-	
-	    oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
-	
-	    return React.createElement(
-	      'li',
-	      { className: 'like_index_item', onClick: this._goToProfile },
-	      React.createElement('img', { src: this.props.person.image_url }),
-	      React.createElement(
-	        'h3',
-	        null,
-	        this.props.person.username
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Age ',
-	        oldness2
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        oldness,
-	        ' % Match'
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Last visit: ',
-	        React.createElement(
-	          'span',
-	          { className: 'datDateDoe' },
-	          ' ',
-	          timeStamp,
-	          ' '
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	_registerVisit = function (visitor, visitee) {
-	  _visitSeekAndDestroy(visitor, visitee);
-	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
-	};
-	
-	_visitSeekAndDestroy = function (visitor, visitee) {
-	  for (var i = 0; i < visitor.visitees.length; i++) {
-	    if (visitor.visitees[i].id === visitee.id) {
-	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
-	      return;
-	    }
-	  }
-	};
-	
-	module.exports = VisitIndexItem;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ServerActions = __webpack_require__(289);
-	
-	var VisitApiUtil = {
-	  createVisit: function (theIds) {
-	    $.ajax({
-	      method: 'POST',
-	      url: 'api/visits',
-	      dataType: 'json',
-	      data: { visit: theIds },
-	      success: function () {
-	        console.log("Visit created!");
-	      },
-	      faliure: function (xhr) {
-	        console.log("Somebody set us up the bomb!");
-	      }
-	    });
-	  },
-	
-	  deleteVisit: function (theIds) {
-	    $.ajax({
-	      method: 'DELETE',
-	      url: 'api/visits/1',
-	      dataType: 'json',
-	      data: { visit: theIds },
-	      success: function () {
-	        console.log("Visit destroyed!");
-	      },
-	      faliure: function (xhr) {
-	        console.log("Somebody set us up the bomb!");
-	      }
-	    });
-	  },
-	
-	  getAllVisits: function (theCurrentUserId, theType) {
-	    $.ajax({
-	      method: 'GET',
-	      url: 'api/visits',
-	      dataType: 'json',
-	      data: { visit: { visitor_id: theCurrentUserId, type: theType } },
-	      success: function (theVisits) {
-	        ServerActions.receiveAllVisits(theVisits, theType);
-	      }
-	    });
-	  },
-	
-	  getOneVisit: function (visitor_id, visitee_id) {
-	    $.ajax({
-	      method: 'GET',
-	      url: 'api/visits',
-	      dataType: 'json',
-	      data: { visit: { visitor_id: visitor_id, visitee_id: visitee_id } },
-	      success: function (theVisit) {
-	        ServerActions.receiveOneVisit(theVisit);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = VisitApiUtil;
-
-/***/ },
-/* 312 */,
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var MessageIndexItem = __webpack_require__(314);
-	var SessionStore = __webpack_require__(237);
-	var MessageStore = __webpack_require__(315);
-	
-	var MessageApiUtil = __webpack_require__(316);
+	var MessageApiUtil = __webpack_require__(312);
 	
 	var MessageIndex = React.createClass({
 	  displayName: 'MessageIndex',
@@ -37815,16 +38239,16 @@
 	module.exports = MessageIndex;
 
 /***/ },
-/* 314 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
 	var SessionStore = __webpack_require__(237);
-	var MessageStore = __webpack_require__(315);
+	var MessageStore = __webpack_require__(311);
 	
-	var VisitApiUtil = __webpack_require__(311);
+	var VisitApiUtil = __webpack_require__(297);
 	
 	var MessageIndexItem = React.createClass({
 	  displayName: 'MessageIndexItem',
@@ -37918,8 +38342,8 @@
 	
 	    return React.createElement(
 	      'li',
-	      { className: 'message_index_item' },
-	      React.createElement('img', { onClick: this._goToProfile, src: window.peterImage }),
+	      { className: 'like_index_item' },
+	      React.createElement('img', { onClick: this._goToProfile, src: this.props.person.image_url }),
 	      React.createElement(
 	        'span',
 	        { onClick: this._seeMessageDetails },
@@ -37951,6 +38375,8 @@
 	
 	});
 	
+	// WTF
+	
 	_registerVisit = function (visitor, visitee) {
 	  _visitSeekAndDestroy(visitor, visitee);
 	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
@@ -37968,186 +38394,18 @@
 	module.exports = MessageIndexItem;
 
 /***/ },
-/* 315 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(238);
-	var Store = __webpack_require__(242).Store;
-	
-	var MessageApiUtil = __webpack_require__(316);
-	
-	var _convos = [];
-	var _messages = [];
-	var _convo;
-	var _message;
-	
-	var MessageStore = new Store(AppDispatcher);
-	
-	MessageStore.allConvos = function () {
-	  return _convos;
-	};
-	
-	MessageStore.oneConvo = function () {
-	  return _convo;
-	};
-	
-	MessageStore.getLatestMessage = function (convo_id) {
-	  for (var i = 0; i < _convos.length; i++) {
-	    if (_convos[i].id === convo_id) {
-	      return _convos[i].messages[_convos[i].messages.length - 1];
-	    }
-	  }
-	};
-	
-	MessageStore.existing = function (counterpartyId) {
-	  for (var i = 0; i < _convos.length; i++) {
-	    console.log(_convos[i], counterpartyId);
-	    if (_convos[i].user.id === counterpartyId || _convos[i].user2.id === counterpartyId) {
-	      return _convos[i].id;
-	    }
-	  }
-	  return false;
-	};
-	
-	MessageStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "ALL_MESSAGES":
-	      _messages = payload.messages;
-	      MessageStore.__emitChange();
-	      break;
-	    case "NEW_MESSAGE":
-	      MessageApiUtil.getOneConvo(payload.convo_id);
-	      break;
-	    case "CONVERSATIONS":
-	      _convos = payload.convos;
-	      MessageStore.__emitChange();
-	      break;
-	    case "CONVERSATION":
-	      _convo = payload.convo;
-	      MessageStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = MessageStore;
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SessionActions = __webpack_require__(235);
-	var ErrorActions = __webpack_require__(259);
-	var MessageActions = __webpack_require__(317);
-	
-	var MessageApiUtil = {
-	
-	  getAllConvos: function (theUserId) {
-	    $.ajax({
-	      method: 'GET',
-	      url: 'api/conversations',
-	      dataType: 'json',
-	      data: { conversation: theUserId },
-	      success: function (result) {
-	        MessageActions.receiveAllConvos(result);
-	      }
-	    });
-	  },
-	
-	  getOneConvo: function (theConvoId) {
-	    $.ajax({
-	      method: 'GET',
-	      url: 'api/conversations/' + theConvoId,
-	      dataType: 'json',
-	      data: {},
-	      success: function (result) {
-	        MessageActions.receiveOneConvo(result);
-	      }
-	    });
-	  },
-	
-	  createConversation: function (theParams, messageBody, callback) {
-	    $.ajax({
-	      method: 'POST',
-	      url: 'api/conversations',
-	      dataType: 'json',
-	      data: { conversation: theParams },
-	      success: function (newConvo) {
-	        MessageApiUtil.createMessage({
-	          convo_id: newConvo.id,
-	          sender_id: theParams.user_id,
-	          receiver_id: theParams.user2_id,
-	          body: messageBody
-	        });
-	
-	        callback(newConvo.id);
-	      }
-	    });
-	  },
-	
-	  createMessage: function (theParams) {
-	    $.ajax({
-	      method: 'POST',
-	      url: 'api/messages',
-	      dataType: 'json',
-	      data: { message: theParams },
-	      success: function (newMessage) {
-	        MessageActions.receiveNewMessage(newMessage);
-	      }
-	    });
-	  }
-	
-	};
-	
-	module.exports = MessageApiUtil;
-
-/***/ },
-/* 317 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SessionApiUtil = __webpack_require__(234);
-	var SessionStore = __webpack_require__(237);
-	var AppDispatcher = __webpack_require__(238);
-	
-	var MessageActions = {
-	
-	  receiveAllConvos: function (convos) {
-	    AppDispatcher.dispatch({
-	      actionType: "CONVERSATIONS",
-	      convos: convos
-	    });
-	  },
-	
-	  receiveOneConvo: function (convo) {
-	    AppDispatcher.dispatch({
-	      actionType: "CONVERSATION",
-	      convo: convo
-	    });
-	  },
-	
-	  receiveNewMessage: function (message) {
-	    AppDispatcher.dispatch({
-	      actionType: "NEW_MESSAGE",
-	      convo_id: message.convo_id
-	    });
-	  }
-	
-	};
-	
-	module.exports = MessageActions;
-
-/***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
 	var SessionStore = __webpack_require__(237);
-	var MessageStore = __webpack_require__(315);
+	var MessageStore = __webpack_require__(311);
 	
-	var MessageApiUtil = __webpack_require__(316);
+	var MessageApiUtil = __webpack_require__(312);
 	
-	var MessageForm = __webpack_require__(319);
+	var MessageForm = __webpack_require__(314);
 	
 	var MessageDetail = React.createClass({
 	  displayName: 'MessageDetail',
@@ -38266,263 +38524,6 @@
 	});
 	
 	module.exports = MessageDetail;
-
-/***/ },
-/* 319 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var MessageStore = __webpack_require__(315);
-	
-	var MessageApiUtil = __webpack_require__(316);
-	
-	// WE NEED THE FOLLOWING PROPS:
-	// SENDER
-	// RECEIVER
-	// CONVO_ID
-	
-	var MessageForm = React.createClass({
-	  displayName: 'MessageForm',
-	
-	  getInitialState: function () {
-	    return { contents: "" };
-	  },
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  _redirectToConvo: function (convo_id) {
-	    this.context.router.push("messages/" + convo_id);
-	  },
-	
-	  _handleSubmit: function (event) {
-	    event.preventDefault();
-	
-	    if (this.props.convo_id) {
-	
-	      MessageApiUtil.createMessage({
-	        convo_id: this.props.convo_id,
-	        sender_id: this.props.sender.id,
-	        receiver_id: this.props.receiver.id,
-	        body: this.state.contents
-	      });
-	    } else {
-	
-	      MessageApiUtil.createConversation({
-	        user_id: this.props.sender.id,
-	        user2_id: this.props.receiver.id
-	      }, this.state.contents, this._redirectToConvo);
-	    }
-	
-	    this.setState({ contents: "" });
-	  },
-	
-	  _changeContents: function (event) {
-	    this.setState({ contents: event.target.value });
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'li',
-	      { className: 'sent' },
-	      React.createElement(
-	        'form',
-	        { onSubmit: this._handleSubmit },
-	        React.createElement('textarea', { className: 'new_message_text', value: this.state.contents, placeholder: "Write " + this.props.receiver.username + " a nice message", onChange: this._changeContents }),
-	        React.createElement(
-	          'button',
-	          { className: 'submit_that_message' },
-	          'Submit'
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = MessageForm;
-
-/***/ },
-/* 320 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var ProfileField = __webpack_require__(306);
-	
-	var ProfileInfo = React.createClass({
-	  displayName: 'ProfileInfo',
-	
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'question_pane' },
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'My Self-Summary:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'self_summary', fieldContents: this.props.theprops.info.self_summary,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'What I\'m doing with my life:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'do_with_life', fieldContents: this.props.theprops.info.do_with_life,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'I\'m really good at:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'real_good_at', fieldContents: this.props.theprops.info.real_good_at,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'The first thing people usually notice about me:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'first_thing', fieldContents: this.props.theprops.info.first_thing,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'My favorite things:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'favorites', fieldContents: this.props.theprops.info.favorites,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'The six things I could never do without:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'six_things', fieldContents: this.props.theprops.info.six_things,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'I spend a lot of time thinking about:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'think_about', fieldContents: this.props.theprops.info.think_about,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'On a typical friday, I am:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'typical_friday', fieldContents: this.props.theprops.info.typical_friday,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'p',
-	        { className: 'profile_header' },
-	        'You should message me if:'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(ProfileField, {
-	        fieldName: 'message_if', fieldContents: this.props.theprops.info.message_if,
-	        canWeEdit: this.props.isThisUs,
-	        theUserId: this.props.theprops.user.id }),
-	      React.createElement('br', null)
-	    );
-	  }
-	
-	});
-	
-	module.exports = ProfileInfo;
-
-/***/ },
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	// need user prop
-	
-	var UploadButton = React.createClass({
-	  displayName: 'UploadButton',
-	
-	  getInitialState: function () {
-	    return { image: this.props.user.image_url };
-	  },
-	
-	  _postImage: function (url) {
-	    var img = {
-	      image_url: url,
-	      id: this.props.user.id
-	    };
-	    $.ajax({
-	      method: 'PATCH',
-	      url: 'api/user',
-	      dataType: 'json',
-	      data: { user: img },
-	      success: function (user) {
-	        this.setState({ image: user.image_url });
-	      }.bind(this)
-	    });
-	  },
-	
-	  _upload: function (event) {
-	    event.preventDefault();
-	
-	    cloudinary.openUploadWidget(window.cloudinary_options, function (error, images) {
-	      if (error === null) {
-	        // successful upload
-	        this._postImage(images[0].url);
-	      }
-	    }.bind(this));
-	  },
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'button',
-	      { onClick: this._upload },
-	      React.createElement('img', { className: 'main_profile_photo', src: this.state.image })
-	    );
-	  }
-	
-	});
-	
-	module.exports = UploadButton;
 
 /***/ }
 /******/ ]);
