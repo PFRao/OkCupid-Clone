@@ -145,7 +145,7 @@
 	            React.createElement(
 	              'a',
 	              { href: '#/main' },
-	              'LoLQetesh'
+	              'LoLCupid'
 	            )
 	          ),
 	          React.createElement(
@@ -26124,7 +26124,7 @@
 	      React.createElement(
 	        'header',
 	        null,
-	        'Millions of Peters await...'
+	        'Millions of beautiful people await...'
 	      ),
 	      this.fieldErrors("base"),
 	      React.createElement(
@@ -33825,7 +33825,7 @@
 	        React.createElement(
 	          'button',
 	          { type: 'submit' },
-	          'Become a Peter!'
+	          'Find Love!'
 	        )
 	      ),
 	      React.createElement(
