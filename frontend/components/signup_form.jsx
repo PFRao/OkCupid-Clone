@@ -172,7 +172,7 @@ var SignupForm = React.createClass({
             <br />
           </label>
 
-          <button type="submit">Become a Peter!</button>
+          <button type="submit">Find Love!</button>
         </form>
 
         <Modal

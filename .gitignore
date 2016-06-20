@@ -17,3 +17,7 @@ node_modules
 
 # Ignore application configuration
 /config/application.yml
+
+# Ignore some of this other stuff too
+.DS_Store
+.byebug_history

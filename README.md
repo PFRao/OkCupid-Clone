@@ -5,10 +5,6 @@ LoLCupid is a full-stack web application inspired by OkCupid. It utilizes Ruby o
 
 ## Features & Implementation
 
-### Single-Page App
-
-LoLCupid is a single page dating app. All of its content is delivered through one element on a single page. The root page and all other pages listen to a `SessionStore`, which reveals the current user to the app by means of the function `SessionStore.currentUser()`. The user that is returned by said function determines the content that will render on the page.
-
 ### Matching
 
 Matching is arguably the crux of the LoLCupid experience. Displaying users are all well and good, but an individual user cannot be expected to carefully screen each and every user on the site.
@@ -53,6 +49,12 @@ One might question the validity of matching based on an overall profile rather t
 
 The other core part of any dating website is, of course, the ability to contact users that one is interested in. On LoLCupid, we've kept it very simple. By visiting another person's profile, a user can start a conversation by clicking the appropriate button on the profile page. From there on out, the conversation takes place on a separate messages page, which displays messages from both sides in chronological order with timestamps. When reviewing the message index (MessagesIndex component), The user is treated to a list of all conversations, along with a timestamp and preview of the last sent/received message.
 
+* [Conversations][convos]
+* [Messages][messages]
+
+[convos]: ./screenshots/convos.png
+[messages]: ./screenshots/messages.png
+
 The messaging portion of the LoLCupid is structured in two main parts: the messages themselves, and the conversations they belong to. This aids greatly in organization, since it allows us to gather all correspondences between two users in one spot. Furthermore, this aids greatly in simplifying how the information is queried by the app itself. Rather than having to gather all messages from all users that have spoken to the current user, we can simply search for associated conversations and, from there, search for associated messages.
 
 ## Future Directions for the Project
@@ -61,4 +63,4 @@ In addition to the features already implemented, I plan to continue work on this
 
 ### Search
 
-Searching users is a standard feature of Evernote.  I plan to utilize the Fuse.js library to create a fuzzy search of users and, in particular, matches.  This search will allow filters for age, preferences, match percentage, etc.  
+Searching users is a standard feature of dating websites.  I plan to utilize the Fuse.js library to create a fuzzy search of users and, in particular, matches.  This search will allow filters for age, preferences, match percentage, etc.  

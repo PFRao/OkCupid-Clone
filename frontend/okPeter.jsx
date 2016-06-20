@@ -61,7 +61,7 @@ var App = React.createClass({
           <nav className="header-nav group">
 
             <h1 className="header-logo">
-              <a href="#/main">LoLQetesh</a>
+              <a href="#/main">LoLCupid</a>
             </h1>
 
             <ul className="header-list group">

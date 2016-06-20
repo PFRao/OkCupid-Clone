@@ -77,7 +77,7 @@ var LoginForm = React.createClass({
 
 		return (
       <form className="sign_in" onSubmit={this._handleSubmit}>
-        <header>Millions of Peters await...</header>
+        <header>Millions of beautiful people await...</header>
 
         { this.fieldErrors("base") }
 
