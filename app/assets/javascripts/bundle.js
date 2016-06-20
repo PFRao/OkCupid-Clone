@@ -26427,12 +26427,9 @@
 				type: 'POST',
 				data: { user: credentials },
 				success: function (currentUser) {
-					console.log("Login success (SessionApiUtil#login)");
-	
 					UserApiUtil.update({ id: currentUser.id, last_online: new Date() });
 				},
 				error: function (xhr) {
-					console.log("Login error in SessionApiUtil#login");
 					var errors = xhr.responseJSON;
 					ErrorActions.setErrors("login", errors);
 				}
@@ -26444,12 +26441,9 @@
 				url: '/api/session',
 				method: 'DELETE',
 				success: function () {
-					console.log("Logout success (SessionApiUtil#logout)");
 					SessionActions.removeCurrentUser();
 				},
-				error: function () {
-					console.log("Logout error in SessionApiUtil#logout");
-				}
+				error: function () {}
 			});
 		},
 	
@@ -26460,16 +26454,12 @@
 				success: function (currentUser) {
 					SessionActions.receiveCurrentUser(currentUser);
 				},
-				error: function (xhr) {
-					console.log("Error in SessionApiUtil#fetchCurrentUser");
-				},
+				error: function (xhr) {},
 				complete: complete
 			});
 		},
 	
-		hubert: function () {
-			console.log("hubert is very awesome!");
-		}
+		hubert: function () {}
 	};
 	
 	module.exports = SessionApiUtil;
@@ -26558,7 +26548,6 @@
 	};
 	
 	SessionStore.update = function () {
-	  console.log("Hi i'm hubert");
 	  SessionApiUtil.hubert();
 	};
 	
@@ -33527,12 +33516,8 @@
 	      url: "api/profiles",
 	      dataType: "json",
 	      data: { profile: id },
-	      success: function (newProfile) {
-	        console.log("Empty profile created for user with the id of ", id.user_id);
-	      },
-	      error: function () {
-	        console.log("No profile was created.");
-	      }
+	      success: function (newProfile) {},
+	      error: function () {}
 	    });
 	  },
 	
@@ -33545,9 +33530,7 @@
 	      success: function (newProfile) {
 	        ProfileActions.receiveNewProfile(newProfile);
 	      },
-	      error: function () {
-	        console.log("No profile was created.");
-	      }
+	      error: function () {}
 	    });
 	  }
 	
@@ -33684,7 +33667,6 @@
 	  },
 	
 	  _changeGender: function (event) {
-	    console.log(event.target.value);
 	    this.setState({ gender: event.target.value });
 	  },
 	
@@ -35939,12 +35921,6 @@
 	  var thePersonality = JSON.parse(stinker.personality);
 	  var theOtherPersonality = JSON.parse(otherStinker.personality);
 	
-	  // console.log("your personality:", thePersonality);
-	  // console.log(stinker.personality);
-	  // console.log("their personality:", theOtherPersonality);
-	  // console.log(otherStinker.personality);
-	  // console.log(otherStinker);
-	
 	  var theScore = 0;
 	
 	  _ATTRIBUTES.forEach(function (attr) {
@@ -36040,7 +36016,6 @@
 	      url: 'api/questions/new',
 	      dataType: 'json',
 	      success: function (question) {
-	        console.log("next question:", question);
 	        ServerActions.receiveNewQuestion(question);
 	      }
 	    });
@@ -36053,13 +36028,8 @@
 	      url: 'api/answers',
 	      dataType: 'json',
 	      data: { answer: answerInfo },
-	      success: function (answer) {
-	        console.log("This was a triumph!");
-	        console.log("I'm making a note here: HUGE success!");
-	      },
-	      error: function (answer) {
-	        console.log("Fission mailed");
-	      }
+	      success: function (answer) {},
+	      error: function (answer) {}
 	    });
 	  }
 	};
@@ -36589,7 +36559,6 @@
 	      formData.thePref = _average(demPrefsTho) * this.state.theWeight;
 	    }
 	
-	    // console.log("submitted:", formAnswer);
 	    this._resetForm();
 	
 	    this._answerTheQuestion(formAnswer);
@@ -37679,7 +37648,6 @@
 	
 	MessageStore.existing = function (counterpartyId) {
 	  for (var i = 0; i < _convos.length; i++) {
-	    console.log(_convos[i], counterpartyId);
 	    if (_convos[i].user.id === counterpartyId || _convos[i].user2.id === counterpartyId) {
 	      return _convos[i].id;
 	    }

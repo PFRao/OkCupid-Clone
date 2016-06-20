@@ -57,7 +57,6 @@ var Questions = React.createClass({
 
     }
 
-    // console.log("submitted:", formAnswer);
     this._resetForm();
 
     this._answerTheQuestion(formAnswer);

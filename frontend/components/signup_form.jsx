@@ -72,7 +72,6 @@ var SignupForm = React.createClass({
   },
 
   _changeGender: function (event) {
-    console.log(event.target.value);
     this.setState({ gender: event.target.value });
   },
 
