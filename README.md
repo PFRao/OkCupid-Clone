@@ -15,6 +15,38 @@ Matching is arguably the crux of the LoLCupid experience. Displaying users are a
 
 The solution, just like on the real OkCupid, is to offer a sort of "pre-screening" process. LoLCupid accomplishes this by allowing users to answer personality questions, which will then be used to create a list of potentially good matches as a starting point for the user to look at (again, much like OkCupid itself). Where this differs from OkCupid is that, rather than compare users on a question to question basis, LoLCupid creates two personalty profiles for each user: one for themselves, and one for their ideal match. These profiles assign each user values in categories such as optimism, outgoingness, religousness, etc., based on how they answered the given questions.
 
+The personality profile takes the form of a hash. For a newly-registered user, all values start at 0.
+
+```ruby
+
+  {you: {
+    active: 0,
+    outdoorsy: 0,
+    outgoing: 0,
+    sports: 0,
+    pop_culture: 0,
+    conservative: 0,
+    rebellious: 0,
+    optimistic: 0,
+    traditional: 0,
+    organized: 0,
+    religious: 0
+  }, them: {
+    active: 0,
+    outdoorsy: 0,
+    outgoing: 0,
+    sports: 0,
+    pop_culture: 0,
+    conservative: 0,
+    rebellious: 0,
+    optimistic: 0,
+    traditional: 0,
+    organized: 0,
+    religious: 0
+  }}
+
+```
+
 One might question the validity of matching based on an overall profile rather than specific responses. While it's true that the method employed by LoLCupid misses out on extreme corner case dealbreakers ("I will not date someone who enjoys Guy Ritchie movies, ever. Period."), the trade off is that it avoids the classical "not enough responses"/"my answer isn't here" problem that is endemic to all multiple choice personality assessments. The problem on OkCupid is alleviated somewhat by the explaination feature, but that only works if the users read all of each other's respective responses; the additional response is not accounted for the in the matching algorithm itself, which is the most important part.
 
 ### Direct Messaging
