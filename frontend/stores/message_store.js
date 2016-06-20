@@ -28,7 +28,6 @@ MessageStore.getLatestMessage = function (convo_id) {
 
 MessageStore.existing = function (counterpartyId) {
   for (var i = 0; i < _convos.length; i++) {
-    console.log(_convos[i], counterpartyId);
     if (_convos[i].user.id === counterpartyId || _convos[i].user2.id === counterpartyId) {
       return _convos[i].id;
     }

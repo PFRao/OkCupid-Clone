@@ -38,7 +38,6 @@ SessionStore.currentUser = function () {
 };
 
 SessionStore.update = function () {
-  console.log("Hi i'm hubert");
   SessionApiUtil.hubert();
 };
 

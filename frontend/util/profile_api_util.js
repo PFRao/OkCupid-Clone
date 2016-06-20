@@ -11,10 +11,8 @@ var ProfileApiUtil = {
       dataType: "json",
       data: { profile: id },
       success: function(newProfile) {
-        console.log("Empty profile created for user with the id of ", id.user_id);
       },
       error: function () {
-        console.log("No profile was created.");
       }
     });
   },
@@ -29,7 +27,6 @@ var ProfileApiUtil = {
         ProfileActions.receiveNewProfile(newProfile);
       },
       error: function () {
-        console.log("No profile was created.");
       }
     });
   }
