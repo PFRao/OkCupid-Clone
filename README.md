@@ -1,5 +1,5 @@
 [LoLCupid live][heroku]
-[heroku]: http://okpeter.herokuapp.com
+[heroku]: http://www.lolcupid.date
 
 LoLCupid is a full-stack web application inspired by OkCupid. It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.
 
@@ -52,8 +52,8 @@ The other core part of any dating website is, of course, the ability to contact 
 * [Conversations][convos]
 * [Messages][messages]
 
-[convos]: ./screenshots/convos.png
-[messages]: ./screenshots/messages.png
+[convos]: ./docs/screenshots/convos.png
+[messages]: ./docs/screenshots/messages.png
 
 The messaging portion of the LoLCupid is structured in two main parts: the messages themselves, and the conversations they belong to. This aids greatly in organization, since it allows us to gather all correspondences between two users in one spot. Furthermore, this aids greatly in simplifying how the information is queried by the app itself. Rather than having to gather all messages from all users that have spoken to the current user, we can simply search for associated conversations and, from there, search for associated messages.
 
