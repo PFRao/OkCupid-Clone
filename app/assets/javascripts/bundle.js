@@ -47,6 +47,7 @@
 	//React
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
+	var Modal = __webpack_require__(266);
 	//Router
 	var ReactRouter = __webpack_require__(168);
 	var Router = ReactRouter.Router;
@@ -64,6 +65,9 @@
 	var UserProfile = __webpack_require__(309);
 	var MessageIndex = __webpack_require__(318);
 	var MessageDetail = __webpack_require__(320);
+	//Modals
+	var QuickVisitors = __webpack_require__(321);
+	var QuickLikes = __webpack_require__(322);
 	//Stores
 	var SessionStore = __webpack_require__(237);
 	//Other Stuff
@@ -74,7 +78,38 @@
 	var App = React.createClass({
 	  displayName: 'App',
 	
-	  // mixins: [CurrentUserState],
+	  getInitialState: function () {
+	    return {
+	      visitorsOpen: false,
+	      likesOpen: false,
+	      messagesOpen: false
+	    };
+	  },
+	
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	    this.refs.subtitle.style.color = '#f00';
+	  },
+	
+	  _openVisitors: function (e) {
+	    e.preventDefault();
+	    this.setState({ visitorsOpen: true });
+	  },
+	
+	  _closeVisitors: function (e) {
+	    // e.preventDefault();
+	    this.setState({ visitorsOpen: false });
+	  },
+	
+	  _openLikes: function (e) {
+	    e.preventDefault();
+	    this.setState({ likesOpen: true });
+	  },
+	
+	  _closeLikes: function (e) {
+	    // e.preventDefault();
+	    this.setState({ likesOpen: false });
+	  },
 	
 	  componentDidMount: function () {
 	    SessionApiUtil.fetchCurrentUser();
@@ -95,18 +130,18 @@
 	    if (SessionStore.isUserLoggedIn()) {
 	      candyCorn = [React.createElement(
 	        'li',
-	        { key: "visitors" },
+	        { key: "visitors", onClick: this._openVisitors },
 	        React.createElement(
 	          'a',
-	          { href: '#/visits' },
+	          null,
 	          'Visitors'
 	        )
 	      ), React.createElement(
 	        'li',
-	        { key: "likes" },
+	        { key: "likes", onClick: this._openLikes },
 	        React.createElement(
 	          'a',
-	          { href: '#/likes' },
+	          null,
 	          'Likes'
 	        )
 	      ), React.createElement(
@@ -155,7 +190,27 @@
 	          )
 	        )
 	      ),
-	      this.props.children
+	      this.props.children,
+	      React.createElement(
+	        Modal,
+	        {
+	          className: 'charles',
+	          ref: 'mymodal',
+	          isOpen: this.state.visitorsOpen,
+	          onAfterOpen: this.handleOnAfterOpenModal,
+	          onRequestClose: this._closeVisitors },
+	        React.createElement(QuickVisitors, { close: this._closeVisitors })
+	      ),
+	      React.createElement(
+	        Modal,
+	        {
+	          className: 'charles',
+	          ref: 'mymodal',
+	          isOpen: this.state.likesOpen,
+	          onAfterOpen: this.handleOnAfterOpenModal,
+	          onRequestClose: this._closeLikes },
+	        React.createElement(QuickLikes, { close: this._closeLikes })
+	      )
 	    );
 	  }
 	
@@ -33629,7 +33684,8 @@
 	    this.refs.subtitle.style.color = '#f00';
 	  },
 	
-	  _closeModal: function () {
+	  _closeModal: function (e) {
+	    e.preventDefault();
 	    this.setState({ modalIsOpen: false });
 	  },
 	
@@ -36752,34 +36808,6 @@
 	};
 	
 	module.exports = Questions;
-	
-	// <form>
-	//   <h4>How important is this question to you?</h4>
-	//
-	//   <label>
-	//     <input type="radio" value={0} checked={this.state.theWeight === 0} onChange={this._changeWeight} />
-	//     I honestly don't give a shit
-	//     <br />
-	//   </label>
-	//
-	//   <label>
-	//     <input type="radio" value={1} checked={this.state.theWeight === 1} onChange={this._changeWeight} />
-	//     I care a little bit, bit it's really no big deal, you know?
-	//     <br />
-	//   </label>
-	//
-	//   <label>
-	//     <input type="radio" value={2} checked={this.state.theWeight === 2} onChange={this._changeWeight} />
-	//     This is something that I would definitely consider when selecting a mate
-	//     <br />
-	//   </label>
-	//
-	//   <label>
-	//     <input type="radio" value={10} checked={this.state.theWeight === 10} onChange={this._changeWeight} />
-	//     This is basically a dealbreaker
-	//     <br />
-	//   </label>
-	// </form>
 
 /***/ },
 /* 299 */
@@ -37168,7 +37196,7 @@
 	
 	  render: function () {
 	
-	    var kiwi = this.props.theList.map(function (element, index) {
+	    var visitIndexItems = this.props.theList.map(function (element, index) {
 	      return React.createElement(VisitIndexItem, { key: element.id, person: element });
 	    }).reverse();
 	
@@ -37178,7 +37206,7 @@
 	      React.createElement(
 	        'ul',
 	        null,
-	        kiwi
+	        visitIndexItems
 	      )
 	    );
 	  }
@@ -38492,6 +38520,98 @@
 	});
 	
 	module.exports = MessageDetail;
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var IncomingVisits = __webpack_require__(306);
+	var SessionStore = __webpack_require__(237);
+	
+	var QuickVisitors = React.createClass({
+	  displayName: 'QuickVisitors',
+	
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _redirection: function (e) {
+	    e.preventDefault();
+	    this.props.close();
+	    this.context.router.push('visits');
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'quickModal' },
+	      'Recent Visitors:',
+	      React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors }),
+	      React.createElement(
+	        'button',
+	        { className: 'redirect_modal', onClick: this._redirection },
+	        'See all visitors'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'close_modal', onClick: this.props.close },
+	        'Close'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = QuickVisitors;
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var IncomingLikes = __webpack_require__(301);
+	var SessionStore = __webpack_require__(237);
+	
+	var QuickLikes = React.createClass({
+	  displayName: 'QuickLikes',
+	
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _redirection: function (e) {
+	    // e.preventDefault();
+	    this.props.close();
+	    this.context.router.push('likes');
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'quickModal' },
+	      'Recent Likes:',
+	      React.createElement(IncomingLikes, { theList: SessionStore.currentUser().likers }),
+	      React.createElement(
+	        'button',
+	        { className: 'redirect_modal', onClick: this._redirection },
+	        'See all likes'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'close_modal', onClick: this.props.close },
+	        'Close'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = QuickLikes;
 
 /***/ }
 /******/ ]);

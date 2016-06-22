@@ -1,0 +1,16 @@
+.redirect_modal {
+  border: 2px solid black;
+}
+
+.close_modal {
+  border: 1px solid black;
+}
+
+.quickModal {
+  color: #2F4F4F;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 50px;
+  width: 400px;
+}

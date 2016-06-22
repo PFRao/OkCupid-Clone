@@ -1,6 +1,7 @@
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Modal = require('react-modal');
 //Router
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
@@ -18,6 +19,9 @@ var VisitsIndex = require('./components/visit_stuff/visits_index');
 var UserProfile = require('./components/profile_stuff/user_profile');
 var MessageIndex = require('./components/message_stuff/message_index');
 var MessageDetail = require('./components/message_stuff/message_detail');
+//Modals
+var QuickVisitors = require('./components/nav_stuff/quick_visitors');
+var QuickLikes = require('./components/nav_stuff/quick_likes');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
@@ -26,7 +30,38 @@ var Link = require('react-router').Link;
 var SessionApiUtil = require('./util/session_api_util');
 
 var App = React.createClass({
-  // mixins: [CurrentUserState],
+  getInitialState: function () {
+    return {
+      visitorsOpen: false,
+      likesOpen: false,
+      messagesOpen: false
+    }
+  },
+
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+
+  _openVisitors: function (e) {
+    e.preventDefault();
+    this.setState({ visitorsOpen: true });
+  },
+
+  _closeVisitors: function (e) {
+    // e.preventDefault();
+    this.setState({ visitorsOpen: false });
+  },
+
+  _openLikes: function (e) {
+    e.preventDefault();
+    this.setState({ likesOpen: true });
+  },
+
+  _closeLikes: function (e) {
+    // e.preventDefault();
+    this.setState({ likesOpen: false });
+  },
 
   componentDidMount: function () {
     SessionApiUtil.fetchCurrentUser();
@@ -46,8 +81,8 @@ var App = React.createClass({
 
     if (SessionStore.isUserLoggedIn()) {
       candyCorn = [
-        <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
-        <li key={"likes"}><a href="#/likes">Likes</a></li>,
+        <li key={"visitors"} onClick={this._openVisitors}><a>Visitors</a></li>,
+        <li key={"likes"} onClick={this._openLikes}><a>Likes</a></li>,
         <li key={"messages"}><a href="#/messages">Messages</a></li>,
         <li className="yer_face" onClick={this._goToProfile} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
       ];
@@ -71,6 +106,28 @@ var App = React.createClass({
           </nav>
         </header>
         {this.props.children}
+
+        <Modal
+          className="charles"
+          ref="mymodal"
+          isOpen={this.state.visitorsOpen}
+          onAfterOpen={this.handleOnAfterOpenModal}
+          onRequestClose={this._closeVisitors}>
+
+          <QuickVisitors close={this._closeVisitors} />
+
+        </Modal>
+
+        <Modal
+          className="charles"
+          ref="mymodal"
+          isOpen={this.state.likesOpen}
+          onAfterOpen={this.handleOnAfterOpenModal}
+          onRequestClose={this._closeLikes}>
+
+          <QuickLikes close={this._closeLikes} />
+
+        </Modal>
       </div>
     );
 

@@ -34,7 +34,8 @@ var SignupForm = React.createClass({
     this.refs.subtitle.style.color = '#f00';
   },
 
-  _closeModal: function () {
+  _closeModal: function (e) {
+    e.preventDefault();
     this.setState({ modalIsOpen: false });
   },
 

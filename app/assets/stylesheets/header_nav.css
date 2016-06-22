@@ -1,7 +1,7 @@
 .header {
   background: #104da1;
   color: #F8F8FF;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
 .header a {
@@ -12,13 +12,13 @@
 .header-nav {
   margin: 0 auto;
   width: 900px;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+  border-left: 1px solid rgba(255, 255, 255, .2);
+  border-right: 1px solid rgba(255, 255, 255, .2);
 }
 
 .header-logo {
   float: left;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid rgba(255, 255, 255, .2);
   font-weight: 700;
 }
 
@@ -32,7 +32,7 @@
 
 .header-list > li {
   float: left;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid rgba(255, 255, 255, .2);
 }
 
 .header-list > li:hover {

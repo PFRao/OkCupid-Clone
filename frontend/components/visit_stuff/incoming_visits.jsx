@@ -12,14 +12,14 @@ var IncomingVisits = React.createClass({
 
   render: function() {
 
-    var kiwi = this.props.theList.map(function (element, index) {
+    var visitIndexItems = this.props.theList.map(function (element, index) {
       return (<VisitIndexItem key={element.id} person={element} />);
     }).reverse();
 
     return (
       <div>
         <ul>
-          {kiwi}
+          {visitIndexItems}
         </ul>
       </div>
     );

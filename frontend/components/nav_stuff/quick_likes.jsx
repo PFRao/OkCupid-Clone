@@ -1,26 +1,26 @@
 var React = require('react');
 
-var IncomingVisits = require('../visit_stuff/incoming_visits');
+var IncomingLikes = require('../like_stuff/incoming_likes');
 var SessionStore = require('../../stores/session_store');
 
-var QuickVisitors = React.createClass({
+var QuickLikes = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
 
   _redirection: function (e) {
-    e.preventDefault();
+    // e.preventDefault();
     this.props.close()
-    this.context.router.push('visits')
+    this.context.router.push('likes')
   },
 
   render: function() {
     return (
       <div className="quickModal">
-        Recent Visitors:
-        <IncomingVisits theList={SessionStore.currentUser().visitors}/>
-        <button className="redirect_modal" onClick={this._redirection}>See all visitors</button>
+        Recent Likes:
+        <IncomingLikes theList={SessionStore.currentUser().likers}/>
+        <button className="redirect_modal" onClick={this._redirection}>See all likes</button>
         <button className="close_modal" onClick={this.props.close}>Close</button>
       </div>
     );
@@ -28,4 +28,4 @@ var QuickVisitors = React.createClass({
 
 });
 
-module.exports = QuickVisitors;
+module.exports = QuickLikes;
