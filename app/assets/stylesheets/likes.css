@@ -28,11 +28,12 @@
   color: #2F4F4F;
   display: block;
   width: 350px;
+  height: 100px;
   margin: 50px 0 50px 0;
-  border-top-left-radius: 1000px;
+  /*border-top-left-radius: 1000px;
   border-top-right-radius: 300px;
   border-bottom-left-radius: 425px;
-  border-bottom-right-radius: 300px;
+  border-bottom-right-radius: 300px;*/
 
   -webkit-transition: all 0.3s ease, background-color 0.3s ease;
   -moz-transition: all 0.3s ease, background-color 0.3s ease;
@@ -52,15 +53,22 @@
   float:left;
   height:100px;
   width: 100px;
-  border-radius: 50px;
+  /*border-radius: 50px;*/
+}
+
+.like_index_item > span {
+  position: relative;
+  left: 10px;
 }
 
 .like_index_item > h3 {
-  margin-left: 10px;
+  position: relative;
+  left: 10px;
 }
 
 .like_index_item > p {
-  margin-left: 10px;
+  position: relative;
+  left: 10px;
 }
 
 .active {

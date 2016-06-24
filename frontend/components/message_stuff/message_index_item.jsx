@@ -74,7 +74,7 @@ var MessageIndexItem = React.createClass({
       } else if (hours < 48) {
         hours_ago = "1 day";
       } else {
-        hours_ago = (hours/24) + " days";
+        hours_ago = Math.floor(hours/24) + " days";
       }
 
     }

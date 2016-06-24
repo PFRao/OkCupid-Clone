@@ -44,12 +44,16 @@ var MessageDetail = React.createClass({
     }
 
     var classiness;
+    var imgURL;
+    var imgClass;
 
     var hours_ago;
     var milliseconds;
     var hours;
 
     var messages = this.state.theConvo.messages.map(function (message, index) {
+
+      imgClass = "message_user_thumbnail";
 
       milliseconds = new Date() - new Date(message.created_at);
       hours = milliseconds / 3600000;
@@ -71,21 +75,26 @@ var MessageDetail = React.createClass({
         } else if (hours < 48) {
           hours_ago = "a day";
         } else {
-          hours_ago = (hours/24) + " days";
+          hours_ago = Math.floor(hours/24) + " days";
         }
 
       }
 
       if (message.receiver_id === SessionStore.currentUser().id) {
         classiness = "received";
+        imgURL = them.image_url;
+        imgClass += " their_picture"
       } else {
         classiness = "sent";
+        imgURL = SessionStore.currentUser().image_url;
+        imgClass += " my_picture"
       }
 
       return (
         <li className={classiness} key={message.id}>
           {message.body}
           <br /><br />
+          <img className={imgClass} src={imgURL} />
           <p className="message_timestamp">{classiness} {hours_ago} ago</p>
         </li>
       );
@@ -95,7 +104,6 @@ var MessageDetail = React.createClass({
     return (
       <div className="message_detail_list">
         <h1>Conversation with {them.username}</h1>
-        <img src={them.image_url} />
         <ul >
           {messages}
           <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
