@@ -38555,7 +38555,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal' },
+	      { className: 'quickModal visitorModal' },
 	      'Recent Visitors:',
 	      React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors }),
 	      React.createElement(

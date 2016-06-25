@@ -17,7 +17,7 @@ var QuickVisitors = React.createClass({
 
   render: function() {
     return (
-      <div className="quickModal">
+      <div className="quickModal visitorModal">
         Recent Visitors:
         <IncomingVisits theList={SessionStore.currentUser().visitors}/>
         <button className="redirect_modal" onClick={this._redirection}>See all visitors</button>
