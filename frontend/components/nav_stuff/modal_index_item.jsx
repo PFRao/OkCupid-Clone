@@ -6,7 +6,7 @@ var MessageStore = require('../../stores/message_store');
 
 var VisitApiUtil = require('../../util/visit_api_util');
 
-var MessageIndexItem = React.createClass({
+var ModalIndexItem = React.createClass({
   getInitialState: function () {
     return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
   },
@@ -122,4 +122,4 @@ _visitSeekAndDestroy = function (visitor, visitee) {
   }
 };
 
-module.exports = MessageIndexItem;
+module.exports = ModalIndexItem;

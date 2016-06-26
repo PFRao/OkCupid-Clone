@@ -20,8 +20,8 @@ var UserProfile = require('./components/profile_stuff/user_profile');
 var MessageIndex = require('./components/message_stuff/message_index');
 var MessageDetail = require('./components/message_stuff/message_detail');
 //Modals
-var QuickVisitors = require('./components/nav_stuff/quick_visitors');
-var QuickLikes = require('./components/nav_stuff/quick_likes');
+var QuickConvos = require('./components/nav_stuff/quick_convos');
+var QuickMessages = require('./components/nav_stuff/quick_messages');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
@@ -32,9 +32,9 @@ var SessionApiUtil = require('./util/session_api_util');
 var App = React.createClass({
   getInitialState: function () {
     return {
-      visitorsOpen: false,
-      likesOpen: false,
-      messagesOpen: false
+      convosOpen: false,
+      messagesOpen: false,
+      menuOpen: false
     }
   },
 
@@ -43,24 +43,35 @@ var App = React.createClass({
     this.refs.subtitle.style.color = '#f00';
   },
 
-  _openVisitors: function (e) {
+  _openMenu: function (e) {
     e.preventDefault();
-    this.setState({ visitorsOpen: true });
+    this.setState({ menuOpen: true });
   },
 
-  _closeVisitors: function (e) {
+  _closeMenu: function (e) {
     // e.preventDefault();
-    this.setState({ visitorsOpen: false });
+    this.setState({ menuOpen: false });
   },
 
-  _openLikes: function (e) {
+  _openConvos: function (e) {
     e.preventDefault();
-    this.setState({ likesOpen: true });
+    this.setState({ convosOpen: true });
   },
 
-  _closeLikes: function (e) {
+  _closeConvos: function (e) {
     // e.preventDefault();
-    this.setState({ likesOpen: false });
+    this.setState({ convosOpen: false });
+  },
+
+  _openMessages: function (e) {
+    e.preventDefault();
+    this.closeConvos();
+    this.setState({ messagesOpen: true });
+  },
+
+  _closeMessages: function (e) {
+    // e.preventDefault();
+    this.setState({ messagesOpen: false });
   },
 
   componentDidMount: function () {
@@ -71,20 +82,18 @@ var App = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
-  _goToProfile: function () {
-    this.context.router.push("profile/" + SessionStore.currentUser().id);
-  },
-
   render: function(){
 
     var candyCorn;
 
+    // onClick={this._openConvos}
+
     if (SessionStore.isUserLoggedIn()) {
       candyCorn = [
-        <li key={"visitors"} onClick={this._openVisitors}><a>Visitors</a></li>,
-        <li key={"likes"} onClick={this._openLikes}><a>Likes</a></li>,
+        <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
+        <li key={"likes"}><a href="#/likes">Likes</a></li>,
         <li key={"messages"}><a href="#/messages">Messages</a></li>,
-        <li className="yer_face" onClick={this._goToProfile} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
+        <li className="yer_face" onClick={this._openMenu} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
       ];
     } else {
       <li>Please log in or sign up!</li>;
@@ -96,7 +105,7 @@ var App = React.createClass({
           <nav className="header-nav group">
 
             <h1 className="header-logo">
-              <a href="#/main">LoLCupid</a>
+              <a href="#/matches"><img src={window.logo} /></a>
             </h1>
 
             <ul className="header-list group">
@@ -110,22 +119,33 @@ var App = React.createClass({
         <Modal
           className="charles"
           ref="mymodal"
-          isOpen={this.state.visitorsOpen}
+          isOpen={this.state.convosOpen}
           onAfterOpen={this.handleOnAfterOpenModal}
-          onRequestClose={this._closeVisitors}>
+          onRequestClose={this._closeConvos}>
 
-          <QuickVisitors close={this._closeVisitors} />
+          <QuickConvos open={this._openMessages} close={this._closeConvos} />
 
         </Modal>
 
         <Modal
           className="charles"
           ref="mymodal"
-          isOpen={this.state.likesOpen}
+          isOpen={this.state.messagesOpen}
           onAfterOpen={this.handleOnAfterOpenModal}
-          onRequestClose={this._closeLikes}>
+          onRequestClose={this._closeMessages}>
 
-          <QuickLikes close={this._closeLikes} />
+          <QuickMessages close={this._closeMessages} />
+
+        </Modal>
+
+        <Modal
+          className="charles"
+          ref="mymodal"
+          isOpen={this.state.menuOpen}
+          onAfterOpen={this.handleOnAfterOpenModal}
+          onRequestClose={this._closeMenu}>
+
+          <Main close={this._closeMenu} />
 
         </Modal>
       </div>

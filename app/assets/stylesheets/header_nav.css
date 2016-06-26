@@ -12,14 +12,10 @@
 .header-nav {
   margin: 0 auto;
   width: 900px;
-  border-left: 1px solid rgba(255, 255, 255, .2);
-  border-right: 1px solid rgba(255, 255, 255, .2);
 }
 
 .header-logo {
   float: left;
-  border-right: 1px solid rgba(255, 255, 255, .2);
-  font-weight: 700;
 }
 
 .header-logo:hover {
@@ -27,12 +23,13 @@
 }
 
 .header-list {
+  margin-top: 25px;
   float: right;
 }
 
 .header-list > li {
   float: left;
-  border-left: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 15px;
 }
 
 .header-list > li:hover {
@@ -48,4 +45,10 @@
   transform: translateY(25%);
   border-radius: 15px;
   margin-right: 5px;
+}
+
+.yer_face:hover {
+  height: 31px;
+  width: 31px;
+  cursor: pointer;
 }

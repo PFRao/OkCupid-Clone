@@ -45,12 +45,13 @@
   text-decoration: none;
   color: #2F4F4F;
   display: block;
-  width: 350px;
-  margin:50px;
-  border-top-left-radius: 1000px;
+  width: 500px;
+  height: 150px;
+  margin: 50px 0 50px 0;
+  /*border-top-left-radius: 1000px;
   border-top-right-radius: 300px;
-  border-bottom-left-radius:650px;
-  border-bottom-right-radius: 300px;
+  border-bottom-left-radius: 425px;
+  border-bottom-right-radius: 300px;*/
 
   -webkit-transition: all 0.3s ease, background-color 0.3s ease;
   -moz-transition: all 0.3s ease, background-color 0.3s ease;
@@ -68,7 +69,22 @@
 .visit_index_item > img {
   display: block;
   float:left;
-  height:100px;
-  width: 100px;
-  border-radius: 50px;
+  height:150px;
+  width: 150px;
+
+}
+
+.visit_index_item > span {
+  position: relative;
+  left: 10px;
+}
+
+.visit_index_item > h3 {
+  position: relative;
+  left: 10px;
+}
+
+.visit_index_item > p {
+  position: relative;
+  left: 10px;
 }

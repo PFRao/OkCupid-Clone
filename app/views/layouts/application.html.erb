@@ -6,13 +6,17 @@
   <%= csrf_meta_tags %>
   <script type="text/javascript" src="http://widget.cloudinary.com/global/all.js"></script>
   <script type="text/javascript">
-    window.peterImage = "<%= asset_url "jimmy.jpg" %>"
+    window.logo = "<%= asset_url "logo.png" %>"
+    window.favicon = "<%= asset_url "favicon.png" %>"
     window.cloudinary_options = {
       cloud_name: "di4l0rwwz",
       upload_preset: "uych3dyq"
     }
   </script>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link rel="icon"
+      type="image/png"
+      href="<%= asset_url "favicon.png" %>">
 </head>
 <body>
 

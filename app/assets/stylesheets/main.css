@@ -1,18 +1,31 @@
+.main_page_area {
+  position:absolute;
+  top: 50px;
+  left: 850px;
+  text-align: center;
+  color: #2F4F4F;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 50px;
+  width: 200px;
+}
+
 .main_page_button {
   position: relative;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   left: 50%;
   font-family: inherit;
   color: white;
-  background: #29d58f;
+  background: #bc1367;
   outline: none;
   border: none;
   padding: 5px 15px;
   font-size: 1.3em;
   font-weight: 400;
   border-radius: 3px;
-  box-shadow: 0 10px 10px #07408d;
+  box-shadow: 0 10px 10px #4e6c8f;
   cursor: pointer;
   transform: translate(-50%, 0);
   transition: all 0.15s ease-in-out;

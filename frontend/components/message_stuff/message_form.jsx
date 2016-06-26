@@ -53,10 +53,10 @@ var MessageForm = React.createClass({
 
   render: function() {
     return (
-      <li className="sent">
+      <li className="new_message_box">
         <form onSubmit={this._handleSubmit}>
           <textarea className="new_message_text" value={this.state.contents} placeholder={"Write " + this.props.receiver.username + " a nice message"} onChange={this._changeContents} />
-            <button className="submit_that_message">Submit</button>
+          <button className="submit_that_message">Submit</button>
         </form>
       </li>
     );

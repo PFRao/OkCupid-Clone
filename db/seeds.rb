@@ -137,7 +137,7 @@ AnswerChoice.create!(
 
 AnswerChoice.create!(
   question_id: 4,
-  body: "Every goddamn day of my goddamn life",
+  body: "Every moment of every day of my life",
   category: "optimistic",
   value: -5
 )

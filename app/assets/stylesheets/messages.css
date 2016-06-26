@@ -68,6 +68,14 @@
   background: #add8e6;
   margin: 10px 0 10px 20px;
   text-align: right;
+  padding: 30px 30px 30px 60px;
+}
+
+.new_message_box {
+  position: relative;
+  background: #add8e6;
+  margin: 10px 0 10px 20px;
+  text-align: right;
   padding: 30px;
 }
 
@@ -81,6 +89,7 @@
   background: #d3d3d3;
   padding: 30px;
   margin: 10px 20px 10px 0;
+  padding: 30px 60px 30px 30px;
 }
 
 .their_picture {
@@ -112,7 +121,6 @@
   color: #f3f5f9;
   border-radius: 2px;
   padding: 15px;
-  font-family: sans-serif;
   font-weight: 1000;
 }
 

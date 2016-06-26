@@ -16,6 +16,25 @@ var Main = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
+  _browse: function () {
+    this._closeModal();
+    this.context.router.push("matches");
+  },
+
+  _goToProfile: function () {
+    this._closeModal();
+    this.context.router.push("profile/" + SessionStore.currentUser().id);
+  },
+
+  _logout: function () {
+    this._closeModal();
+    SessionApiUtil.logout();
+  },
+
+  _closeModal: function () {
+    this.props.close();
+  },
+
   componentDidMount: function () {
     this.listener = SessionStore.addListener(function () {
       this.setState({ user: SessionStore.currentUser() });
@@ -32,18 +51,6 @@ var Main = React.createClass({
     this.otherListener.remove();
   },
 
-  _logout: function () {
-    SessionApiUtil.logout();
-  },
-
-  _browse: function () {
-    this.context.router.push("matches");
-  },
-
-  _interrogate: function () {
-    this.context.router.push("questions");
-  },
-
   redirectIfLoggedOut: function () {
     if (!SessionStore.isUserLoggedIn()) {
       this.context.router.push("/");
@@ -53,9 +60,12 @@ var Main = React.createClass({
   render: function () {
 
     return (
-      <div>
+      <div className="main_page_area">
+        Menu:
         <button className="main_page_button" onClick={this._browse}>Browse  matches</button><br />
+        <button className="main_page_button" onClick={this._goToProfile}>Profile</button><br />
         <button className="main_page_button" onClick={this._logout}>Log out</button><br />
+        <button className="main_page_button" onClick={this._closeModal}>Close</button><br />
       </div>
     );
 

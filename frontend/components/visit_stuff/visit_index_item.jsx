@@ -57,7 +57,7 @@ var VisitIndexItem = React.createClass({
     oldness = MatchesStore.beJudgemental(SessionStore.currentUser(), this.props.person);
 
     return (
-      <li className="like_index_item" onClick={this._goToProfile}>
+      <li className="visit_index_item" onClick={this._goToProfile}>
         <img src={this.props.person.image_url} />
         <h3>{this.props.person.username}</h3>
         <p>Age {oldness2}</p>

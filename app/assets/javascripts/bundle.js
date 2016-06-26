@@ -66,8 +66,8 @@
 	var MessageIndex = __webpack_require__(318);
 	var MessageDetail = __webpack_require__(320);
 	//Modals
-	var QuickVisitors = __webpack_require__(321);
-	var QuickLikes = __webpack_require__(322);
+	var QuickConvos = __webpack_require__(321);
+	var QuickMessages = __webpack_require__(324);
 	//Stores
 	var SessionStore = __webpack_require__(257);
 	//Other Stuff
@@ -80,9 +80,9 @@
 	
 	  getInitialState: function () {
 	    return {
-	      visitorsOpen: false,
-	      likesOpen: false,
-	      messagesOpen: false
+	      convosOpen: false,
+	      messagesOpen: false,
+	      menuOpen: false
 	    };
 	  },
 	
@@ -91,24 +91,35 @@
 	    this.refs.subtitle.style.color = '#f00';
 	  },
 	
-	  _openVisitors: function (e) {
+	  _openMenu: function (e) {
 	    e.preventDefault();
-	    this.setState({ visitorsOpen: true });
+	    this.setState({ menuOpen: true });
 	  },
 	
-	  _closeVisitors: function (e) {
+	  _closeMenu: function (e) {
 	    // e.preventDefault();
-	    this.setState({ visitorsOpen: false });
+	    this.setState({ menuOpen: false });
 	  },
 	
-	  _openLikes: function (e) {
+	  _openConvos: function (e) {
 	    e.preventDefault();
-	    this.setState({ likesOpen: true });
+	    this.setState({ convosOpen: true });
 	  },
 	
-	  _closeLikes: function (e) {
+	  _closeConvos: function (e) {
 	    // e.preventDefault();
-	    this.setState({ likesOpen: false });
+	    this.setState({ convosOpen: false });
+	  },
+	
+	  _openMessages: function (e) {
+	    e.preventDefault();
+	    this.closeConvos();
+	    this.setState({ messagesOpen: true });
+	  },
+	
+	  _closeMessages: function (e) {
+	    // e.preventDefault();
+	    this.setState({ messagesOpen: false });
 	  },
 	
 	  componentDidMount: function () {
@@ -119,29 +130,27 @@
 	    router: React.PropTypes.object.isRequired
 	  },
 	
-	  _goToProfile: function () {
-	    this.context.router.push("profile/" + SessionStore.currentUser().id);
-	  },
-	
 	  render: function () {
 	
 	    var candyCorn;
 	
+	    // onClick={this._openConvos}
+	
 	    if (SessionStore.isUserLoggedIn()) {
 	      candyCorn = [React.createElement(
 	        'li',
-	        { key: "visitors", onClick: this._openVisitors },
+	        { key: "visitors" },
 	        React.createElement(
 	          'a',
-	          null,
+	          { href: '#/visits' },
 	          'Visitors'
 	        )
 	      ), React.createElement(
 	        'li',
-	        { key: "likes", onClick: this._openLikes },
+	        { key: "likes" },
 	        React.createElement(
 	          'a',
-	          null,
+	          { href: '#/likes' },
 	          'Likes'
 	        )
 	      ), React.createElement(
@@ -154,7 +163,7 @@
 	        )
 	      ), React.createElement(
 	        'li',
-	        { className: 'yer_face', onClick: this._goToProfile, key: "person" },
+	        { className: 'yer_face', onClick: this._openMenu, key: "person" },
 	        React.createElement('img', { src: SessionStore.currentUser().image_url })
 	      )];
 	    } else {
@@ -179,8 +188,8 @@
 	            { className: 'header-logo' },
 	            React.createElement(
 	              'a',
-	              { href: '#/main' },
-	              'LoLCupid'
+	              { href: '#/matches' },
+	              React.createElement('img', { src: window.logo })
 	            )
 	          ),
 	          React.createElement(
@@ -196,20 +205,30 @@
 	        {
 	          className: 'charles',
 	          ref: 'mymodal',
-	          isOpen: this.state.visitorsOpen,
+	          isOpen: this.state.convosOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
-	          onRequestClose: this._closeVisitors },
-	        React.createElement(QuickVisitors, { close: this._closeVisitors })
+	          onRequestClose: this._closeConvos },
+	        React.createElement(QuickConvos, { open: this._openMessages, close: this._closeConvos })
 	      ),
 	      React.createElement(
 	        Modal,
 	        {
 	          className: 'charles',
 	          ref: 'mymodal',
-	          isOpen: this.state.likesOpen,
+	          isOpen: this.state.messagesOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
-	          onRequestClose: this._closeLikes },
-	        React.createElement(QuickLikes, { close: this._closeLikes })
+	          onRequestClose: this._closeMessages },
+	        React.createElement(QuickMessages, { close: this._closeMessages })
+	      ),
+	      React.createElement(
+	        Modal,
+	        {
+	          className: 'charles',
+	          ref: 'mymodal',
+	          isOpen: this.state.menuOpen,
+	          onAfterOpen: this.handleOnAfterOpenModal,
+	          onRequestClose: this._closeMenu },
+	        React.createElement(Main, { close: this._closeMenu })
 	      )
 	    );
 	  }
@@ -35872,6 +35891,25 @@
 	    router: React.PropTypes.object.isRequired
 	  },
 	
+	  _browse: function () {
+	    this._closeModal();
+	    this.context.router.push("matches");
+	  },
+	
+	  _goToProfile: function () {
+	    this._closeModal();
+	    this.context.router.push("profile/" + SessionStore.currentUser().id);
+	  },
+	
+	  _logout: function () {
+	    this._closeModal();
+	    SessionApiUtil.logout();
+	  },
+	
+	  _closeModal: function () {
+	    this.props.close();
+	  },
+	
 	  componentDidMount: function () {
 	    this.listener = SessionStore.addListener(function () {
 	      this.setState({ user: SessionStore.currentUser() });
@@ -35888,18 +35926,6 @@
 	    this.otherListener.remove();
 	  },
 	
-	  _logout: function () {
-	    SessionApiUtil.logout();
-	  },
-	
-	  _browse: function () {
-	    this.context.router.push("matches");
-	  },
-	
-	  _interrogate: function () {
-	    this.context.router.push("questions");
-	  },
-	
 	  redirectIfLoggedOut: function () {
 	    if (!SessionStore.isUserLoggedIn()) {
 	      this.context.router.push("/");
@@ -35910,7 +35936,8 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'main_page_area' },
+	      'Menu:',
 	      React.createElement(
 	        'button',
 	        { className: 'main_page_button', onClick: this._browse },
@@ -35919,8 +35946,20 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
+	        { className: 'main_page_button', onClick: this._goToProfile },
+	        'Profile'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
 	        { className: 'main_page_button', onClick: this._logout },
 	        'Log out'
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'button',
+	        { className: 'main_page_button', onClick: this._closeModal },
+	        'Close'
 	      ),
 	      React.createElement('br', null)
 	    );
@@ -36692,7 +36731,7 @@
 	
 	      stuffToRender = React.createElement(
 	        'div',
-	        { className: 'main_question_area' },
+	        { className: 'question_pane group' },
 	        React.createElement(
 	          'form',
 	          { onSubmit: this._handleAnswer },
@@ -36742,7 +36781,7 @@
 	            null,
 	            'How important is this question to you?'
 	          ),
-	          'Don\'t give a shit',
+	          'Not important at all',
 	          React.createElement('input', {
 	            type: 'range',
 	            min: '0',
@@ -37287,7 +37326,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      { className: 'like_index_item', onClick: this._goToProfile },
+	      { className: 'visit_index_item', onClick: this._goToProfile },
 	      React.createElement('img', { src: this.props.person.image_url }),
 	      React.createElement(
 	        'h3',
@@ -37869,7 +37908,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'li',
-	      { className: 'sent' },
+	      { className: 'new_message_box' },
 	      React.createElement(
 	        'form',
 	        { onSubmit: this._handleSubmit },
@@ -38279,13 +38318,13 @@
 	  },
 	
 	  _shorten: function (string) {
-	    if (string.length < 20) {
+	    if (string.length < 18) {
 	      return string;
 	    }
 	
 	    var arr = string.split("");
 	
-	    return arr.slice(0, 20).join("") + "...";
+	    return arr.slice(0, 18).join("") + "...";
 	  },
 	
 	  render: function () {
@@ -38534,34 +38573,35 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
 	
-	var IncomingVisits = __webpack_require__(306);
+	var ConvosModal = __webpack_require__(322);
+	
 	var SessionStore = __webpack_require__(257);
 	
-	var QuickVisitors = React.createClass({
-	  displayName: 'QuickVisitors',
+	var QuickConvos = React.createClass({
+	  displayName: 'QuickConvos',
 	
 	
 	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
+	    router: PropTypes.object.isRequired
 	  },
 	
 	  _redirection: function (e) {
 	    e.preventDefault();
 	    this.props.close();
-	    this.context.router.push('visits');
+	    this.context.router.push('messages');
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal visitorModal' },
-	      'Recent Visitors:',
-	      React.createElement(IncomingVisits, { theList: SessionStore.currentUser().visitors }),
+	      { className: 'quickModal convosModal' },
+	      React.createElement(ConvosModal, { open: this.props.open }),
 	      React.createElement(
 	        'button',
 	        { className: 'redirect_modal', onClick: this._redirection },
-	        'See all visitors'
+	        'See all conversations'
 	      ),
 	      React.createElement(
 	        'button',
@@ -38573,53 +38613,257 @@
 	
 	});
 	
-	module.exports = QuickVisitors;
+	module.exports = QuickConvos;
 
 /***/ },
 /* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
 	
-	var IncomingLikes = __webpack_require__(301);
+	var ModalIndexItem = __webpack_require__(323);
 	var SessionStore = __webpack_require__(257);
+	var MessageStore = __webpack_require__(311);
 	
-	var QuickLikes = React.createClass({
-	  displayName: 'QuickLikes',
+	var MessageApiUtil = __webpack_require__(312);
+	
+	var ConvosModal = React.createClass({
+	  displayName: 'ConvosModal',
 	
 	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
+	  getInitialState: function () {
+	    return { convos: null };
 	  },
 	
-	  _redirection: function (e) {
-	    // e.preventDefault();
-	    this.props.close();
-	    this.context.router.push('likes');
+	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._updateConvos);
+	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  _updateConvos: function () {
+	    this.setState({ convos: MessageStore.allConvos() });
 	  },
 	
 	  render: function () {
+	
+	    var board;
+	    var person;
+	
+	    if (this.state.convos) {
+	
+	      board = this.state.convos.map(function (convo) {
+	
+	        if (SessionStore.currentUser().id === convo.user.id) {
+	          person = convo.user2;
+	        } else {
+	          person = convo.user;
+	        }
+	
+	        return React.createElement(ModalIndexItem, { open: this.props.open, key: convo.id, person: person, convo: convo });
+	      });
+	    } else {
+	
+	      return React.createElement('div', { className: 'loading_message' });
+	    }
+	
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal' },
-	      'Recent Likes:',
-	      React.createElement(IncomingLikes, { theList: SessionStore.currentUser().likers }),
+	      { className: 'message_main' },
 	      React.createElement(
-	        'button',
-	        { className: 'redirect_modal', onClick: this._redirection },
-	        'See all likes'
+	        'h1',
+	        { className: 'message_header_thing' },
+	        'Your conversations'
 	      ),
 	      React.createElement(
-	        'button',
-	        { className: 'close_modal', onClick: this.props.close },
-	        'Close'
+	        'ul',
+	        null,
+	        board
 	      )
 	    );
 	  }
 	
 	});
 	
-	module.exports = QuickLikes;
+	module.exports = ConvosModal;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var SessionStore = __webpack_require__(257);
+	var MessageStore = __webpack_require__(311);
+	
+	var VisitApiUtil = __webpack_require__(297);
+	
+	var ModalIndexItem = React.createClass({
+	  displayName: 'ModalIndexItem',
+	
+	  getInitialState: function () {
+	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._newMessage);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _goToProfile: function (event) {
+	    _registerVisit(SessionStore.currentUser(), this.props.person);
+	    this.context.router.push("profile/" + this.props.person.id);
+	  },
+	
+	  _seeMessageDetails: function () {
+	    this.context.router.push("messages/" + this.props.convo.id);
+	  },
+	
+	  _newMessage: function () {
+	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	  },
+	
+	  _shorten: function (string) {
+	    if (string.length < 18) {
+	      return string;
+	    }
+	
+	    var arr = string.split("");
+	
+	    return arr.slice(0, 18).join("") + "...";
+	  },
+	
+	  render: function () {
+	
+	    if (!this.state.latestPreview) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement('img', { onClick: this._goToProfile, src: window.peterImage }),
+	          React.createElement(
+	            'h3',
+	            null,
+	            this.props.person.username
+	          )
+	        )
+	      );
+	    }
+	
+	    var hours_ago;
+	    var milliseconds = new Date() - new Date(this.state.latestPreview.created_at);
+	    var hours = milliseconds / 3600000;
+	
+	    if (hours < 1) {
+	      hours_ago = "less than 1 hour";
+	    } else {
+	
+	      hours = Math.floor(hours);
+	
+	      if (hours === 1) {
+	        hours_ago = "1 hour";
+	      } else if (hours < 24) {
+	        hours_ago = Math.floor(hours) + " hours";
+	      } else if (hours < 48) {
+	        hours_ago = "1 day";
+	      } else {
+	        hours_ago = Math.floor(hours / 24) + " days";
+	      }
+	    }
+	
+	    var theClass = "sent_message";
+	    var theSayer = "you";
+	
+	    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
+	      theClass = "received_message";
+	      theSayer = "they";
+	    }
+	
+	    return React.createElement(
+	      'li',
+	      { className: 'like_index_item' },
+	      React.createElement('img', { onClick: this._goToProfile, src: this.props.person.image_url }),
+	      React.createElement(
+	        'span',
+	        { onClick: this._seeMessageDetails },
+	        React.createElement(
+	          'h3',
+	          null,
+	          this.props.person.username
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          theSayer,
+	          ' said: ',
+	          React.createElement(
+	            'span',
+	            { className: theClass },
+	            this._shorten(this.state.latestPreview.body)
+	          )
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'message_timestamp' },
+	          hours_ago,
+	          ' ago'
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	// WTF
+	
+	_registerVisit = function (visitor, visitee) {
+	  _visitSeekAndDestroy(visitor, visitee);
+	  VisitApiUtil.createVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	};
+	
+	_visitSeekAndDestroy = function (visitor, visitee) {
+	  for (var i = 0; i < visitor.visitees.length; i++) {
+	    if (visitor.visitees[i].id === visitee.id) {
+	      VisitApiUtil.deleteVisit({ visitor_id: visitor.id, visitee_id: visitee.id });
+	      return;
+	    }
+	  }
+	};
+	
+	module.exports = ModalIndexItem;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var QuickMessages = React.createClass({
+	  displayName: 'QuickMessages',
+	
+	
+	  render: function () {
+	    return React.createElement('div', null);
+	  }
+	
+	});
+	
+	module.exports = QuickMessages;
 
 /***/ }
 /******/ ]);

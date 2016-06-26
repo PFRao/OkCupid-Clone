@@ -134,7 +134,7 @@ var Questions = React.createClass({
     if (this.state.question) {
 
       stuffToRender = (
-        <div className="main_question_area">
+        <div className="question_pane group">
           <form onSubmit={this._handleAnswer}>
 
             <div className="part1">
@@ -170,7 +170,7 @@ var Questions = React.createClass({
           </form>
           <div className="part2">
           <h4>How important is this question to you?</h4>
-          Don't give a shit
+          Not important at all
           <input
             type ="range"
             min ="0"
