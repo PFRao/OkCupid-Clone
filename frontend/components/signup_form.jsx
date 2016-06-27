@@ -127,9 +127,11 @@ var SignupForm = React.createClass({
 
         <form className="sign_up" onSubmit={this._handleSubmit}>
 
-          <header>Join LoLCupid today! It's totally free and rather easy!</header>
+          <header>Join lolCupid today! It's totally free and rather easy!</header>
 
-          { this.fieldErrors("base") }
+          <div className="errors">
+            { this.fieldErrors("base") }
+          </div>
 
           <label>
             Username:
@@ -137,7 +139,6 @@ var SignupForm = React.createClass({
             { this.fieldErrors("username") }
           </label>
           <input type="text" onChange={this._changeUsername} value={this.state.username} />
-          <div className="help">Pick something unique and memorable. This is the name that your matches will know you by!</div>
 
           <label>
             Password:
@@ -145,7 +146,7 @@ var SignupForm = React.createClass({
             { this.fieldErrors("password") }
           </label>
           <input type="password" onChange={this._changePassword} value={this.state.password} />
-          <div className="help">Your password must be at least 6 letters long!</div>
+          <div className="shelp">Your password must be at least 6 letters long</div>
 
           <label>
             Zip Code:
@@ -159,19 +160,19 @@ var SignupForm = React.createClass({
           </label>
           <input type="date" onChange={this._changeBirthdate} />
 
-          Are you a man or a woman?
+          <div className="gender">
+            <label>
+              <input type="checkbox" value="man" checked={this.state.gender === "man"} onChange={this._changeGender} />
+              Man
+              <br />
+            </label>
 
-          <label>
-            <input type="checkbox" value="man" checked={this.state.gender === "man"} onChange={this._changeGender} />
-            Man
-            <br />
-          </label>
-
-          <label>
-            <input type="checkbox" value="woman" checked={this.state.gender === "woman"} onChange={this._changeGender} />
-            Woman
-            <br />
-          </label>
+            <label>
+              <input type="checkbox" value="woman" checked={this.state.gender === "woman"} onChange={this._changeGender} />
+              Woman
+              <br />
+            </label>
+          </div>
 
           <button type="submit">Find Love!</button>
         </form>

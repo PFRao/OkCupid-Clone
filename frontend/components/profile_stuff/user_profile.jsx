@@ -131,7 +131,7 @@ var UserProfile = React.createClass({
     var tab = this.state.whichPane;
 
     if (this.state.isThisUs) {
-      warning = (<p>You last logged in at: {last_login}</p>);
+      warning = (<p className="last_login">You last logged in at: {last_login}</p>);
       if (this.state.whichPane === "q&a") {
         thePane = (<Questions />);
       }
@@ -166,7 +166,7 @@ var UserProfile = React.createClass({
       return (
         <div className="user_profile">
           <div className="user_name_header">
-            {thePicture}
+            {thePicture} &nbsp;
             {this.state.theState.user.username}
           </div>
 

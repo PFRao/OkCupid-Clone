@@ -1,6 +1,25 @@
 .steven {
 }
 
+.errors {
+  color: #9d0d0d;
+  background: #F8F8FF;
+  border-radius: 10px;
+  width: 30%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.shelp {
+  margin-left: 550px;
+  font-size: 0.8em;
+  color: #9dbaf2;
+}
+
+.gender {
+  margin-left: 550px;
+}
+
 .sign_up {
   background: #104da1;
   width: 100%;
@@ -17,7 +36,7 @@
   text-align: center;
 }
 .sign_up > label {
-  margin-left: 20px;
+  margin-left: 550px;
   display: inline-block;
   margin-top: 30px;
   margin-bottom: 5px;
@@ -34,8 +53,8 @@
 
 .sign_up > input {
   display: block;
-  width: 78%;
-  margin-left: 20px;
+  width: 300px;
+  margin-left: 550px;
   padding: 5px 20px;
   font-size: 1em;
   border-radius: 3px;

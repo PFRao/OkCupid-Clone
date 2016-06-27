@@ -35771,9 +35771,13 @@
 	        React.createElement(
 	          'header',
 	          null,
-	          'Join LoLCupid today! It\'s totally free and rather easy!'
+	          'Join lolCupid today! It\'s totally free and rather easy!'
 	        ),
-	        this.fieldErrors("base"),
+	        React.createElement(
+	          'div',
+	          { className: 'errors' },
+	          this.fieldErrors("base")
+	        ),
 	        React.createElement(
 	          'label',
 	          null,
@@ -35786,11 +35790,6 @@
 	          this.fieldErrors("username")
 	        ),
 	        React.createElement('input', { type: 'text', onChange: this._changeUsername, value: this.state.username }),
-	        React.createElement(
-	          'div',
-	          { className: 'help' },
-	          'Pick something unique and memorable. This is the name that your matches will know you by!'
-	        ),
 	        React.createElement(
 	          'label',
 	          null,
@@ -35805,8 +35804,8 @@
 	        React.createElement('input', { type: 'password', onChange: this._changePassword, value: this.state.password }),
 	        React.createElement(
 	          'div',
-	          { className: 'help' },
-	          'Your password must be at least 6 letters long!'
+	          { className: 'shelp' },
+	          'Your password must be at least 6 letters long'
 	        ),
 	        React.createElement(
 	          'label',
@@ -35830,20 +35829,23 @@
 	          )
 	        ),
 	        React.createElement('input', { type: 'date', onChange: this._changeBirthdate }),
-	        'Are you a man or a woman?',
 	        React.createElement(
-	          'label',
-	          null,
-	          React.createElement('input', { type: 'checkbox', value: 'man', checked: this.state.gender === "man", onChange: this._changeGender }),
-	          'Man',
-	          React.createElement('br', null)
-	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          React.createElement('input', { type: 'checkbox', value: 'woman', checked: this.state.gender === "woman", onChange: this._changeGender }),
-	          'Woman',
-	          React.createElement('br', null)
+	          'div',
+	          { className: 'gender' },
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'checkbox', value: 'man', checked: this.state.gender === "man", onChange: this._changeGender }),
+	            'Man',
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            React.createElement('input', { type: 'checkbox', value: 'woman', checked: this.state.gender === "woman", onChange: this._changeGender }),
+	            'Woman',
+	            React.createElement('br', null)
+	          )
 	        ),
 	        React.createElement(
 	          'button',
@@ -35907,7 +35909,7 @@
 	  },
 	
 	  _closeModal: function () {
-	    this.props.close();
+	    this.props.close;
 	  },
 	
 	  componentDidMount: function () {
@@ -37565,7 +37567,7 @@
 	    if (this.state.isThisUs) {
 	      warning = React.createElement(
 	        'p',
-	        null,
+	        { className: 'last_login' },
 	        'You last logged in at: ',
 	        last_login
 	      );
@@ -37619,6 +37621,7 @@
 	          'div',
 	          { className: 'user_name_header' },
 	          thePicture,
+	          '  ',
 	          this.state.theState.user.username
 	        ),
 	        React.createElement('br', null),
