@@ -305,7 +305,7 @@
 	      // `replace` is like a redirect. It replaces the current entry
 	      // into the history (and the hashFragment), so the Router is forced
 	      // to re-route.
-	      replace('/main');
+	      replace('/matches');
 	    }
 	
 	    // The `asyncDoneCallback` is the React Router's way of telling us
