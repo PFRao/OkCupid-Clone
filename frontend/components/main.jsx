@@ -32,7 +32,7 @@ var Main = React.createClass({
   },
 
   _closeModal: function () {
-    this.props.close;
+    this.props.close();
   },
 
   componentDidMount: function () {

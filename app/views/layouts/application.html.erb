@@ -4,6 +4,8 @@
   <title>Ok, Peter!</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
+
+  <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
   <script type="text/javascript" src="http://widget.cloudinary.com/global/all.js"></script>
   <script type="text/javascript">
     window.logo = "<%= asset_url "logo.png" %>"
@@ -13,6 +15,7 @@
       upload_preset: "uych3dyq"
     }
   </script>
+
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
   <link rel="icon"
       type="image/png"

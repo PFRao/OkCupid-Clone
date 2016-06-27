@@ -88,7 +88,7 @@ var SignupForm = React.createClass({
 
   redirectIfLoggedIn: function () {
     if (SessionStore.isUserLoggedIn()) {
-      this.context.router.push("main");
+      this.context.router.push("matches");
     }
   },
 
@@ -105,7 +105,7 @@ var SignupForm = React.createClass({
 
   _goToMainPage: function (event) {
     hashHistory.push({
-      pathname: "main"
+      pathname: "matches"
     });
   },
 

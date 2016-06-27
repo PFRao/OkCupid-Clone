@@ -1,4 +1,5 @@
-.steven {
+#steven {
+  background: #104da1;
 }
 
 .errors {
@@ -18,6 +19,10 @@
 
 .gender {
   margin-left: 550px;
+}
+
+.top_stuff {
+  background: #104da1;
 }
 
 .sign_up {

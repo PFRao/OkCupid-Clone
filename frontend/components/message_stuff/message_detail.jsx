@@ -16,6 +16,15 @@ var MessageDetail = React.createClass({
   componentDidMount: function () {
     this.listener = MessageStore.addListener(this._getToTheConvo);
     MessageApiUtil.getOneConvo(this.props.params.convo_id);
+
+    var pusher = new Pusher('8912b275855afe98c4d3', {
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('convo_' + this.props.params.convo_id);
+    channel.bind('message_sent', function(data) {
+      MessageApiUtil.getOneConvo(this.props.params.convo_id);
+    }.bind(this));
   },
 
   componentWillUnmount: function () {

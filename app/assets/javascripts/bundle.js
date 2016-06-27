@@ -35705,7 +35705,7 @@
 	
 	  redirectIfLoggedIn: function () {
 	    if (SessionStore.isUserLoggedIn()) {
-	      this.context.router.push("main");
+	      this.context.router.push("matches");
 	    }
 	  },
 	
@@ -35732,7 +35732,7 @@
 	
 	  _goToMainPage: function (event) {
 	    hashHistory.push({
-	      pathname: "main"
+	      pathname: "matches"
 	    });
 	  },
 	
@@ -35909,7 +35909,7 @@
 	  },
 	
 	  _closeModal: function () {
-	    this.props.close;
+	    this.props.close();
 	  },
 	
 	  componentDidMount: function () {
@@ -36729,7 +36729,19 @@
 	
 	    var stuffToRender;
 	
+	    var importance = "Absolute dealbreaker";
+	
 	    if (this.state.question) {
+	
+	      if (this.state.theWeight === 0) {
+	        importance = "Not important at all";
+	      } else if (this.state.theWeight < 4) {
+	        importance = "A little bit important";
+	      } else if (this.state.theWeight < 7) {
+	        importance = "Moderately important";
+	      } else if (this.state.theWeight < 10) {
+	        importance = "Very important";
+	      }
 	
 	      stuffToRender = React.createElement(
 	        'div',
@@ -36783,7 +36795,6 @@
 	            null,
 	            'How important is this question to you?'
 	          ),
-	          'Not important at all',
 	          React.createElement('input', {
 	            type: 'range',
 	            min: '0',
@@ -36791,7 +36802,8 @@
 	            step: '.1',
 	            value: this.state.theWeight,
 	            onChange: this._changeWeight }),
-	          'Absolute dealbreaker'
+	          '  ',
+	          importance
 	        ),
 	        React.createElement('br', null)
 	      );
@@ -38455,6 +38467,15 @@
 	  componentDidMount: function () {
 	    this.listener = MessageStore.addListener(this._getToTheConvo);
 	    MessageApiUtil.getOneConvo(this.props.params.convo_id);
+	
+	    var pusher = new Pusher('8912b275855afe98c4d3', {
+	      encrypted: true
+	    });
+	
+	    var channel = pusher.subscribe('convo_' + this.props.params.convo_id);
+	    channel.bind('message_sent', function (data) {
+	      MessageApiUtil.getOneConvo(this.props.params.convo_id);
+	    }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {

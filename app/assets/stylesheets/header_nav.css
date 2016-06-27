@@ -1,5 +1,6 @@
 .header {
   background: #104da1;
+  /*background: #909090;*/
   color: #F8F8FF;
   border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
@@ -15,11 +16,13 @@
 }
 
 .header-logo {
+  border-radius: 20px;
+  margin: 3px;
   float: left;
 }
 
 .header-logo:hover {
-  background: blue;
+  background: #e9ebee;
 }
 
 .header-list {
@@ -33,7 +36,7 @@
 }
 
 .header-list > li:hover {
-  background: blue;
+  border: 1px solid #F8F8FF;
 }
 
 .yer_face {

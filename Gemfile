@@ -36,6 +36,8 @@ gem 'omniauth-facebook'
 
 gem 'uuidtools'
 
+gem 'pusher'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

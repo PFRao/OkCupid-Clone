@@ -1,9 +1,12 @@
+require 'pusher'
+
 class Api::MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
 
     if @message.save
+      Pusher.trigger('convo_' + @message.convo_id.to_s, 'message_sent', {})
       render "api/messages/show"
     else
       render(

@@ -131,7 +131,19 @@ var Questions = React.createClass({
 
     var stuffToRender;
 
+    var importance = "Absolute dealbreaker";
+
     if (this.state.question) {
+
+      if(this.state.theWeight === 0) {
+        importance = "Not important at all";
+      } else if (this.state.theWeight < 4) {
+        importance = "A little bit important";
+      } else if (this.state.theWeight < 7) {
+        importance = "Moderately important";
+      } else if (this.state.theWeight < 10) {
+        importance = "Very important";
+      }
 
       stuffToRender = (
         <div className="question_pane group">
@@ -170,7 +182,6 @@ var Questions = React.createClass({
           </form>
           <div className="part2">
           <h4>How important is this question to you?</h4>
-          Not important at all
           <input
             type ="range"
             min ="0"
@@ -178,7 +189,7 @@ var Questions = React.createClass({
             step =".1"
             value ={this.state.theWeight}
             onChange={this._changeWeight} />
-          Absolute dealbreaker
+            &nbsp; {importance}
           </div>
           <br />
         </div>
