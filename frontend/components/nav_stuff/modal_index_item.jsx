@@ -29,7 +29,7 @@ var ModalIndexItem = React.createClass({
   },
 
   _seeMessageDetails: function () {
-    this.context.router.push("messages/" + this.props.convo.id);
+    this.props.open();
   },
 
   _newMessage: function () {
@@ -88,7 +88,7 @@ var ModalIndexItem = React.createClass({
     }
 
     return (
-      <li className="like_index_item">
+      <li className="modal_index_item">
         <img onClick={this._goToProfile} src={this.props.person.image_url} />
         <span onClick={this._seeMessageDetails}>
           <h3>{this.props.person.username}</h3>

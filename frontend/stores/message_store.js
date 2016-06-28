@@ -45,13 +45,22 @@ MessageStore.__onDispatch = function (payload) {
       MessageApiUtil.getOneConvo(payload.convo_id);
       break;
     case "CONVERSATIONS":
-      _convos = payload.convos;
+      _convos = (payload.convos).sort(_compare);
       MessageStore.__emitChange();
       break;
     case "CONVERSATION":
       _convo = payload.convo;
       MessageStore.__emitChange();
       break;
+  }
+};
+
+var _compare = function (a, b) {
+  // debugger
+  if (a.messages[a.messages.length - 1].updated_at > b.messages[b.messages.length - 1].updated_at) {
+    return -1;
+  } else {
+    return 1;
   }
 };
 

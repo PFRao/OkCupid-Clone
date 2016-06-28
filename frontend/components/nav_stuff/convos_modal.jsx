@@ -45,7 +45,7 @@ var ConvosModal = React.createClass({
           <ModalIndexItem open={this.props.open} key={convo.id} person={person} convo={convo}/>
         );
 
-      });
+      }.bind(this));
 
     } else {
 
@@ -54,8 +54,8 @@ var ConvosModal = React.createClass({
     }
 
     return (
-      <div className="message_main">
-        <h1 className="message_header_thing">Your conversations</h1>
+      <div className="message_modal_main">
+        <h1 className="message_header_thing">Inbox</h1>
         <ul>
           {board}
         </ul>

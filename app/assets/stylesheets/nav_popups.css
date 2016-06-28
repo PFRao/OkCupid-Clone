@@ -1,3 +1,53 @@
+.message_modal_main {
+  color: #2F4F4F;
+  margin: 5px auto;
+  border-radius: 5px;
+  background: #f3f5f9;
+  padding: 20px 20px;
+  /*width: px;*/
+}
+
+.message_modal_main > ul {
+  border-top: 2px solid #dadce0;
+}
+
+.modal_index_item {
+  text-decoration: none;
+  color: #2F4F4F;
+  display: block;
+  width: 350px;
+  height: 100px;
+  border-bottom: 2px solid #dadce0;
+  margin: 5px 0 5px 0;
+}
+
+.modal_index_item:hover {
+  cursor: pointer;
+}
+
+.modal_index_item > img {
+  display: block;
+  float:left;
+  height:80px;
+  width: 80px;
+  border-radius: 40px;
+}
+
+.modal_index_item > span {
+  position: relative;
+  left: 10px;
+}
+
+.modal_index_item > h3 {
+  position: relative;
+  left: 10px;
+}
+
+.modal_index_item > p {
+  position: relative;
+  left: 10px;
+}
+
 .redirect_modal {
   border: 1px solid black;
 }
@@ -13,8 +63,9 @@
   background: #f3f5f9;
   padding: 20px 50px;
   width: 400px;
+  box-shadow: 2px 5px 5px #ccc;
 }
 
 .convosModal {
-  
+  padding: 10px;
 }

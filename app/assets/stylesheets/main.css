@@ -9,6 +9,7 @@
   background: #f3f5f9;
   padding: 20px 50px;
   width: 200px;
+  box-shadow: 0 5px 5px #ccc;
 }
 
 .main_page_button {
@@ -29,10 +30,6 @@
   cursor: pointer;
   transform: translate(-50%, 0);
   transition: all 0.15s ease-in-out;
-}
-
-.main_page_button:hover {
-  border: 1px solid #ADD8E6;
 }
 
 .main_page_button:active {

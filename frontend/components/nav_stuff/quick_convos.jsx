@@ -21,7 +21,7 @@ var QuickConvos = React.createClass({
     return (
       <div className="quickModal convosModal">
         <ConvosModal open={this.props.open} />
-        <button className="redirect_modal" onClick={this._redirection}>See all conversations</button>
+        <button className="redirect_modal" onClick={this._redirection}>See all</button>
         <button className="close_modal" onClick={this.props.close}>Close</button>
       </div>
     );

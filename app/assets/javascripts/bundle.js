@@ -112,8 +112,8 @@
 	  },
 	
 	  _openMessages: function (e) {
-	    e.preventDefault();
-	    this.closeConvos();
+	    // e.preventDefault();
+	    this._closeConvos();
 	    this.setState({ messagesOpen: true });
 	  },
 	
@@ -155,10 +155,10 @@
 	        )
 	      ), React.createElement(
 	        'li',
-	        { key: "messages" },
+	        { key: "messages", onClick: this._openConvos },
 	        React.createElement(
 	          'a',
-	          { href: '#/messages' },
+	          null,
 	          'Messages'
 	        )
 	      ), React.createElement(
@@ -167,10 +167,14 @@
 	        React.createElement('img', { src: SessionStore.currentUser().image_url })
 	      )];
 	    } else {
-	      React.createElement(
+	      candyCorn = React.createElement(
 	        'li',
 	        null,
-	        'Please log in or sign up!'
+	        React.createElement(
+	          'a',
+	          { href: '#' },
+	          'Please log in or sign up!'
+	        )
 	      );
 	    }
 	
@@ -37747,13 +37751,22 @@
 	      MessageApiUtil.getOneConvo(payload.convo_id);
 	      break;
 	    case "CONVERSATIONS":
-	      _convos = payload.convos;
+	      _convos = payload.convos.sort(_compare);
 	      MessageStore.__emitChange();
 	      break;
 	    case "CONVERSATION":
 	      _convo = payload.convo;
 	      MessageStore.__emitChange();
 	      break;
+	  }
+	};
+	
+	var _compare = function (a, b) {
+	  // debugger
+	  if (a.messages[a.messages.length - 1].updated_at > b.messages[b.messages.length - 1].updated_at) {
+	    return -1;
+	  } else {
+	    return 1;
 	  }
 	};
 	
@@ -38625,7 +38638,7 @@
 	      React.createElement(
 	        'button',
 	        { className: 'redirect_modal', onClick: this._redirection },
-	        'See all conversations'
+	        'See all'
 	      ),
 	      React.createElement(
 	        'button',
@@ -38689,7 +38702,7 @@
 	        }
 	
 	        return React.createElement(ModalIndexItem, { open: this.props.open, key: convo.id, person: person, convo: convo });
-	      });
+	      }.bind(this));
 	    } else {
 	
 	      return React.createElement('div', { className: 'loading_message' });
@@ -38697,11 +38710,11 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'message_main' },
+	      { className: 'message_modal_main' },
 	      React.createElement(
 	        'h1',
 	        { className: 'message_header_thing' },
-	        'Your conversations'
+	        'Inbox'
 	      ),
 	      React.createElement(
 	        'ul',
@@ -38752,7 +38765,7 @@
 	  },
 	
 	  _seeMessageDetails: function () {
-	    this.context.router.push("messages/" + this.props.convo.id);
+	    this.props.open();
 	  },
 	
 	  _newMessage: function () {
@@ -38819,7 +38832,7 @@
 	
 	    return React.createElement(
 	      'li',
-	      { className: 'like_index_item' },
+	      { className: 'modal_index_item' },
 	      React.createElement('img', { onClick: this._goToProfile, src: this.props.person.image_url }),
 	      React.createElement(
 	        'span',
@@ -38878,11 +38891,15 @@
 	var PropTypes = React.PropTypes;
 	
 	var QuickMessages = React.createClass({
-	  displayName: 'QuickMessages',
+	  displayName: "QuickMessages",
 	
 	
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      "div",
+	      { className: "message_box" },
+	      "YOU DID IT!"
+	    );
 	  }
 	
 	});

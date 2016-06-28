@@ -64,8 +64,8 @@ var App = React.createClass({
   },
 
   _openMessages: function (e) {
-    e.preventDefault();
-    this.closeConvos();
+    // e.preventDefault();
+    this._closeConvos();
     this.setState({ messagesOpen: true });
   },
 
@@ -92,11 +92,11 @@ var App = React.createClass({
       candyCorn = [
         <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
         <li key={"likes"}><a href="#/likes">Likes</a></li>,
-        <li key={"messages"}><a href="#/messages">Messages</a></li>,
+        <li key={"messages"} onClick={this._openConvos}><a>Messages</a></li>,
         <li className="yer_face" onClick={this._openMenu} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
       ];
     } else {
-      <li>Please log in or sign up!</li>;
+      candyCorn = (<li><a href="#">Please log in or sign up!</a></li>);
     }
 
     return (

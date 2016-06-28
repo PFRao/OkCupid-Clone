@@ -5,7 +5,7 @@ var QuickMessages = React.createClass({
 
   render: function() {
     return (
-      <div />
+      <div className="message_box">YOU DID IT!</div>
     );
   }
 
