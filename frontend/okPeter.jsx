@@ -22,6 +22,7 @@ var MessageDetail = require('./components/message_stuff/message_detail');
 //Modals
 var QuickConvos = require('./components/nav_stuff/quick_convos');
 var QuickMessages = require('./components/nav_stuff/quick_messages');
+var ModalStyle = require('./components/modal/modal_style');
 //Stores
 var SessionStore = require('./stores/session_store');
 //Other Stuff
@@ -34,7 +35,8 @@ var App = React.createClass({
     return {
       convosOpen: false,
       messagesOpen: false,
-      menuOpen: false
+      menuOpen: false,
+      currentConvo: null
     }
   },
 
@@ -65,7 +67,8 @@ var App = React.createClass({
 
   _openMessages: function (e) {
     // e.preventDefault();
-    this._closeConvos();
+    this._closeMessages();
+    this.setState({ currentConvo: e });
     this.setState({ messagesOpen: true });
   },
 
@@ -121,7 +124,8 @@ var App = React.createClass({
           ref="mymodal"
           isOpen={this.state.convosOpen}
           onAfterOpen={this.handleOnAfterOpenModal}
-          onRequestClose={this._closeConvos}>
+          onRequestClose={this._closeConvos}
+          style={ModalStyle}>
 
           <QuickConvos open={this._openMessages} close={this._closeConvos} />
 
@@ -132,9 +136,10 @@ var App = React.createClass({
           ref="mymodal"
           isOpen={this.state.messagesOpen}
           onAfterOpen={this.handleOnAfterOpenModal}
-          onRequestClose={this._closeMessages}>
+          onRequestClose={this._closeMessages}
+          style={ModalStyle}>
 
-          <QuickMessages close={this._closeMessages} />
+          <QuickMessages convo={this.state.currentConvo} close={this._closeMessages} />
 
         </Modal>
 

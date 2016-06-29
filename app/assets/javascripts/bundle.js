@@ -68,6 +68,7 @@
 	//Modals
 	var QuickConvos = __webpack_require__(321);
 	var QuickMessages = __webpack_require__(324);
+	var ModalStyle = __webpack_require__(325);
 	//Stores
 	var SessionStore = __webpack_require__(257);
 	//Other Stuff
@@ -82,7 +83,8 @@
 	    return {
 	      convosOpen: false,
 	      messagesOpen: false,
-	      menuOpen: false
+	      menuOpen: false,
+	      currentConvo: null
 	    };
 	  },
 	
@@ -113,7 +115,8 @@
 	
 	  _openMessages: function (e) {
 	    // e.preventDefault();
-	    this._closeConvos();
+	    this._closeMessages();
+	    this.setState({ currentConvo: e });
 	    this.setState({ messagesOpen: true });
 	  },
 	
@@ -211,7 +214,8 @@
 	          ref: 'mymodal',
 	          isOpen: this.state.convosOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
-	          onRequestClose: this._closeConvos },
+	          onRequestClose: this._closeConvos,
+	          style: ModalStyle },
 	        React.createElement(QuickConvos, { open: this._openMessages, close: this._closeConvos })
 	      ),
 	      React.createElement(
@@ -221,8 +225,9 @@
 	          ref: 'mymodal',
 	          isOpen: this.state.messagesOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
-	          onRequestClose: this._closeMessages },
-	        React.createElement(QuickMessages, { close: this._closeMessages })
+	          onRequestClose: this._closeMessages,
+	          style: ModalStyle },
+	        React.createElement(QuickMessages, { convo: this.state.currentConvo, close: this._closeMessages })
 	      ),
 	      React.createElement(
 	        Modal,
@@ -38481,17 +38486,18 @@
 	    this.listener = MessageStore.addListener(this._getToTheConvo);
 	    MessageApiUtil.getOneConvo(this.props.params.convo_id);
 	
-	    var pusher = new Pusher('8912b275855afe98c4d3', {
+	    this.pusher = new Pusher('8912b275855afe98c4d3', {
 	      encrypted: true
 	    });
 	
-	    var channel = pusher.subscribe('convo_' + this.props.params.convo_id);
+	    var channel = this.pusher.subscribe('convo_' + this.props.params.convo_id);
 	    channel.bind('message_sent', function (data) {
 	      MessageApiUtil.getOneConvo(this.props.params.convo_id);
 	    }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {
+	    this.pusher.unsubscribe('convo_' + this.props.params.convo_id);
 	    this.listener.remove();
 	  },
 	
@@ -38765,7 +38771,7 @@
 	  },
 	
 	  _seeMessageDetails: function () {
-	    this.props.open();
+	    this.props.open(this.props.convo);
 	  },
 	
 	  _newMessage: function () {
@@ -38890,21 +38896,158 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	
-	var QuickMessages = React.createClass({
-	  displayName: "QuickMessages",
+	var SessionStore = __webpack_require__(257);
+	var MessageStore = __webpack_require__(311);
 	
+	var MessageApiUtil = __webpack_require__(312);
+	
+	var MessageForm = __webpack_require__(314);
+	
+	var QuickMessages = React.createClass({
+	  displayName: 'QuickMessages',
+	
+	
+	  getInitialState: function () {
+	    return { theConvo: this.props.convo };
+	  },
+	
+	  componentDidMount: function () {
+	    // this.listener = MessageStore.addListener(this._getToTheConvo);
+	    MessageApiUtil.getOneConvo(this.state.theConvo.id);
+	
+	    this.pusher = new Pusher('8912b275855afe98c4d3', {
+	      encrypted: true
+	    });
+	
+	    var channel = this.pusher.subscribe('convo_' + this.state.theConvo.id);
+	    channel.bind('message_sent', function (data) {
+	      MessageApiUtil.getOneConvo(this.state.theConvo.id);
+	    }.bind(this));
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.pusher.unsubscribe('convo_' + this.state.theConvo.id);
+	    // this.listener.remove();
+	  },
 	
 	  render: function () {
+	
+	    if (!this.state.theConvo) {
+	      return React.createElement(
+	        'p',
+	        { className: 'loading_message' },
+	        'Please wait, your content is loading...'
+	      );
+	    }
+	
+	    var us;
+	    var them;
+	
+	    if (this.state.theConvo.user.id === SessionStore.currentUser().id) {
+	      us = this.state.theConvo.user;
+	      them = this.state.theConvo.user2;
+	    } else {
+	      us = this.state.theConvo.user2;
+	      them = this.state.theConvo.user;
+	    }
+	
+	    var classiness;
+	    var imgURL;
+	    var imgClass;
+	
+	    var hours_ago;
+	    var milliseconds;
+	    var hours;
+	
+	    var messages = this.state.theConvo.messages.map(function (message, index) {
+	
+	      imgClass = "message_user_thumbnail";
+	
+	      milliseconds = new Date() - new Date(message.created_at);
+	      hours = milliseconds / 3600000;
+	
+	      if (hours < 1) {
+	
+	        var mintues = hours * 60;
+	
+	        hours_ago = Math.floor(mintues) + " minute(s)";
+	      } else {
+	
+	        hours = Math.floor(hours);
+	
+	        if (hours === 1) {
+	          hours_ago = "an hour";
+	        } else if (hours < 24) {
+	          hours_ago = Math.floor(hours) + " hours";
+	        } else if (hours < 48) {
+	          hours_ago = "a day";
+	        } else {
+	          hours_ago = Math.floor(hours / 24) + " days";
+	        }
+	      }
+	
+	      if (message.receiver_id === SessionStore.currentUser().id) {
+	        classiness = "received";
+	        imgURL = them.image_url;
+	        imgClass += " their_picture";
+	      } else {
+	        classiness = "sent";
+	        imgURL = SessionStore.currentUser().image_url;
+	        imgClass += " my_picture";
+	      }
+	
+	      return React.createElement(
+	        'li',
+	        { className: classiness, key: message.id },
+	        message.body,
+	        React.createElement('br', null),
+	        React.createElement('br', null),
+	        React.createElement('img', { className: imgClass, src: imgURL }),
+	        React.createElement(
+	          'p',
+	          { className: 'message_timestamp' },
+	          classiness,
+	          ' ',
+	          hours_ago,
+	          ' ago'
+	        )
+	      );
+	    }.bind(this));
+	
 	    return React.createElement(
-	      "div",
-	      { className: "message_box" },
-	      "YOU DID IT!"
+	      'div',
+	      { className: 'message_detail_list' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Conversation with ',
+	        them.username
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        messages,
+	        React.createElement(MessageForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	      )
 	    );
 	  }
 	
 	});
 	
 	module.exports = QuickMessages;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  overlay: {
+	    background: 'transparent',
+	    height: '0px',
+	    width: '0px'
+	  },
+	  content: {}
+	};
 
 /***/ }
 /******/ ]);

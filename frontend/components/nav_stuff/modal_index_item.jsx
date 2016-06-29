@@ -29,7 +29,7 @@ var ModalIndexItem = React.createClass({
   },
 
   _seeMessageDetails: function () {
-    this.props.open();
+    this.props.open(this.props.convo);
   },
 
   _newMessage: function () {

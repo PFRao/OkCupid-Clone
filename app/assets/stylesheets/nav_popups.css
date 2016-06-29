@@ -67,5 +67,12 @@
 }
 
 .convosModal {
+  position: absolute;
+  top: 50px;
+  left: 680px;
   padding: 10px;
+}
+
+.messagesModal {
+  
 }
