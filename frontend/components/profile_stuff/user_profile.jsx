@@ -35,7 +35,9 @@ var theMonths = {
 Modal.setAppElement("#content");
 
 var UserProfile = React.createClass({
+
   getInitialState: function () {
+    UserApiUtil.fetchOneUser(this.props.params.user_id);
     return {
       theState: null,
       isThisUs: (SessionStore.currentUser().id === parseInt(this.props.params.user_id)),

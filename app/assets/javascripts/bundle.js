@@ -37487,7 +37487,9 @@
 	var UserProfile = React.createClass({
 	  displayName: 'UserProfile',
 	
+	
 	  getInitialState: function () {
+	    UserApiUtil.fetchOneUser(this.props.params.user_id);
 	    return {
 	      theState: null,
 	      isThisUs: SessionStore.currentUser().id === parseInt(this.props.params.user_id),
@@ -38914,6 +38916,8 @@
 	var ModalForm = __webpack_require__(326);
 	
 	var moving = false;
+	var theLeft;
+	var theTop;
 	
 	var QuickMessages = React.createClass({
 	  displayName: 'QuickMessages',
@@ -38936,7 +38940,9 @@
 	      MessageApiUtil.getOneConvo(this.state.theConvo.id);
 	    }.bind(this));
 	
-	    $("#click_and_drag").mousedown(function () {
+	    $("#click_and_drag").mousedown(function (event) {
+	      theLeft = event.offsetX;
+	      theTop = event.offsetY;
 	      moving = true;
 	    });
 	
@@ -38946,16 +38952,16 @@
 	
 	    $("body").mousemove(function (event) {
 	
-	      console.log(event);
-	
 	      if (moving) {
-	        var drag = document.getElementById('click_and_drag');
+	        var drag = document.getElementById('draggable');
 	
-	        var x = event.clientX;
-	        var y = event.clientY;
+	        console.log();
 	
-	        drag.style.left = x - 10 + "px";
-	        drag.style.top = y - 10 + "px";
+	        var x = event.clientX - theLeft;
+	        var y = event.clientY - theTop;
+	
+	        drag.style.left = x + "px";
+	        drag.style.top = y - 20 + "px";
 	      }
 	    });
 	  },
@@ -39038,7 +39044,8 @@
 	
 	    return React.createElement(
 	      'div',
-	      { id: 'click_and_drag', className: 'quickModal modalModalModal' },
+	      { id: 'draggable', className: 'quickModal modalModalModal' },
+	      React.createElement('div', { id: 'click_and_drag' }),
 	      React.createElement(
 	        'span',
 	        { className: 'message_modal_header' },

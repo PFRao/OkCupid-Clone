@@ -9,6 +9,8 @@ var MessageApiUtil = require('../../util/message_api_util');
 var ModalForm = require('./modal_form');
 
 var moving = false;
+var theLeft;
+var theTop;
 
 var QuickMessages = React.createClass({
 
@@ -29,7 +31,9 @@ var QuickMessages = React.createClass({
       MessageApiUtil.getOneConvo(this.state.theConvo.id);
     }.bind(this));
 
-    $("#click_and_drag").mousedown(function () {
+    $("#click_and_drag").mousedown(function (event) {
+      theLeft = event.offsetX;
+      theTop = event.offsetY;
       moving = true;
     });
 
@@ -39,16 +43,16 @@ var QuickMessages = React.createClass({
 
     $("body").mousemove(function (event) {
 
-      console.log(event);
-
       if (moving) {
-        var drag = document.getElementById('click_and_drag');
+        var drag = document.getElementById('draggable');
 
-        var x = event.clientX;
-        var y = event.clientY;
+        console.log();
 
-        drag.style.left = (x - 10) + "px";
-        drag.style.top = (y - 10) + "px";
+        var x = event.clientX - theLeft;
+        var y = event.clientY - theTop;
+
+        drag.style.left = (x) + "px";
+        drag.style.top = (y - 20) + "px";
       }
 
     });
@@ -130,7 +134,8 @@ var QuickMessages = React.createClass({
     }.bind(this));
 
     return (
-    <div id="click_and_drag" className="quickModal modalModalModal">
+    <div id="draggable" className="quickModal modalModalModal">
+      <div id="click_and_drag" />
       <span className="message_modal_header">
         <button className="xbox" onClick={this.props.close}>X</button>
         <img className='message_box_img' src={them.image_url} />
