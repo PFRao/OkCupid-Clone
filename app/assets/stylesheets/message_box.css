@@ -8,12 +8,18 @@
   width: 300px;
 }
 
+.modalModalModal {
+  position: absolute;
+  top: 475px;
+  left: 750px;
+}
+
 .messagesModal {
   margin: 20px auto;
   border-radius: 5px;
   background: #f3f5f9;
   padding: 10px 10px;
-  height: 250px;
+  height: 100px;
   width: 300px;
   overflow-y: scroll;
 }

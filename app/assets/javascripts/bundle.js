@@ -39008,7 +39008,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal' },
+	      { className: 'quickModal modalModalModal' },
 	      React.createElement(
 	        'span',
 	        { className: 'message_modal_header' },

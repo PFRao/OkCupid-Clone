@@ -104,7 +104,7 @@ var QuickMessages = React.createClass({
     }.bind(this));
 
     return (
-    <div className="quickModal">
+    <div className="quickModal modalModalModal">
       <span className="message_modal_header">
         <button className="xbox" onClick={this.props.close}>X</button>
         <img className='message_box_img' src={them.image_url} />
