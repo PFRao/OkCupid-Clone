@@ -35761,15 +35761,15 @@
 	        { className: 'top_stuff group' },
 	        React.createElement(
 	          'button',
-	          { className: 'guest_button', onClick: this._guest_login },
+	          { id: 'guesty', className: 'guest_button', onClick: this._guest_login },
 	          'Guest Login'
 	        ),
 	        React.createElement(
 	          'span',
-	          { className: 'sign_in_button' },
+	          { id: 'not_guesty', className: 'sign_in_button' },
 	          React.createElement(
 	            'button',
-	            { className: 'guest_button sign_in_button', onClick: this._openModal },
+	            { className: 'si_button sign_in_button', onClick: this._openModal },
 	            'Sign in!'
 	          ),
 	          React.createElement(
@@ -35920,7 +35920,7 @@
 	  _logout: function () {
 	    this._closeModal();
 	    SessionApiUtil.logout();
-	    this.context.router.push("/");
+	    window.location.reload();
 	  },
 	
 	  _closeModal: function () {

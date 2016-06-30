@@ -1,5 +1,5 @@
 #steven {
-  background: #104da1;
+  background: #3b5998;
 }
 
 .errors {
@@ -12,28 +12,28 @@
 }
 
 .shelp {
-  margin-left: 550px;
+  margin-left: 30%;
   font-size: 0.8em;
   color: #9dbaf2;
 }
 
 .gender {
-  margin-left: 550px;
+  margin-left: 30%;
 }
 
 .top_stuff {
-  background: #104da1;
+  background: #3b5998;
 }
 
 .sign_up {
-  background: #104da1;
+  background: #3b5998;
   width: 100%;
   font-family: lato;
   position: relative;
   color: #FFF;
 }
 .sign_up > header {
-  background: #104da1;
+  background: #3b5998;
   padding: 30px 20px;
   color: #F8F8FF;
   font-size: 1.2em;
@@ -41,7 +41,7 @@
   text-align: center;
 }
 .sign_up > label {
-  margin-left: 550px;
+  margin-left: 30%;
   display: inline-block;
   margin-top: 30px;
   margin-bottom: 5px;
@@ -58,8 +58,10 @@
 
 .sign_up > input {
   display: block;
-  width: 300px;
-  margin-left: 550px;
+  width: 40%;
+  margin-left: 30%;
+  /*width: 300px;
+  margin-left: 550px;*/
   padding: 5px 20px;
   font-size: 1em;
   border-radius: 3px;
@@ -109,6 +111,23 @@
   border: 2px solid #FF0080;
 }
 
+.si_button {
+  background-color: transparent;
+  border: 2px solid #ADD8E6;
+  color: #ADD8E6;
+  padding: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.si_button:hover {
+  border: 2px solid #29d58f;
+}
+
+.si_button:active {
+  border: 2px solid #FF0080;
+}
+
 .top_part {
   display: block;
 }
@@ -123,6 +142,10 @@
   margin-top: 22px;
 }
 
-/*.charles {
-  background-color: transparent;
-}*/
+#guesty {
+  margin-left: 30%
+}
+
+#not_guesty {
+  margin-right: 27.5%;
+}

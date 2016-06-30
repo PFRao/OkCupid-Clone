@@ -118,9 +118,9 @@ var SignupForm = React.createClass({
 
 
         <div className="top_stuff group">
-          <button className="guest_button" onClick={this._guest_login}>Guest Login</button>
-          <span className="sign_in_button">
-            <button className="guest_button sign_in_button" onClick={this._openModal}>Sign in!</button>
+          <button id="guesty" className="guest_button" onClick={this._guest_login}>Guest Login</button>
+          <span id="not_guesty" className="sign_in_button">
+            <button className="si_button sign_in_button" onClick={this._openModal}>Sign in!</button>
             <span className="sign_text">What's that? You're already a member?</span>
           </span>
         </div>
