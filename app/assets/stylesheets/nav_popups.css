@@ -61,7 +61,7 @@
 
 .quickModal {
   color: #2F4F4F;
-  margin: 20px auto;
+  margin: 10px;
   border-radius: 5px;
   background: #f3f5f9;
   padding: 10px 10px;
@@ -71,7 +71,5 @@
 
 .convosModal {
   position: absolute;
-  top: 50px;
-  left: 680px;
   padding: 10px;
 }

@@ -83,3 +83,9 @@
   font-size: 12px;
   font-style: italic;
 }
+
+.profile_message {
+  position: relative;
+  float: right;
+  margin-left: 800px;
+}

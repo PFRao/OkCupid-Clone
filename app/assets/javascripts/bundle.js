@@ -37630,7 +37630,11 @@
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.handleOnAfterOpenModal,
 	          onRequestClose: this._closeModal },
-	        React.createElement(MessageForm, { receiver: this.state.theState.user, sender: SessionStore.currentUser() })
+	        React.createElement(
+	          'ul',
+	          { className: 'profile_message' },
+	          React.createElement(MessageForm, { receiver: this.state.theState.user, sender: SessionStore.currentUser() })
+	        )
 	      );
 	      messageButton = React.createElement(
 	        'button',
@@ -39034,7 +39038,11 @@
 	          messages
 	        )
 	      ),
-	      React.createElement(ModalForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(ModalForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
+	      )
 	    );
 	  }
 	
@@ -39052,7 +39060,9 @@
 	    height: '0px',
 	    width: '0px'
 	  },
-	  content: {}
+	  content: {
+	    position: 'relative'
+	  }
 	};
 
 /***/ },

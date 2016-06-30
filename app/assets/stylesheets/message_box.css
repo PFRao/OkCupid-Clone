@@ -10,8 +10,7 @@
 
 .modalModalModal {
   position: absolute;
-  top: 475px;
-  left: 750px;
+  left: 400px;
 }
 
 .messagesModal {
@@ -76,10 +75,6 @@
   margin: 5px 10px 5px 0;
   padding: 5px 10px 5px 10px;
   border-radius: 20px;
-  /*position: relative;
-  background: #d3d3d3;
-  float: left;
-  color: #808080;*/
 }
 
 .sent_modal {
@@ -89,10 +84,6 @@
   text-align: right;
   padding: 5px 10px 5px 10px;
   border-radius: 20px;
-  /*position: relative;
-  background: #add8e6;
-  float: right;
-  color: #808080;*/
 }
 
 .message_box_img {

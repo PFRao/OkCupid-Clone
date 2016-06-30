@@ -5,5 +5,6 @@ module.exports = {
     width                      : '0px'
   },
   content : {
+    position: 'relative'
   }
 };

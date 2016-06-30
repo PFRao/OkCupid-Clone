@@ -152,7 +152,9 @@ var UserProfile = React.createClass({
           onAfterOpen={this.handleOnAfterOpenModal}
           onRequestClose={this._closeModal}>
 
-          <MessageForm receiver={this.state.theState.user} sender={SessionStore.currentUser()} />
+          <ul className="profile_message">
+            <MessageForm receiver={this.state.theState.user} sender={SessionStore.currentUser()} />
+          </ul>
 
         </Modal>
       );

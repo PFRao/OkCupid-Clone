@@ -115,7 +115,9 @@ var QuickMessages = React.createClass({
           {messages}
         </ul>
       </div>
-      <ModalForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
+      <ul>
+        <ModalForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
+      </ul>
     </div>
     );
   }
