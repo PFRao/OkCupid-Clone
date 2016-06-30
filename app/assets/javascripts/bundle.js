@@ -35920,6 +35920,7 @@
 	  _logout: function () {
 	    this._closeModal();
 	    SessionApiUtil.logout();
+	    this.context.router.push("/");
 	  },
 	
 	  _closeModal: function () {

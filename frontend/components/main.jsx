@@ -29,6 +29,7 @@ var Main = React.createClass({
   _logout: function () {
     this._closeModal();
     SessionApiUtil.logout();
+    this.context.router.push("/");
   },
 
   _closeModal: function () {
