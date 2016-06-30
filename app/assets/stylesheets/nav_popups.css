@@ -50,10 +50,13 @@
 
 .redirect_modal {
   border: 1px solid black;
+  padding: 8px;
 }
 
 .close_modal {
   border: 1px solid black;
+  padding: 8px;
+  margin-left: 4px;
 }
 
 .quickModal {
@@ -61,7 +64,7 @@
   margin: 20px auto;
   border-radius: 5px;
   background: #f3f5f9;
-  padding: 20px 50px;
+  padding: 10px 10px;
   width: 400px;
   box-shadow: 2px 5px 5px #ccc;
 }
@@ -71,8 +74,4 @@
   top: 50px;
   left: 680px;
   padding: 10px;
-}
-
-.messagesModal {
-  
 }

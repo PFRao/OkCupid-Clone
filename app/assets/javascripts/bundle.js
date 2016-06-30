@@ -115,7 +115,7 @@
 	
 	  _openMessages: function (e) {
 	    // e.preventDefault();
-	    this._closeMessages();
+	    // this._closeMessages();
 	    this.setState({ currentConvo: e });
 	    this.setState({ messagesOpen: true });
 	  },
@@ -123,6 +123,12 @@
 	  _closeMessages: function (e) {
 	    // e.preventDefault();
 	    this.setState({ messagesOpen: false });
+	  },
+	
+	  _closeAndReopenMessages: function (e) {
+	    this.setState({ messagesOpen: false }, function () {
+	      this._openMessages(e);
+	    });
 	  },
 	
 	  componentDidMount: function () {
@@ -180,7 +186,6 @@
 	        )
 	      );
 	    }
-	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -216,7 +221,7 @@
 	          onAfterOpen: this.handleOnAfterOpenModal,
 	          onRequestClose: this._closeConvos,
 	          style: ModalStyle },
-	        React.createElement(QuickConvos, { open: this._openMessages, close: this._closeConvos })
+	        React.createElement(QuickConvos, { open: this._closeAndReopenMessages, close: this._closeConvos })
 	      ),
 	      React.createElement(
 	        Modal,
@@ -38901,7 +38906,7 @@
 	
 	var MessageApiUtil = __webpack_require__(312);
 	
-	var MessageForm = __webpack_require__(314);
+	var ModalForm = __webpack_require__(326);
 	
 	var QuickMessages = React.createClass({
 	  displayName: 'QuickMessages',
@@ -38912,7 +38917,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    // this.listener = MessageStore.addListener(this._getToTheConvo);
+	    this.listener = MessageStore.addListener(this._getToTheConvo);
 	    MessageApiUtil.getOneConvo(this.state.theConvo.id);
 	
 	    this.pusher = new Pusher('8912b275855afe98c4d3', {
@@ -38927,7 +38932,11 @@
 	
 	  componentWillUnmount: function () {
 	    this.pusher.unsubscribe('convo_' + this.state.theConvo.id);
-	    // this.listener.remove();
+	    this.listener.remove();
+	  },
+	
+	  _getToTheConvo: function () {
+	    this.setState({ theConvo: MessageStore.oneConvo() });
 	  },
 	
 	  render: function () {
@@ -38952,8 +38961,6 @@
 	    }
 	
 	    var classiness;
-	    var imgURL;
-	    var imgClass;
 	
 	    var hours_ago;
 	    var milliseconds;
@@ -38987,48 +38994,47 @@
 	      }
 	
 	      if (message.receiver_id === SessionStore.currentUser().id) {
-	        classiness = "received";
-	        imgURL = them.image_url;
-	        imgClass += " their_picture";
+	        classiness = "received_modal";
 	      } else {
-	        classiness = "sent";
-	        imgURL = SessionStore.currentUser().image_url;
-	        imgClass += " my_picture";
+	        classiness = "sent_modal";
 	      }
 	
 	      return React.createElement(
 	        'li',
 	        { className: classiness, key: message.id },
-	        message.body,
-	        React.createElement('br', null),
-	        React.createElement('br', null),
-	        React.createElement('img', { className: imgClass, src: imgURL }),
-	        React.createElement(
-	          'p',
-	          { className: 'message_timestamp' },
-	          classiness,
-	          ' ',
-	          hours_ago,
-	          ' ago'
-	        )
+	        message.body
 	      );
 	    }.bind(this));
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'message_detail_list' },
+	      { className: 'quickModal' },
 	      React.createElement(
-	        'h1',
-	        null,
-	        'Conversation with ',
-	        them.username
+	        'span',
+	        { className: 'message_modal_header' },
+	        React.createElement(
+	          'button',
+	          { className: 'xbox', onClick: this.props.close },
+	          'X'
+	        ),
+	        React.createElement('img', { className: 'message_box_img', src: them.image_url }),
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Conversation with ',
+	          them.username
+	        )
 	      ),
 	      React.createElement(
-	        'ul',
-	        null,
-	        messages,
-	        React.createElement(MessageForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
-	      )
+	        'div',
+	        { className: 'messagesModal' },
+	        React.createElement(
+	          'ul',
+	          { className: 'modal_message_list group' },
+	          messages
+	        )
+	      ),
+	      React.createElement(ModalForm, { receiver: them, sender: us, convo_id: this.state.theConvo.id })
 	    );
 	  }
 	
@@ -39048,6 +39054,75 @@
 	  },
 	  content: {}
 	};
+
+/***/ },
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var MessageStore = __webpack_require__(311);
+	
+	var MessageApiUtil = __webpack_require__(312);
+	
+	// WE NEED THE FOLLOWING PROPS:
+	// SENDER
+	// RECEIVER
+	// CONVO_ID
+	
+	var ModalForm = React.createClass({
+	  displayName: 'ModalForm',
+	
+	  getInitialState: function () {
+	    return { contents: "" };
+	  },
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  _redirectToConvo: function (convo_id) {
+	    this.context.router.push("messages/" + convo_id);
+	  },
+	
+	  _handleSubmit: function (event) {
+	    event.preventDefault();
+	
+	    MessageApiUtil.createMessage({
+	      convo_id: this.props.convo_id,
+	      sender_id: this.props.sender.id,
+	      receiver_id: this.props.receiver.id,
+	      body: this.state.contents
+	    });
+	
+	    this.setState({ contents: "" });
+	  },
+	
+	  _changeContents: function (event) {
+	    this.setState({ contents: event.target.value });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'li',
+	      { className: 'modal_message_box' },
+	      React.createElement(
+	        'form',
+	        { onSubmit: this._handleSubmit },
+	        React.createElement('textarea', { className: 'modal_message_text', value: this.state.contents, placeholder: "Write " + this.props.receiver.username + " a nice message", onChange: this._changeContents }),
+	        React.createElement(
+	          'button',
+	          { className: 'modal_submit_button' },
+	          'Submit'
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ModalForm;
 
 /***/ }
 /******/ ]);

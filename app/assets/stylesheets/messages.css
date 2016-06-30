@@ -15,12 +15,10 @@
 
 .sent_message {
   position: relative;
-  color: #808080;
 }
 
 .received_message {
   position: relative;
-  color: #ce2029;
 }
 
 .message_index_item {

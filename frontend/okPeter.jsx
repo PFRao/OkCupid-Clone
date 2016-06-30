@@ -67,7 +67,7 @@ var App = React.createClass({
 
   _openMessages: function (e) {
     // e.preventDefault();
-    this._closeMessages();
+    // this._closeMessages();
     this.setState({ currentConvo: e });
     this.setState({ messagesOpen: true });
   },
@@ -75,6 +75,12 @@ var App = React.createClass({
   _closeMessages: function (e) {
     // e.preventDefault();
     this.setState({ messagesOpen: false });
+  },
+
+  _closeAndReopenMessages: function (e) {
+    this.setState({ messagesOpen: false }, function () {
+      this._openMessages(e);
+    });
   },
 
   componentDidMount: function () {
@@ -101,7 +107,6 @@ var App = React.createClass({
     } else {
       candyCorn = (<li><a href="#">Please log in or sign up!</a></li>);
     }
-
     return (
       <div>
         <header className="header">
@@ -127,7 +132,7 @@ var App = React.createClass({
           onRequestClose={this._closeConvos}
           style={ModalStyle}>
 
-          <QuickConvos open={this._openMessages} close={this._closeConvos} />
+          <QuickConvos open={this._closeAndReopenMessages} close={this._closeConvos} />
 
         </Modal>
 

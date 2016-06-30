@@ -6,7 +6,7 @@ var MessageStore = require('../../stores/message_store');
 
 var MessageApiUtil = require('../../util/message_api_util');
 
-var MessageForm = require('../message_stuff/message_form');
+var ModalForm = require('./modal_form');
 
 var QuickMessages = React.createClass({
 
@@ -15,7 +15,7 @@ var QuickMessages = React.createClass({
   },
 
   componentDidMount: function () {
-    // this.listener = MessageStore.addListener(this._getToTheConvo);
+    this.listener = MessageStore.addListener(this._getToTheConvo);
     MessageApiUtil.getOneConvo(this.state.theConvo.id);
 
     this.pusher = new Pusher('8912b275855afe98c4d3', {
@@ -30,7 +30,11 @@ var QuickMessages = React.createClass({
 
   componentWillUnmount: function () {
     this.pusher.unsubscribe('convo_' + this.state.theConvo.id)
-    // this.listener.remove();
+    this.listener.remove();
+  },
+
+  _getToTheConvo: function () {
+    this.setState({ theConvo: MessageStore.oneConvo() });
   },
 
   render: function() {
@@ -51,8 +55,6 @@ var QuickMessages = React.createClass({
     }
 
     var classiness;
-    var imgURL;
-    var imgClass;
 
     var hours_ago;
     var milliseconds;
@@ -88,34 +90,33 @@ var QuickMessages = React.createClass({
       }
 
       if (message.receiver_id === SessionStore.currentUser().id) {
-        classiness = "received";
-        imgURL = them.image_url;
-        imgClass += " their_picture"
+        classiness = "received_modal";
       } else {
-        classiness = "sent";
-        imgURL = SessionStore.currentUser().image_url;
-        imgClass += " my_picture"
+        classiness = "sent_modal";
       }
 
       return (
         <li className={classiness} key={message.id}>
           {message.body}
-          <br /><br />
-          <img className={imgClass} src={imgURL} />
-          <p className="message_timestamp">{classiness} {hours_ago} ago</p>
         </li>
       );
 
     }.bind(this));
 
     return (
-      <div className="message_detail_list">
+    <div className="quickModal">
+      <span className="message_modal_header">
+        <button className="xbox" onClick={this.props.close}>X</button>
+        <img className='message_box_img' src={them.image_url} />
         <h1>Conversation with {them.username}</h1>
-        <ul >
+      </span>
+      <div className="messagesModal">
+        <ul className="modal_message_list group">
           {messages}
-          <MessageForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
         </ul>
       </div>
+      <ModalForm receiver={them} sender={us} convo_id={this.state.theConvo.id} />
+    </div>
     );
   }
 
