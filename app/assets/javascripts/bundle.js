@@ -38913,6 +38913,8 @@
 	
 	var ModalForm = __webpack_require__(326);
 	
+	var moving = false;
+	
 	var QuickMessages = React.createClass({
 	  displayName: 'QuickMessages',
 	
@@ -38933,6 +38935,29 @@
 	    channel.bind('message_sent', function (data) {
 	      MessageApiUtil.getOneConvo(this.state.theConvo.id);
 	    }.bind(this));
+	
+	    $("#click_and_drag").mousedown(function () {
+	      moving = true;
+	    });
+	
+	    $("body").mouseup(function () {
+	      moving = false;
+	    });
+	
+	    $("body").mousemove(function (event) {
+	
+	      console.log(event);
+	
+	      if (moving) {
+	        var drag = document.getElementById('click_and_drag');
+	
+	        var x = event.clientX;
+	        var y = event.clientY;
+	
+	        drag.style.left = x - 10 + "px";
+	        drag.style.top = y - 10 + "px";
+	      }
+	    });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -39013,7 +39038,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal modalModalModal' },
+	      { id: 'click_and_drag', className: 'quickModal modalModalModal' },
 	      React.createElement(
 	        'span',
 	        { className: 'message_modal_header' },
