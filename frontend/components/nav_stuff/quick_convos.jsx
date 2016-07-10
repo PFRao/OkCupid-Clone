@@ -5,6 +5,8 @@ var ConvosModal = require('./convos_modal');
 
 var SessionStore = require('../../stores/session_store');
 
+var moving = false;
+
 var QuickConvos = React.createClass({
 
   contextTypes: {

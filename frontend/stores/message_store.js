@@ -1,6 +1,8 @@
 var AppDispatcher = require('../dispatcher/dispatcher.js');
 var Store = require('flux/utils').Store;
 
+var SessionStore = require('./session_store');
+
 var MessageApiUtil = require('../util/message_api_util');
 
 var _convos = [];
@@ -33,6 +35,29 @@ MessageStore.existing = function (counterpartyId) {
     }
   }
   return false;
+};
+
+MessageStore.isItUnread = function (convo_id) {
+  for (var i = 0; i < _convos.length; i++) {
+    if (_convos[i].id === convo_id) {
+      if (_convos[i].messages[_convos[i].messages.length - 1].receiver_id === SessionStore.currentUser().id){
+        return _convos[i].messages[_convos[i].messages.length - 1].unread;
+      }
+      return false;
+    }
+  }
+};
+
+MessageStore.readTheMessages = function (convo_id) {
+  for (var i = 0; i < _convos.length; i++) {
+    if (_convos[i].id === convo_id) {
+      _convos[i].messages.forEach( function (message) {
+        if (message.unread) {
+          MessageApiUtil.updateMessage(message.id);
+        }
+      });
+    }
+  }
 };
 
 MessageStore.__onDispatch = function (payload) {

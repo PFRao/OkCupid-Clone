@@ -18,9 +18,24 @@ class Api::MessagesController < ApplicationController
     end
   end
 
+  def update
+    @message = Message.find(params[:id])
+
+    if @message.update(message_params)
+      render "api/message/show"
+    else
+      render(
+        json: {
+          base: ["Something went horribly wrong!"]
+        },
+        status: 401
+      )
+    end
+  end
+
   private
   def message_params
-    params.require(:message).permit(:sender_id, :receiver_id, :body, :convo_id)
+    params.require(:message).permit(:sender_id, :receiver_id, :body, :convo_id, :unread)
   end
 
 end

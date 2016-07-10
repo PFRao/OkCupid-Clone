@@ -21,9 +21,19 @@
   cursor:move;
 }
 
-/*.message_modal_main > ul {
-  border-top: 2px solid #dadce0;
-}*/
+.unreadMessage {
+  position: absolute;
+  top: 40px;
+  left: 222px;
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  background: #3b5998;
+}
+
+.readMessage {
+  display:none;
+}
 
 .modal_index_item {
   text-decoration: none;

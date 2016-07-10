@@ -30,6 +30,7 @@ var ConvosModal = React.createClass({
 
     var board;
     var person;
+    var unread;
 
     if (this.state.convos) {
 
@@ -41,8 +42,14 @@ var ConvosModal = React.createClass({
           person = convo.user;
         }
 
+        if (MessageStore.isItUnread(convo.id)) {
+          unread = true;
+        } else {
+          unread = false;
+        }
+
         return (
-          <ModalIndexItem open={this.props.open} key={convo.id} person={person} convo={convo}/>
+          <ModalIndexItem unread={unread} open={this.props.open} key={convo.id} person={person} convo={convo}/>
         );
 
       }.bind(this));

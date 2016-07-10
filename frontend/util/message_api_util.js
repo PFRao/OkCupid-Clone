@@ -57,6 +57,18 @@ var MessageApiUtil = {
         MessageActions.receiveNewMessage(newMessage);
       }
     });
+  },
+
+  updateMessage: function (message_id) {
+    $.ajax({
+      method: 'PUT',
+      url: 'api/messages/' + message_id,
+      dataType: 'json',
+      data: { message: { unread: false } },
+      success: function (newMessage) {
+        MessageActions.receiveNewMessage(newMessage);
+      }
+    });
   }
 
 };

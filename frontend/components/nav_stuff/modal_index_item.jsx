@@ -8,7 +8,11 @@ var VisitApiUtil = require('../../util/visit_api_util');
 
 var ModalIndexItem = React.createClass({
   getInitialState: function () {
-    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+    debugger
+    return {
+      latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
+      areWeUnread: this.props.unread
+    };
   },
 
   componentDidMount: function () {
@@ -29,6 +33,10 @@ var ModalIndexItem = React.createClass({
   },
 
   _seeMessageDetails: function () {
+    if (this.state.areWeUnread) {
+      this.setState({ areWeUnread: false })
+      MessageStore.readTheMessages(this.props.convo.id)
+    }
     this.props.open(this.props.convo);
   },
 
@@ -79,18 +87,26 @@ var ModalIndexItem = React.createClass({
 
     }
 
-    var theClass = "sent_message";
-    var theSayer = "you";
+    var theClass;
+    var theSayer;
+    var readness = "readMessage";
 
     if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
       theClass = "received_message";
       theSayer = "they";
+      if (this.state.areWeUnread) {
+        readness = "unreadMessage";
+      }
+    } else {
+      theClass = "sent_message";
+      theSayer = "you";
     }
 
     return (
       <li className="modal_index_item">
         <img onClick={this._goToProfile} src={this.props.person.image_url} />
         <span onClick={this._seeMessageDetails}>
+          <div className={readness} />
           <h3>{this.props.person.username}</h3>
           <p>
             {theSayer} said:&nbsp;

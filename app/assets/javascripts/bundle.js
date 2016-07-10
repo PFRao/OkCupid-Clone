@@ -37730,6 +37730,8 @@
 	var AppDispatcher = __webpack_require__(258);
 	var Store = __webpack_require__(262).Store;
 	
+	var SessionStore = __webpack_require__(257);
+	
 	var MessageApiUtil = __webpack_require__(312);
 	
 	var _convos = [];
@@ -37762,6 +37764,29 @@
 	    }
 	  }
 	  return false;
+	};
+	
+	MessageStore.isItUnread = function (convo_id) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    if (_convos[i].id === convo_id) {
+	      if (_convos[i].messages[_convos[i].messages.length - 1].receiver_id === SessionStore.currentUser().id) {
+	        return _convos[i].messages[_convos[i].messages.length - 1].unread;
+	      }
+	      return false;
+	    }
+	  }
+	};
+	
+	MessageStore.readTheMessages = function (convo_id) {
+	  for (var i = 0; i < _convos.length; i++) {
+	    if (_convos[i].id === convo_id) {
+	      _convos[i].messages.forEach(function (message) {
+	        if (message.unread) {
+	          MessageApiUtil.updateMessage(message.id);
+	        }
+	      });
+	    }
+	  }
 	};
 	
 	MessageStore.__onDispatch = function (payload) {
@@ -37854,6 +37879,18 @@
 	      url: 'api/messages',
 	      dataType: 'json',
 	      data: { message: theParams },
+	      success: function (newMessage) {
+	        MessageActions.receiveNewMessage(newMessage);
+	      }
+	    });
+	  },
+	
+	  updateMessage: function (message_id) {
+	    $.ajax({
+	      method: 'PUT',
+	      url: 'api/messages/' + message_id,
+	      dataType: 'json',
+	      data: { message: { unread: false } },
 	      success: function (newMessage) {
 	        MessageActions.receiveNewMessage(newMessage);
 	      }
@@ -38640,6 +38677,8 @@
 	
 	var SessionStore = __webpack_require__(257);
 	
+	var moving = false;
+	
 	var QuickConvos = React.createClass({
 	  displayName: 'QuickConvos',
 	
@@ -38747,6 +38786,7 @@
 	
 	    var board;
 	    var person;
+	    var unread;
 	
 	    if (this.state.convos) {
 	
@@ -38758,7 +38798,13 @@
 	          person = convo.user;
 	        }
 	
-	        return React.createElement(ModalIndexItem, { open: this.props.open, key: convo.id, person: person, convo: convo });
+	        if (MessageStore.isItUnread(convo.id)) {
+	          unread = true;
+	        } else {
+	          unread = false;
+	        }
+	
+	        return React.createElement(ModalIndexItem, { unread: unread, open: this.props.open, key: convo.id, person: person, convo: convo });
 	      }.bind(this));
 	    } else {
 	
@@ -38796,7 +38842,11 @@
 	  displayName: 'ModalIndexItem',
 	
 	  getInitialState: function () {
-	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	    debugger;
+	    return {
+	      latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
+	      areWeUnread: this.props.unread
+	    };
 	  },
 	
 	  componentDidMount: function () {
@@ -38817,6 +38867,10 @@
 	  },
 	
 	  _seeMessageDetails: function () {
+	    if (this.state.areWeUnread) {
+	      this.setState({ areWeUnread: false });
+	      MessageStore.readTheMessages(this.props.convo.id);
+	    }
 	    this.props.open(this.props.convo);
 	  },
 	
@@ -38874,12 +38928,19 @@
 	      }
 	    }
 	
-	    var theClass = "sent_message";
-	    var theSayer = "you";
+	    var theClass;
+	    var theSayer;
+	    var readness = "readMessage";
 	
 	    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
 	      theClass = "received_message";
 	      theSayer = "they";
+	      if (this.state.areWeUnread) {
+	        readness = "unreadMessage";
+	      }
+	    } else {
+	      theClass = "sent_message";
+	      theSayer = "you";
 	    }
 	
 	    return React.createElement(
@@ -38889,6 +38950,7 @@
 	      React.createElement(
 	        'span',
 	        { onClick: this._seeMessageDetails },
+	        React.createElement('div', { className: readness }),
 	        React.createElement(
 	          'h3',
 	          null,
