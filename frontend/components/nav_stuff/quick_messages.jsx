@@ -90,7 +90,7 @@ var QuickMessages = React.createClass({
     var milliseconds;
     var hours;
 
-    var messages = this.state.theConvo.messages.map(function (message, index) {
+    var messages = this.state.theConvo.messages.reverse().map(function (message, index) {
 
       imgClass = "message_user_thumbnail";
 

@@ -3,13 +3,27 @@
   margin: 5px auto;
   border-radius: 5px;
   background: #f3f5f9;
-  padding: 20px 20px;
+  padding: 0px 20px;
+  height: 400px;
+  overflow-y: scroll;
   /*width: px;*/
 }
 
-.message_modal_main > ul {
-  border-top: 2px solid #dadce0;
+.message_header_thing {
+  margin-left: 10px;
+  border-bottom: 2px solid #dadce0;
 }
+
+#click_and_brag {
+  height: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  cursor:move;
+}
+
+/*.message_modal_main > ul {
+  border-top: 2px solid #dadce0;
+}*/
 
 .modal_index_item {
   text-decoration: none;

@@ -68,7 +68,7 @@
 	//Modals
 	var QuickConvos = __webpack_require__(321);
 	var QuickMessages = __webpack_require__(324);
-	var ModalStyle = __webpack_require__(325);
+	var ModalStyle = __webpack_require__(326);
 	//Stores
 	var SessionStore = __webpack_require__(257);
 	//Other Stuff
@@ -20851,15 +20851,20 @@
 	  },
 	
 	  open: function() {
-	    focusManager.setupScopedFocus(this.node);
-	    focusManager.markForFocusLater();
-	    this.setState({isOpen: true}, function() {
-	      this.setState({afterOpen: true});
+	    if (this.state.afterOpen && this.state.beforeClose) {
+	      clearTimeout(this.closeTimer);
+	      this.setState({ beforeClose: false });
+	    } else {
+	      focusManager.setupScopedFocus(this.node);
+	      focusManager.markForFocusLater();
+	      this.setState({isOpen: true}, function() {
+	        this.setState({afterOpen: true});
 	
-	      if (this.props.isOpen && this.props.onAfterOpen) {
-	        this.props.onAfterOpen();
-	      }
-	    }.bind(this));
+	        if (this.props.isOpen && this.props.onAfterOpen) {
+	          this.props.onAfterOpen();
+	        }
+	      }.bind(this));
+	    }
 	  },
 	
 	  close: function() {
@@ -20883,8 +20888,9 @@
 	
 	  closeWithoutTimeout: function() {
 	    this.setState({
+	      beforeClose: false,
+	      isOpen: false,
 	      afterOpen: false,
-	      beforeClose: false
 	    }, this.afterClose);
 	  },
 	
@@ -38642,6 +38648,33 @@
 	    router: PropTypes.object.isRequired
 	  },
 	
+	  componentDidMount: function () {
+	    $("#click_and_brag").mousedown(function (event) {
+	      theLeft = event.offsetX;
+	      theTop = event.offsetY;
+	      moving = true;
+	    });
+	
+	    $("body").mouseup(function () {
+	      moving = false;
+	    });
+	
+	    $("body").mousemove(function (event) {
+	
+	      if (moving) {
+	        var drag = document.getElementById('braggable');
+	
+	        console.log();
+	
+	        var x = event.clientX - theLeft;
+	        var y = event.clientY - theTop;
+	
+	        drag.style.left = x + "px";
+	        drag.style.top = y - 20 + "px";
+	      }
+	    });
+	  },
+	
 	  _redirection: function (e) {
 	    e.preventDefault();
 	    this.props.close();
@@ -38651,7 +38684,13 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'quickModal convosModal' },
+	      { id: 'braggable', className: 'quickModal convosModal' },
+	      React.createElement('div', { id: 'click_and_brag' }),
+	      React.createElement(
+	        'h1',
+	        { className: 'message_header_thing' },
+	        'Inbox'
+	      ),
 	      React.createElement(ConvosModal, { open: this.props.open }),
 	      React.createElement(
 	        'button',
@@ -38729,11 +38768,6 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'message_modal_main' },
-	      React.createElement(
-	        'h1',
-	        { className: 'message_header_thing' },
-	        'Inbox'
-	      ),
 	      React.createElement(
 	        'ul',
 	        null,
@@ -38913,7 +38947,7 @@
 	
 	var MessageApiUtil = __webpack_require__(312);
 	
-	var ModalForm = __webpack_require__(326);
+	var ModalForm = __webpack_require__(325);
 	
 	var moving = false;
 	var theLeft;
@@ -39002,7 +39036,7 @@
 	    var milliseconds;
 	    var hours;
 	
-	    var messages = this.state.theConvo.messages.map(function (message, index) {
+	    var messages = this.state.theConvo.messages.reverse().map(function (message, index) {
 	
 	      imgClass = "message_user_thumbnail";
 	
@@ -39085,21 +39119,6 @@
 
 /***/ },
 /* 325 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  overlay: {
-	    background: 'transparent',
-	    height: '0px',
-	    width: '0px'
-	  },
-	  content: {
-	    position: 'relative'
-	  }
-	};
-
-/***/ },
-/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -39166,6 +39185,21 @@
 	});
 	
 	module.exports = ModalForm;
+
+/***/ },
+/* 326 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  overlay: {
+	    background: 'transparent',
+	    height: '0px',
+	    width: '0px'
+	  },
+	  content: {
+	    position: 'relative'
+	  }
+	};
 
 /***/ }
 /******/ ]);

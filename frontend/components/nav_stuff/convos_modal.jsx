@@ -55,7 +55,6 @@ var ConvosModal = React.createClass({
 
     return (
       <div className="message_modal_main">
-        <h1 className="message_header_thing">Inbox</h1>
         <ul>
           {board}
         </ul>
