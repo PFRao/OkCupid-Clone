@@ -22,9 +22,7 @@
 }
 
 .unreadMessage {
-  position: absolute;
-  top: 40px;
-  left: 222px;
+  float:left;
   height: 10px;
   width: 10px;
   border-radius: 5px;

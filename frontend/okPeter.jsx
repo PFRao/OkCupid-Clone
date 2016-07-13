@@ -108,15 +108,16 @@ var App = React.createClass({
 
     var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
     channel.bind('notify_user', function(data) {
-      this._updateBadge();
+      console.log("we are updating the badge");
+      MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateBadge);
     }.bind(this));
+
     SessionApiUtil.fetchCurrentUser();
   },
 
   componentWillUnmount: function () {
 
     // remove pusher here!
-    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id)
 
   },
 
@@ -134,7 +135,7 @@ var App = React.createClass({
     if (SessionStore.isUserLoggedIn()) {
 
       if (this.state.numberUnread > 0) {
-        swedishFish = (<div className="message_notifications">{this.state.numberUnread}</div>);
+        swedishFish = (<span className="message_notifications">{this.state.numberUnread}</span>);
       } else {
         swedishFish = (<div />);
       }

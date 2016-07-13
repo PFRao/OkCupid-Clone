@@ -20,10 +20,18 @@ MessageStore.oneConvo = function () {
   return _convo;
 };
 
+// MessageStore.getLatestMessage = function (convo_id) {
+//   for (var i = 0; i < _convos.length; i++) {
+//     if (_convos[i].id === convo_id) {
+//       return _convos[i].messages[_convos[i].messages.length - 1];
+//     }
+//   }
+// };
 MessageStore.getLatestMessage = function (convo_id) {
   for (var i = 0; i < _convos.length; i++) {
     if (_convos[i].id === convo_id) {
-      return _convos[i].messages[_convos[i].messages.length - 1];
+      var temporaryVariable = _convos[i].messages.sort(_compare2);
+      return temporaryVariable[_convos[i].messages.length - 1];
     }
   }
 };
@@ -48,7 +56,7 @@ MessageStore.isItUnread = function (convo_id) {
   }
 };
 
-MessageStore.readTheMessages = function (convo_id) {
+MessageStore.readTheMessages = function (convo_id, update) {
   for (var i = 0; i < _convos.length; i++) {
     if (_convos[i].id === convo_id) {
       _convos[i].messages.forEach( function (message) {
@@ -58,6 +66,7 @@ MessageStore.readTheMessages = function (convo_id) {
       });
     }
   }
+  update(true);
 };
 
 MessageStore.howManyUnread = function (user_id) {
@@ -97,6 +106,15 @@ var _compare = function (a, b) {
     return -1;
   } else {
     return 1;
+  }
+};
+
+var _compare2 = function (a, b) {
+  // debugger
+  if (a.updated_at > b.updated_at) {
+    return 1;
+  } else {
+    return -1;
   }
 };
 

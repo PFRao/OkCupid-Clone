@@ -5,6 +5,7 @@ var SessionStore = require('../../stores/session_store');
 var MessageStore = require('../../stores/message_store');
 
 var VisitApiUtil = require('../../util/visit_api_util');
+var MessageApiUtil = require('../../util/message_api_util');
 
 var ModalIndexItem = React.createClass({
   getInitialState: function () {
@@ -15,11 +16,22 @@ var ModalIndexItem = React.createClass({
   },
 
   componentDidMount: function () {
-    this.listener = MessageStore.addListener(this._newMessage);
+    // this.listener = MessageStore.addListener(this._newMessage);
+
+    this.pusher = new Pusher('8912b275855afe98c4d3', {
+      encrypted: true
+    });
+
+    var channel = this.pusher.subscribe('convo_' + this.props.convo.id);
+    channel.bind('message_sent', function(data) {
+      this._newMessage();
+    }.bind(this));
+
   },
 
   componentWillUnmount: function () {
-    this.listener.remove();
+    // this.listener.remove();
+    this.pusher.unsubscribe('convo_' + this.props.convo.id)
   },
 
   contextTypes: {
@@ -33,15 +45,17 @@ var ModalIndexItem = React.createClass({
 
   _seeMessageDetails: function () {
     if (this.state.areWeUnread) {
-      this.props.update(true);
       this.setState({ areWeUnread: false })
-      MessageStore.readTheMessages(this.props.convo.id)
+      MessageStore.readTheMessages(this.props.convo.id, this.props.update);
     }
     this.props.open(this.props.convo);
   },
 
   _newMessage: function () {
-    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+    this.setState({
+      areWeUnread: true,
+      latestPreview: MessageStore.getLatestMessage(this.props.convo.id)
+    });
   },
 
   _shorten: function (string) {
@@ -95,6 +109,7 @@ var ModalIndexItem = React.createClass({
       theClass = "received_message";
       theSayer = "they";
       if (this.state.areWeUnread) {
+        console.log(this.state.latestPreview, this.state.areWeUnread);
         readness = "unreadMessage";
       }
     } else {

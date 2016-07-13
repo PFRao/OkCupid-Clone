@@ -1,5 +1,11 @@
 .message_notifications {
-  
+  text-align: center;
+  float:right;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  background: #F8F8FF;
+  color: #3b5998;
 }
 
 .header {
@@ -35,12 +41,14 @@
 }
 
 .header-list > li {
+  display: inline;
   float: left;
   border-radius: 15px;
 }
 
 .header-list > li:hover {
-  border: 1px solid #F8F8FF;
+  cursor: pointer;
+  /*border: 1px solid #F8F8FF;*/
 }
 
 .yer_face {

@@ -4,7 +4,7 @@ var MessageActions = require('./../actions/message_actions');
 
 var MessageApiUtil = {
 
-  getAllConvos: function (theUserId) {
+  getAllConvos: function (theUserId, update) {
     $.ajax({
       method: 'GET',
       url: 'api/conversations',
@@ -12,6 +12,7 @@ var MessageApiUtil = {
       data: { conversation: theUserId },
       success: function (result) {
         MessageActions.receiveAllConvos(result);
+        if (update) {update();}
       }
     });
   },

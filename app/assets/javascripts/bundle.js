@@ -155,15 +155,17 @@
 	
 	    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
 	    channel.bind('notify_user', function (data) {
-	      this._updateBadge();
+	      console.log("we are updating the badge");
+	      MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateBadge);
 	    }.bind(this));
+	
 	    SessionApiUtil.fetchCurrentUser();
 	  },
 	
 	  componentWillUnmount: function () {
 	
 	    // remove pusher here!
-	    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
+	
 	  },
 	
 	  contextTypes: {
@@ -181,7 +183,7 @@
 	
 	      if (this.state.numberUnread > 0) {
 	        swedishFish = React.createElement(
-	          'div',
+	          'span',
 	          { className: 'message_notifications' },
 	          this.state.numberUnread
 	        );
@@ -37793,10 +37795,18 @@
 	  return _convo;
 	};
 	
+	// MessageStore.getLatestMessage = function (convo_id) {
+	//   for (var i = 0; i < _convos.length; i++) {
+	//     if (_convos[i].id === convo_id) {
+	//       return _convos[i].messages[_convos[i].messages.length - 1];
+	//     }
+	//   }
+	// };
 	MessageStore.getLatestMessage = function (convo_id) {
 	  for (var i = 0; i < _convos.length; i++) {
 	    if (_convos[i].id === convo_id) {
-	      return _convos[i].messages[_convos[i].messages.length - 1];
+	      var temporaryVariable = _convos[i].messages.sort(_compare2);
+	      return temporaryVariable[_convos[i].messages.length - 1];
 	    }
 	  }
 	};
@@ -37821,7 +37831,7 @@
 	  }
 	};
 	
-	MessageStore.readTheMessages = function (convo_id) {
+	MessageStore.readTheMessages = function (convo_id, update) {
 	  for (var i = 0; i < _convos.length; i++) {
 	    if (_convos[i].id === convo_id) {
 	      _convos[i].messages.forEach(function (message) {
@@ -37831,6 +37841,7 @@
 	      });
 	    }
 	  }
+	  update(true);
 	};
 	
 	MessageStore.howManyUnread = function (user_id) {
@@ -37873,6 +37884,15 @@
 	  }
 	};
 	
+	var _compare2 = function (a, b) {
+	  // debugger
+	  if (a.updated_at > b.updated_at) {
+	    return 1;
+	  } else {
+	    return -1;
+	  }
+	};
+	
 	module.exports = MessageStore;
 
 /***/ },
@@ -37885,7 +37905,7 @@
 	
 	var MessageApiUtil = {
 	
-	  getAllConvos: function (theUserId) {
+	  getAllConvos: function (theUserId, update) {
 	    $.ajax({
 	      method: 'GET',
 	      url: 'api/conversations',
@@ -37893,6 +37913,9 @@
 	      data: { conversation: theUserId },
 	      success: function (result) {
 	        MessageActions.receiveAllConvos(result);
+	        if (update) {
+	          update();
+	        }
 	      }
 	    });
 	  },
@@ -38892,6 +38915,7 @@
 	var MessageStore = __webpack_require__(311);
 	
 	var VisitApiUtil = __webpack_require__(297);
+	var MessageApiUtil = __webpack_require__(312);
 	
 	var ModalIndexItem = React.createClass({
 	  displayName: 'ModalIndexItem',
@@ -38904,11 +38928,21 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.listener = MessageStore.addListener(this._newMessage);
+	    // this.listener = MessageStore.addListener(this._newMessage);
+	
+	    this.pusher = new Pusher('8912b275855afe98c4d3', {
+	      encrypted: true
+	    });
+	
+	    var channel = this.pusher.subscribe('convo_' + this.props.convo.id);
+	    channel.bind('message_sent', function (data) {
+	      this._newMessage();
+	    }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.listener.remove();
+	    // this.listener.remove();
+	    this.pusher.unsubscribe('convo_' + this.props.convo.id);
 	  },
 	
 	  contextTypes: {
@@ -38922,15 +38956,17 @@
 	
 	  _seeMessageDetails: function () {
 	    if (this.state.areWeUnread) {
-	      this.props.update(true);
 	      this.setState({ areWeUnread: false });
-	      MessageStore.readTheMessages(this.props.convo.id);
+	      MessageStore.readTheMessages(this.props.convo.id, this.props.update);
 	    }
 	    this.props.open(this.props.convo);
 	  },
 	
 	  _newMessage: function () {
-	    return { latestPreview: MessageStore.getLatestMessage(this.props.convo.id) };
+	    this.setState({
+	      areWeUnread: true,
+	      latestPreview: MessageStore.getLatestMessage(this.props.convo.id)
+	    });
 	  },
 	
 	  _shorten: function (string) {
@@ -38991,6 +39027,7 @@
 	      theClass = "received_message";
 	      theSayer = "they";
 	      if (this.state.areWeUnread) {
+	        console.log(this.state.latestPreview, this.state.areWeUnread);
 	        readness = "unreadMessage";
 	      }
 	    } else {

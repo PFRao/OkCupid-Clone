@@ -24,6 +24,7 @@ class Api::MessagesController < ApplicationController
 
     if @message.update(message_params)
       render "api/messages/show"
+      Pusher.trigger('user_' + @message.receiver_id.to_s, 'notify_user', {})
     else
       render(
         json: {
