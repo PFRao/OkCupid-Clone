@@ -7,6 +7,7 @@ class Api::MessagesController < ApplicationController
 
     if @message.save
       Pusher.trigger('convo_' + @message.convo_id.to_s, 'message_sent', {})
+      Pusher.trigger('user_' + @message.receiver_id.to_s, 'notify_user', {})
       render "api/messages/show"
     else
       render(
@@ -22,7 +23,7 @@ class Api::MessagesController < ApplicationController
     @message = Message.find(params[:id])
 
     if @message.update(message_params)
-      render "api/message/show"
+      render "api/messages/show"
     else
       render(
         json: {

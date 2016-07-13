@@ -60,6 +60,17 @@ MessageStore.readTheMessages = function (convo_id) {
   }
 };
 
+MessageStore.howManyUnread = function (user_id) {
+  var notRead = 0;
+  for (var i = 0; i < _convos.length; i++) {
+    var lastMessageReceived = MessageStore.getLatestMessage(_convos[i].id);
+    if (lastMessageReceived.receiver_id === user_id && lastMessageReceived.unread) {
+      notRead += 1;
+    }
+  }
+  return notRead;
+};
+
 MessageStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case "ALL_MESSAGES":

@@ -8,7 +8,6 @@ var VisitApiUtil = require('../../util/visit_api_util');
 
 var ModalIndexItem = React.createClass({
   getInitialState: function () {
-    debugger
     return {
       latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
       areWeUnread: this.props.unread
@@ -34,6 +33,7 @@ var ModalIndexItem = React.createClass({
 
   _seeMessageDetails: function () {
     if (this.state.areWeUnread) {
+      this.props.update(true);
       this.setState({ areWeUnread: false })
       MessageStore.readTheMessages(this.props.convo.id)
     }

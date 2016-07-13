@@ -52,7 +52,7 @@ var QuickConvos = React.createClass({
       <div id="braggable" className="quickModal convosModal">
         <div id="click_and_brag" />
         <h1 className="message_header_thing">Inbox</h1>
-        <ConvosModal open={this.props.open} />
+        <ConvosModal update={this.props.update} open={this.props.open} />
         <button className="redirect_modal" onClick={this._redirection}>See all</button>
         <button className="close_modal" onClick={this.props.close}>Close</button>
       </div>

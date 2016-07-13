@@ -71,10 +71,12 @@
 	var ModalStyle = __webpack_require__(326);
 	//Stores
 	var SessionStore = __webpack_require__(257);
+	var MessageStore = __webpack_require__(311);
 	//Other Stuff
 	var hashHistory = __webpack_require__(188).hashHistory;
 	var Link = __webpack_require__(188).Link;
 	var SessionApiUtil = __webpack_require__(254);
+	var MessageApiUtil = __webpack_require__(312);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -84,7 +86,8 @@
 	      convosOpen: false,
 	      messagesOpen: false,
 	      menuOpen: false,
-	      currentConvo: null
+	      currentConvo: null,
+	      numberUnread: 0
 	    };
 	  },
 	
@@ -131,8 +134,36 @@
 	    });
 	  },
 	
+	  _updateBadge: function (deduction) {
+	
+	    if (deduction) {
+	      var temporaryVariable = this.state.numberUnread - 1;
+	      this.setState({ numberUnread: temporaryVariable });
+	    } else {
+	      this.setState({ numberUnread: MessageStore.howManyUnread(SessionStore.currentUser().id) });
+	    }
+	  },
+	
 	  componentDidMount: function () {
+	    this.listener = MessageStore.addListener(this._updateBadge);
+	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	
+	    // add pusher here!
+	    this.pusher = new Pusher('8912b275855afe98c4d3', {
+	      encrypted: true
+	    });
+	
+	    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
+	    channel.bind('notify_user', function (data) {
+	      this._updateBadge();
+	    }.bind(this));
 	    SessionApiUtil.fetchCurrentUser();
+	  },
+	
+	  componentWillUnmount: function () {
+	
+	    // remove pusher here!
+	    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
 	  },
 	
 	  contextTypes: {
@@ -142,10 +173,22 @@
 	  render: function () {
 	
 	    var candyCorn;
+	    var swedishFish;
 	
 	    // onClick={this._openConvos}
 	
 	    if (SessionStore.isUserLoggedIn()) {
+	
+	      if (this.state.numberUnread > 0) {
+	        swedishFish = React.createElement(
+	          'div',
+	          { className: 'message_notifications' },
+	          this.state.numberUnread
+	        );
+	      } else {
+	        swedishFish = React.createElement('div', null);
+	      }
+	
 	      candyCorn = [React.createElement(
 	        'li',
 	        { key: "visitors" },
@@ -169,7 +212,8 @@
 	          'a',
 	          null,
 	          'Messages'
-	        )
+	        ),
+	        swedishFish
 	      ), React.createElement(
 	        'li',
 	        { className: 'yer_face', onClick: this._openMenu, key: "person" },
@@ -221,7 +265,7 @@
 	          onAfterOpen: this.handleOnAfterOpenModal,
 	          onRequestClose: this._closeConvos,
 	          style: ModalStyle },
-	        React.createElement(QuickConvos, { open: this._closeAndReopenMessages, close: this._closeConvos })
+	        React.createElement(QuickConvos, { update: this._updateBadge, open: this._closeAndReopenMessages, close: this._closeConvos })
 	      ),
 	      React.createElement(
 	        Modal,
@@ -37789,6 +37833,17 @@
 	  }
 	};
 	
+	MessageStore.howManyUnread = function (user_id) {
+	  var notRead = 0;
+	  for (var i = 0; i < _convos.length; i++) {
+	    var lastMessageReceived = MessageStore.getLatestMessage(_convos[i].id);
+	    if (lastMessageReceived.receiver_id === user_id && lastMessageReceived.unread) {
+	      notRead += 1;
+	    }
+	  }
+	  return notRead;
+	};
+	
 	MessageStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "ALL_MESSAGES":
@@ -38730,7 +38785,7 @@
 	        { className: 'message_header_thing' },
 	        'Inbox'
 	      ),
-	      React.createElement(ConvosModal, { open: this.props.open }),
+	      React.createElement(ConvosModal, { update: this.props.update, open: this.props.open }),
 	      React.createElement(
 	        'button',
 	        { className: 'redirect_modal', onClick: this._redirection },
@@ -38804,7 +38859,7 @@
 	          unread = false;
 	        }
 	
-	        return React.createElement(ModalIndexItem, { unread: unread, open: this.props.open, key: convo.id, person: person, convo: convo });
+	        return React.createElement(ModalIndexItem, { unread: unread, update: this.props.update, open: this.props.open, key: convo.id, person: person, convo: convo });
 	      }.bind(this));
 	    } else {
 	
@@ -38842,7 +38897,6 @@
 	  displayName: 'ModalIndexItem',
 	
 	  getInitialState: function () {
-	    debugger;
 	    return {
 	      latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
 	      areWeUnread: this.props.unread
@@ -38868,6 +38922,7 @@
 	
 	  _seeMessageDetails: function () {
 	    if (this.state.areWeUnread) {
+	      this.props.update(true);
 	      this.setState({ areWeUnread: false });
 	      MessageStore.readTheMessages(this.props.convo.id);
 	    }

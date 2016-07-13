@@ -49,7 +49,7 @@ var ConvosModal = React.createClass({
         }
 
         return (
-          <ModalIndexItem unread={unread} open={this.props.open} key={convo.id} person={person} convo={convo}/>
+          <ModalIndexItem unread={unread} update={this.props.update} open={this.props.open} key={convo.id} person={person} convo={convo}/>
         );
 
       }.bind(this));

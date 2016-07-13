@@ -25,10 +25,12 @@ var QuickMessages = require('./components/nav_stuff/quick_messages');
 var ModalStyle = require('./components/modal/modal_style');
 //Stores
 var SessionStore = require('./stores/session_store');
+var MessageStore = require('./stores/message_store');
 //Other Stuff
 var hashHistory = require('react-router').hashHistory;
 var Link = require('react-router').Link;
 var SessionApiUtil = require('./util/session_api_util');
+var MessageApiUtil = require('./util/message_api_util');
 
 var App = React.createClass({
   getInitialState: function () {
@@ -36,7 +38,8 @@ var App = React.createClass({
       convosOpen: false,
       messagesOpen: false,
       menuOpen: false,
-      currentConvo: null
+      currentConvo: null,
+      numberUnread: 0
     }
   },
 
@@ -83,8 +86,38 @@ var App = React.createClass({
     });
   },
 
+  _updateBadge: function (deduction) {
+
+    if (deduction) {
+      var temporaryVariable = this.state.numberUnread - 1;
+      this.setState({ numberUnread: temporaryVariable });
+    } else {
+      this.setState({ numberUnread: MessageStore.howManyUnread(SessionStore.currentUser().id) });
+    }
+
+  },
+
   componentDidMount: function () {
+    this.listener = MessageStore.addListener(this._updateBadge);
+    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+
+    // add pusher here!
+    this.pusher = new Pusher('8912b275855afe98c4d3', {
+      encrypted: true
+    });
+
+    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
+    channel.bind('notify_user', function(data) {
+      this._updateBadge();
+    }.bind(this));
     SessionApiUtil.fetchCurrentUser();
+  },
+
+  componentWillUnmount: function () {
+
+    // remove pusher here!
+    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id)
+
   },
 
   contextTypes: {
@@ -94,14 +127,25 @@ var App = React.createClass({
   render: function(){
 
     var candyCorn;
+    var swedishFish;
 
     // onClick={this._openConvos}
 
     if (SessionStore.isUserLoggedIn()) {
+
+      if (this.state.numberUnread > 0) {
+        swedishFish = (<div className="message_notifications">{this.state.numberUnread}</div>);
+      } else {
+        swedishFish = (<div />);
+      }
+
       candyCorn = [
         <li key={"visitors"}><a href="#/visits">Visitors</a></li>,
         <li key={"likes"}><a href="#/likes">Likes</a></li>,
-        <li key={"messages"} onClick={this._openConvos}><a>Messages</a></li>,
+        <li key={"messages"} onClick={this._openConvos}>
+          <a>Messages</a>
+          {swedishFish}
+        </li>,
         <li className="yer_face" onClick={this._openMenu} key={"person"}><img src={SessionStore.currentUser().image_url} /></li>
       ];
     } else {
@@ -132,7 +176,7 @@ var App = React.createClass({
           onRequestClose={this._closeConvos}
           style={ModalStyle}>
 
-          <QuickConvos open={this._closeAndReopenMessages} close={this._closeConvos} />
+          <QuickConvos update={this._updateBadge} open={this._closeAndReopenMessages} close={this._closeConvos} />
 
         </Modal>
 
