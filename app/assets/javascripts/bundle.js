@@ -38851,28 +38851,23 @@
 	  },
 	
 	  componentDidMount: function () {
-	    // this.listener = MessageStore.addListener(this._updateConvos);
-	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	    // add logic to add NEW conversations as they appear
 	
-	    this.pusher = new Pusher('8912b275855afe98c4d3', {
-	      encrypted: true
-	    });
-	
-	    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
-	    channel.bind('notify_user', function (data) {
-	      MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateConvos);
-	    }.bind(this));
+	    // this.pusher = new Pusher('8912b275855afe98c4d3', {
+	    //   encrypted: true
+	    // });
+	    //
+	    // var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
+	    // channel.bind('notify_user', function(data) {
+	    //   MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateConvos);
+	    // }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {
-	    // this.listener.remove();
-	    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
+	    // this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
 	  },
 	
-	  _updateConvos: function () {
-	    console.log("we are updating the convos");
-	    this.setState({ convos: MessageStore.allConvos() });
-	  },
+	  _updateConvos: function () {},
 	
 	  render: function () {
 	
