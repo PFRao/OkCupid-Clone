@@ -48,7 +48,8 @@ MessageStore.existing = function (counterpartyId) {
 MessageStore.isItUnread = function (convo_id) {
   for (var i = 0; i < _convos.length; i++) {
     if (_convos[i].id === convo_id) {
-      if (_convos[i].messages[_convos[i].messages.length - 1].receiver_id === SessionStore.currentUser().id){
+      if (_convos[i].messages[_convos[i].messages.length - 1].receiver_id === SessionStore.currentUser().id) {
+        console.log( convo_id + ":", _convos[i].messages[_convos[i].messages.length - 1].unread );
         return _convos[i].messages[_convos[i].messages.length - 1].unread;
       }
       return false;
@@ -62,7 +63,7 @@ MessageStore.readTheMessages = function (convo_id, update) {
       _convos[i].messages.forEach( function (message) {
         if (message.unread) {
           MessageApiUtil.updateMessage(message.id);
-        }
+        } else { return; }
       });
     }
   }

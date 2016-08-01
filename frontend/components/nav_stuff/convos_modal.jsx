@@ -10,19 +10,30 @@ var MessageApiUtil = require('../../util/message_api_util');
 var ConvosModal = React.createClass({
 
   getInitialState: function () {
-    return { convos: null };
+    return { convos: MessageStore.allConvos() };
   },
 
   componentDidMount: function () {
-    this.listener = MessageStore.addListener(this._updateConvos);
+    // this.listener = MessageStore.addListener(this._updateConvos);
     MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+
+    this.pusher = new Pusher('8912b275855afe98c4d3', {
+      encrypted: true
+    });
+
+    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
+    channel.bind('notify_user', function(data) {
+      MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateConvos);
+    }.bind(this));
   },
 
   componentWillUnmount: function () {
-    this.listener.remove();
+    // this.listener.remove();
+    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
   },
 
   _updateConvos: function () {
+    console.log("we are updating the convos");
     this.setState({ convos: MessageStore.allConvos() });
   },
 

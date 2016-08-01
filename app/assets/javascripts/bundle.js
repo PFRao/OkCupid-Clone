@@ -37824,6 +37824,7 @@
 	  for (var i = 0; i < _convos.length; i++) {
 	    if (_convos[i].id === convo_id) {
 	      if (_convos[i].messages[_convos[i].messages.length - 1].receiver_id === SessionStore.currentUser().id) {
+	        console.log(convo_id + ":", _convos[i].messages[_convos[i].messages.length - 1].unread);
 	        return _convos[i].messages[_convos[i].messages.length - 1].unread;
 	      }
 	      return false;
@@ -37837,6 +37838,8 @@
 	      _convos[i].messages.forEach(function (message) {
 	        if (message.unread) {
 	          MessageApiUtil.updateMessage(message.id);
+	        } else {
+	          return;
 	        }
 	      });
 	    }
@@ -38844,19 +38847,30 @@
 	
 	
 	  getInitialState: function () {
-	    return { convos: null };
+	    return { convos: MessageStore.allConvos() };
 	  },
 	
 	  componentDidMount: function () {
-	    this.listener = MessageStore.addListener(this._updateConvos);
+	    // this.listener = MessageStore.addListener(this._updateConvos);
 	    MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id });
+	
+	    this.pusher = new Pusher('8912b275855afe98c4d3', {
+	      encrypted: true
+	    });
+	
+	    var channel = this.pusher.subscribe('user_' + SessionStore.currentUser().id);
+	    channel.bind('notify_user', function (data) {
+	      MessageApiUtil.getAllConvos({ user_id: SessionStore.currentUser().id }, this._updateConvos);
+	    }.bind(this));
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.listener.remove();
+	    // this.listener.remove();
+	    this.pusher.unsubscribe('user_' + SessionStore.currentUser().id);
 	  },
 	
 	  _updateConvos: function () {
+	    console.log("we are updating the convos");
 	    this.setState({ convos: MessageStore.allConvos() });
 	  },
 	
@@ -38929,6 +38943,7 @@
 	
 	  componentDidMount: function () {
 	    // this.listener = MessageStore.addListener(this._newMessage);
+	    // this.setState({ areWeUnread: MessageStore.isItUnread(this.props.convo.id) })
 	
 	    this.pusher = new Pusher('8912b275855afe98c4d3', {
 	      encrypted: true
@@ -38964,8 +38979,8 @@
 	
 	  _newMessage: function () {
 	    this.setState({
-	      areWeUnread: true,
-	      latestPreview: MessageStore.getLatestMessage(this.props.convo.id)
+	      latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
+	      areWeUnread: true
 	    });
 	  },
 	
@@ -38980,6 +38995,8 @@
 	  },
 	
 	  render: function () {
+	
+	    console.log("rendering ModalIndexItem:", this.props.convo.id);
 	
 	    if (!this.state.latestPreview) {
 	      return React.createElement(
@@ -39026,8 +39043,8 @@
 	    if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
 	      theClass = "received_message";
 	      theSayer = "they";
+	      console.log("CONVO " + this.props.convo.id + ":", this.state.areWeUnread);
 	      if (this.state.areWeUnread) {
-	        console.log(this.state.latestPreview, this.state.areWeUnread);
 	        readness = "unreadMessage";
 	      }
 	    } else {
