@@ -25,7 +25,7 @@ var ModalIndexItem = React.createClass({
 
     var channel = this.pusher.subscribe('convo_' + this.props.convo.id);
     channel.bind('message_sent', function(data) {
-      this._newMessage();
+      this._newMessage(data);
     }.bind(this));
 
   },
@@ -52,9 +52,10 @@ var ModalIndexItem = React.createClass({
     this.props.open(this.props.convo);
   },
 
-  _newMessage: function () {
+  _newMessage: function (data) {
+    console.log(data);
     this.setState({
-      latestPreview: MessageStore.getLatestMessage(this.props.convo.id),
+      latestPreview: data["latest"],
       areWeUnread: true
     });
   },
@@ -69,7 +70,7 @@ var ModalIndexItem = React.createClass({
 
   render: function() {
 
-    console.log("rendering ModalIndexItem:", this.props.convo.id);
+    // console.log("rendering ModalIndexItem:", this.props.convo.id);
 
     if (!this.state.latestPreview) {
       return (
@@ -111,7 +112,7 @@ var ModalIndexItem = React.createClass({
     if (this.state.latestPreview.receiver_id === SessionStore.currentUser().id) {
       theClass = "received_message";
       theSayer = "they";
-      console.log("CONVO " + this.props.convo.id + ":", this.state.areWeUnread);
+      // console.log("CONVO " + this.props.convo.id + ":", this.state.areWeUnread);
       if (this.state.areWeUnread) {
         readness = "unreadMessage";
       }

@@ -6,7 +6,7 @@ class Api::MessagesController < ApplicationController
     @message = Message.new(message_params)
 
     if @message.save
-      Pusher.trigger('convo_' + @message.convo_id.to_s, 'message_sent', {})
+      Pusher.trigger('convo_' + @message.convo_id.to_s, 'message_sent', { latest: @message })
       Pusher.trigger('user_' + @message.receiver_id.to_s, 'notify_user', {})
       render "api/messages/show"
     else
