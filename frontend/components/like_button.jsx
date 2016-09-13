@@ -35,7 +35,7 @@ var LikeButton = React.createClass({
     if (this.state.status) {
       humphrey = "Unlike";
     } else {
-      humphrey = "Like";
+      humphrey = " Like ";
     }
 
     return (

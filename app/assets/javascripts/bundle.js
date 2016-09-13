@@ -36448,7 +36448,7 @@
 	    if (SessionStore.isCurrentUserLikedBy(this.props.person)) {
 	      oldness = React.createElement(
 	        'p',
-	        { className: 'list_o_matches' },
+	        { className: 'likes_you' },
 	        'This person likes you!'
 	      );
 	    } else {
@@ -36458,6 +36458,7 @@
 	    return React.createElement(
 	      'li',
 	      null,
+	      React.createElement(LikeButton, { person: this.props.person }),
 	      React.createElement(
 	        'span',
 	        { onClick: this._goToProfile },
@@ -36480,8 +36481,7 @@
 	          ' % Match'
 	        ),
 	        oldness
-	      ),
-	      React.createElement(LikeButton, { person: this.props.person })
+	      )
 	    );
 	  }
 	
@@ -36546,7 +36546,7 @@
 	    if (this.state.status) {
 	      humphrey = "Unlike";
 	    } else {
-	      humphrey = "Like";
+	      humphrey = " Like ";
 	    }
 	
 	    return React.createElement(
@@ -38852,6 +38852,7 @@
 	
 	  componentDidMount: function () {
 	    // add logic to add NEW conversations as they appear
+	    // also make it so that clicking "see all" reads EVERY message
 	
 	    // this.pusher = new Pusher('8912b275855afe98c4d3', {
 	    //   encrypted: true

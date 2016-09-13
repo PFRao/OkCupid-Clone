@@ -25,7 +25,7 @@ var UserIndexItem = React.createClass({
     var oldness2 = Math.floor(oldness / 31536000000);
 
     if (SessionStore.isCurrentUserLikedBy(this.props.person)) {
-      oldness = (<p className="list_o_matches">This person likes you!</p>);
+      oldness = (<p className="likes_you">This person likes you!</p>);
     } else {
       oldness = (<p></p>);
     }
@@ -33,6 +33,7 @@ var UserIndexItem = React.createClass({
     return (
 
       <li>
+        <LikeButton person={this.props.person}/>
         <span onClick={this._goToProfile}>
           <img src={this.props.person.image_url} />
           <h3>{this.props.person.username}</h3>
@@ -40,7 +41,6 @@ var UserIndexItem = React.createClass({
           <p>{this.props.rating} % Match</p>
           {oldness}
         </span>
-        <LikeButton person={this.props.person}/>
       </li>
 
     );

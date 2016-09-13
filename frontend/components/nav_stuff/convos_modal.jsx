@@ -15,6 +15,7 @@ var ConvosModal = React.createClass({
 
   componentDidMount: function () {
     // add logic to add NEW conversations as they appear
+    // also make it so that clicking "see all" reads EVERY message
 
     // this.pusher = new Pusher('8912b275855afe98c4d3', {
     //   encrypted: true

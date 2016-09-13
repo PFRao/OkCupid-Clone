@@ -16,11 +16,23 @@
 
 .list_o_matches h3 {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
+
+.list_o_matches h3::after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px solid #000;
+  content: ""
 }
 
 .list_o_matches li img {
-  height: 100px;
-  width: 100px;
+  height: 125px;
+  width: 125px;
   float: left;
   margin: 0 15px 0 0;
   border-radius: 50px;
@@ -28,6 +40,8 @@
 
 .list_o_matches li p {
   /*font: 200 12px/1.5 Georgia, Times New Roman, serif;*/
+  line-height: 1.5;
+  color: #605f5f
 }
 
 .list_o_matches li {
@@ -41,7 +55,12 @@
 
 .list_o_matches li:hover {
   background: #4c7bd9;
+  transition: all 0.15s ease-in-out;
   cursor: pointer;
+}
+
+.likes_you {
+  color: #228b22 !important;
 }
 
 .build_a_bridge {

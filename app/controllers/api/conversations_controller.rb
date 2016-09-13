@@ -1,3 +1,5 @@
+require 'pusher'
+
 class Api::ConversationsController < ApplicationController
 
   def index
