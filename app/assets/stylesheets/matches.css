@@ -20,16 +20,6 @@
   margin-bottom: 3px;
 }
 
-.list_o_matches h3::after {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  border-bottom: 1px solid #000;
-  content: ""
-}
-
 .list_o_matches li img {
   height: 125px;
   width: 125px;
