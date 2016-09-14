@@ -37412,34 +37412,38 @@
 	    return React.createElement(
 	      'li',
 	      { className: 'visit_index_item', onClick: this._goToProfile },
-	      React.createElement('img', { src: this.props.person.image_url }),
 	      React.createElement(
-	        'h3',
+	        'div',
 	        null,
-	        this.props.person.username
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Age ',
-	        oldness2
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        oldness,
-	        ' % Match'
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Last visit: ',
+	        React.createElement('img', { src: this.props.person.image_url }),
 	        React.createElement(
-	          'span',
-	          { className: 'datDateDoe' },
-	          ' ',
-	          timeStamp,
-	          ' '
+	          'h3',
+	          null,
+	          this.props.person.username
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Age ',
+	          oldness2
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          oldness,
+	          ' % Match'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Last visit: ',
+	          React.createElement(
+	            'span',
+	            { className: 'datDateDoe' },
+	            ' ',
+	            timeStamp,
+	            ' '
+	          )
 	        )
 	      )
 	    );

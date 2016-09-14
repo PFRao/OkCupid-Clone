@@ -58,11 +58,13 @@ var VisitIndexItem = React.createClass({
 
     return (
       <li className="visit_index_item" onClick={this._goToProfile}>
-        <img src={this.props.person.image_url} />
-        <h3>{this.props.person.username}</h3>
-        <p>Age {oldness2}</p>
-        <p>{oldness} % Match</p>
-        <p>Last visit: <span className="datDateDoe"> {timeStamp} </span></p>
+        <div>
+          <img src={this.props.person.image_url} />
+          <h3>{this.props.person.username}</h3>
+          <p>Age {oldness2}</p>
+          <p>{oldness} % Match</p>
+          <p>Last visit: <span className="datDateDoe"> {timeStamp} </span></p>
+        </div>
       </li>
     );
 
