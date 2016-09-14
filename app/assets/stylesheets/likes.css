@@ -35,10 +35,8 @@
   /*padding: 10px;*/
   /*width: 350px;*/
   width:100%;
-  height: 100px;
+  height: 150px;
   margin: 0px 0 0px 0;
-  padding-top: 25px;
-  padding-bottom: 25px;
   border-bottom: 2px solid #ddd;
   /*border-top-left-radius: 1000px;
   border-top-right-radius: 300px;
@@ -69,6 +67,8 @@
 .like_index_item div {
   /*position: relative;*/
   height: 100px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   /*transform: translateY(-50%);*/
 
   -webkit-transition: all 0.3s ease, background-color 0.3s ease;
