@@ -24,10 +24,12 @@ var UserIndexItem = React.createClass({
 
     return (
       <li className="like_index_item" onClick={this._goToProfile}>
-        <img src={this.props.person.image_url} />
-        <h3>{this.props.person.username}</h3>
-        <p>Age {oldness2}</p>
-        <p>{oldness} % Match</p>
+        <div>
+          <img src={this.props.person.image_url} />
+          <h3>{this.props.person.username}</h3>
+          <p>Age {oldness2}</p>
+          <p>{oldness} % Match</p>
+        </div>
       </li>
     );
   }

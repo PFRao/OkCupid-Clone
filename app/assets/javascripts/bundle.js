@@ -37103,23 +37103,27 @@
 	    return React.createElement(
 	      'li',
 	      { className: 'like_index_item', onClick: this._goToProfile },
-	      React.createElement('img', { src: this.props.person.image_url }),
 	      React.createElement(
-	        'h3',
+	        'div',
 	        null,
-	        this.props.person.username
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Age ',
-	        oldness2
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        oldness,
-	        ' % Match'
+	        React.createElement('img', { src: this.props.person.image_url }),
+	        React.createElement(
+	          'h3',
+	          null,
+	          this.props.person.username
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Age ',
+	          oldness2
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          oldness,
+	          ' % Match'
+	        )
 	      )
 	    );
 	  }
