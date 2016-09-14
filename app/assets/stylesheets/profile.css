@@ -24,12 +24,16 @@
 .edit_profile_button {
   height: 20px;
   width: 50px;
-  background: #F8F8FF;
-  color: #2F4F4F;
+  background: rgb(232, 232, 232);
+  color:rgb(0,0,0);
   text-align: center;
-  border: 4px solid #2F4F4F;
-  border-radius: 7px;
+  padding: 5px 10px;
+  /*border: 4px solid #2F4F4F;
+  border-radius: 7px;*/
   margin-left: 10px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
+              0 3px 1px -2px rgba(0, 0, 0, 0.14),
+              0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
 .profile_header {

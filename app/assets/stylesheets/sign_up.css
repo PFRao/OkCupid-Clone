@@ -1,5 +1,6 @@
 #steven {
   background: #3b5998;
+  height: 4000px;
 }
 
 .errors {
@@ -18,7 +19,18 @@
 }
 
 .gender {
-  margin-left: 30%;
+  margin-top: 10px;
+  margin-left: 45%;
+  width:10%;
+}
+
+.man {
+  display: inline-block;
+}
+
+.woman {
+  float:right;
+  display: inline-block;
 }
 
 .top_stuff {
@@ -46,15 +58,15 @@
   margin-top: 15px;
   margin-bottom: 5px;
   position: relative;
-  font-family: lato;
+  /*font-family: lato;*/
 }
 
 .sign_up > label span {
   color: #F8F8FF;
-  font-size: 2em;
+  font-size: 1.25em;
   position: absolute;
-  left: 2.3em;
-  top: -10px;
+  left: 4em;
+  top: -6px;
 }
 
 .sign_up > input {
@@ -65,11 +77,27 @@
   margin-left: 550px;*/
   padding: 5px 20px;
   font-size: 1em;
-  border-radius: 3px;
   outline: none;
-  border: 1px solid #ccd0d9;
+
   background: #FFF;
-  color: #636973;
+  border: 1px solid #ccd0d9;
+  color: #5e6573;
+  border-radius: 3px;
+}
+
+.halfsies {
+  width: 18% !important;
+  display: inline-block !important;
+}
+
+.halfsies2 {
+  margin-left: 1% !important;
+  width: 18% !important;
+  display: inline-block !important;
+}
+
+.bday {
+  margin-left: 17% !important;
 }
 
 .sign_up > button {

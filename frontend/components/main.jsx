@@ -62,7 +62,7 @@ var Main = React.createClass({
 
     return (
       <div className="main_page_area">
-        Menu:
+        Menu: <br /><br />
         <button className="main_page_button" onClick={this._browse}>Browse  matches</button><br />
         <button className="main_page_button" onClick={this._goToProfile}>Profile</button><br />
         <button className="main_page_button" onClick={this._logout}>Log out</button><br />

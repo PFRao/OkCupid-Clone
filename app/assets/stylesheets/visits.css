@@ -102,7 +102,7 @@
   float:left;
   height:150px;
   width: 150px;
-
+  border-radius: 10px;
 }
 
 .visit_index_item span {

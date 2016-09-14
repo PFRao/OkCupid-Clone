@@ -152,24 +152,24 @@ var SignupForm = React.createClass({
             Zip Code:
             <span>*</span>
           </label>
-          <input type="text" onChange={this._changeZip} value={this.state.location} />
-
-          <label>
-            Birthday:
-            <span>*</span>
+          <label className="bday">
+          Birthday:
+          <span>*</span>
           </label>
-          <input type="date" onChange={this._changeBirthdate} />
+
+          <input className="halfsies" type="text" onChange={this._changeZip} value={this.state.location} />
+          <input className="halfsies2" type="date" onChange={this._changeBirthdate} />
 
           <div className="gender">
-            <label>
+            <label className="man">
               <input type="checkbox" value="man" checked={this.state.gender === "man"} onChange={this._changeGender} />
-              Man
+              &nbsp; M
               <br />
             </label>
 
-            <label>
+            <label className="woman">
+              F &nbsp;
               <input type="checkbox" value="woman" checked={this.state.gender === "woman"} onChange={this._changeGender} />
-              Woman
               <br />
             </label>
           </div>

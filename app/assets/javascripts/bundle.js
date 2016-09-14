@@ -35883,10 +35883,9 @@
 	            '*'
 	          )
 	        ),
-	        React.createElement('input', { type: 'text', onChange: this._changeZip, value: this.state.location }),
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'bday' },
 	          'Birthday:',
 	          React.createElement(
 	            'span',
@@ -35894,22 +35893,23 @@
 	            '*'
 	          )
 	        ),
-	        React.createElement('input', { type: 'date', onChange: this._changeBirthdate }),
+	        React.createElement('input', { className: 'halfsies', type: 'text', onChange: this._changeZip, value: this.state.location }),
+	        React.createElement('input', { className: 'halfsies2', type: 'date', onChange: this._changeBirthdate }),
 	        React.createElement(
 	          'div',
 	          { className: 'gender' },
 	          React.createElement(
 	            'label',
-	            null,
+	            { className: 'man' },
 	            React.createElement('input', { type: 'checkbox', value: 'man', checked: this.state.gender === "man", onChange: this._changeGender }),
-	            'Man',
+	            '  M',
 	            React.createElement('br', null)
 	          ),
 	          React.createElement(
 	            'label',
-	            null,
+	            { className: 'woman' },
+	            'F  ',
 	            React.createElement('input', { type: 'checkbox', value: 'woman', checked: this.state.gender === "woman", onChange: this._changeGender }),
-	            'Woman',
 	            React.createElement('br', null)
 	          )
 	        ),
@@ -36006,7 +36006,9 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'main_page_area' },
-	      'Menu:',
+	      'Menu: ',
+	      React.createElement('br', null),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'button',
 	        { className: 'main_page_button', onClick: this._browse },
